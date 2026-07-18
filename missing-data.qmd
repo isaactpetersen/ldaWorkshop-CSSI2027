@@ -1,8 +1,5 @@
 ---
 title: "Missing Data"
-format: 
-   html:
-     df-print: default
 ---
 
 # Preamble
@@ -279,18 +276,7 @@ linearGCM_mice
 linearGCM_mice_pooled <- mice::pool(linearGCM_mice)
 
 linearGCM_mice_pooled
-```
-
-```{r}
-#| eval: false
-
 summary(linearGCM_mice_pooled)
-```
-
-```{r}
-#| echo: false
-
-rmarkdown::paged_table(summary(linearGCM_mice_pooled))
 ```
 
 ### Structural Equation Models
