@@ -615,7 +615,7 @@ gtag('config', 'G-EG2ZSZZ7EP', { 'anonymize_ip': true});
 </div>
 </section><section id="fit-model" class="level3" data-number="4.1.2"><h3 data-number="4.1.2" class="anchored" data-anchor-id="fit-model">
 <span class="header-section-number">4.1.2</span> Fit Model</h3>
-<p>Specifying <code>fixed.x = FALSE</code> would estimate (i.e., would not consider as fixed) means, variances, and covariances of the observed variables. Doing so would allow missing information in the predictors to be included as part of full information maximum likelihood (FIML). However, this gets challenging to use when including both person mean and person-mean-centered variables (due to linear dependencies). Thus, many of these examples do not specify <code>fixed.x = FALSE</code>.</p>
+<p>Specifying <code>fixed_x = FALSE</code> would estimate (i.e., would not consider as fixed) means, variances, and covariances of the observed variables. Doing so would allow missing information in the predictors to be included as part of full information maximum likelihood (FIML). However, this gets challenging to use when including both person mean and person-mean-centered variables (due to linear dependencies). Thus, many of these examples do not specify <code>fixed_x = FALSE</code>.</p>
 <div class="cell">
 <details open="" class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">linearGCM_fit</span> <span class="op">&lt;-</span> <span class="fu">lavaan</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/lavaan/man/sem.html">sem</a></span><span class="op">(</span></span>
 <span>  <span class="va">linearGCM_syntax</span>,</span>
@@ -630,7 +630,7 @@ gtag('config', 'G-EG2ZSZZ7EP', { 'anonymize_ip': true});
 <div class="cell">
 <details open="" class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span></span>
 <span>  <span class="va">linearGCM_fit</span>,</span>
-<span>  fit.measures <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  fit_measures <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  standardized <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  rsquare <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details><div class="cell-output cell-output-stdout">
@@ -788,7 +788,7 @@ R-Square:
 <div class="cell">
 <details open="" class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/lavaan/man/modificationIndices.html">modificationindices</a></span><span class="op">(</span></span>
 <span>  <span class="va">linearGCM_fit</span>,</span>
-<span>  sort. <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span>  sort <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details><div class="cell-output-display">
 <div data-pagedtable="false">
   <script data-pagedtable-source="" type="application/json">
@@ -808,8 +808,8 @@ R-Square:
 <span>  <span class="co">#covs = TRUE,</span></span>
 <span>  stand <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details><div class="cell-output-display">
-<div class="grViz html-widget html-fill-item" id="htmlwidget-629e3810579cbdc33dd2" style="width:100%;height:464px;"></div>
-<script type="application/json" data-for="htmlwidget-629e3810579cbdc33dd2">{"x":{"diagram":" digraph plot { \n graph [ overlap = true, fontsize = 10 ] \n node [ shape = box ] \n node [shape = box] \n sexEffectCode; sleep_personMean; sexEffectCodeXsleep_personMean; sleep_personMeanCentered_1; sexEffectCodeXsleep_personMeanCentered_1; sleep_personMeanCentered_2; sexEffectCodeXsleep_personMeanCentered_2; sleep_personMeanCentered_3; sexEffectCodeXsleep_personMeanCentered_3; sleep_personMeanCentered_4; sexEffectCodeXsleep_personMeanCentered_4; depression_1; depression_2; depression_3; depression_4 \n node [shape = oval] \n intercept; slope \n \n edge [ color = black ] \n sexEffectCode->intercept [label = \"-0.56\"] sleep_personMean->intercept [label = \"-0.33\"] sexEffectCodeXsleep_personMean->intercept [label = \"0.32\"] sexEffectCode->slope [label = \"-1.15\"] sleep_personMean->slope [label = \"-0.19\"] sexEffectCodeXsleep_personMean->slope [label = \"0.71\"] sleep_personMeanCentered_1->depression_1 [label = \"-0.2\"] sexEffectCodeXsleep_personMeanCentered_1->depression_1 [label = \"0.01\"] sleep_personMeanCentered_2->depression_2 [label = \"-0.08\"] sexEffectCodeXsleep_personMeanCentered_2->depression_2 [label = \"-0.04\"] sleep_personMeanCentered_3->depression_3 [label = \"-0.06\"] sexEffectCodeXsleep_personMeanCentered_3->depression_3 [label = \"0.01\"] sleep_personMeanCentered_4->depression_4 [label = \"-0.09\"] sexEffectCodeXsleep_personMeanCentered_4->depression_4 [label = \"0.03\"] intercept->depression_1 [label = \"0.91\"] intercept->depression_2 [label = \"0.73\"] intercept->depression_3 [label = \"0.58\"] intercept->depression_4 [label = \"0.45\"] slope->depression_1 [label = \"NA\"] slope->depression_2 [label = \"0.31\"] slope->depression_3 [label = \"0.5\"] slope->depression_4 [label = \"0.58\"] \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script><p>Path Diagram</p>
+<div class="grViz html-widget html-fill-item" id="htmlwidget-47975cf1372d40b46f3d" style="width:100%;height:464px;"></div>
+<script type="application/json" data-for="htmlwidget-47975cf1372d40b46f3d">{"x":{"diagram":" digraph plot { \n graph [ overlap = true, fontsize = 10 ] \n node [ shape = box ] \n node [shape = box] \n sexEffectCode; sleep_personMean; sexEffectCodeXsleep_personMean; sleep_personMeanCentered_1; sexEffectCodeXsleep_personMeanCentered_1; sleep_personMeanCentered_2; sexEffectCodeXsleep_personMeanCentered_2; sleep_personMeanCentered_3; sexEffectCodeXsleep_personMeanCentered_3; sleep_personMeanCentered_4; sexEffectCodeXsleep_personMeanCentered_4; depression_1; depression_2; depression_3; depression_4 \n node [shape = oval] \n intercept; slope \n \n edge [ color = black ] \n sexEffectCode->intercept [label = \"-0.56\"] sleep_personMean->intercept [label = \"-0.33\"] sexEffectCodeXsleep_personMean->intercept [label = \"0.32\"] sexEffectCode->slope [label = \"-1.15\"] sleep_personMean->slope [label = \"-0.19\"] sexEffectCodeXsleep_personMean->slope [label = \"0.71\"] sleep_personMeanCentered_1->depression_1 [label = \"-0.2\"] sexEffectCodeXsleep_personMeanCentered_1->depression_1 [label = \"0.01\"] sleep_personMeanCentered_2->depression_2 [label = \"-0.08\"] sexEffectCodeXsleep_personMeanCentered_2->depression_2 [label = \"-0.04\"] sleep_personMeanCentered_3->depression_3 [label = \"-0.06\"] sexEffectCodeXsleep_personMeanCentered_3->depression_3 [label = \"0.01\"] sleep_personMeanCentered_4->depression_4 [label = \"-0.09\"] sexEffectCodeXsleep_personMeanCentered_4->depression_4 [label = \"0.03\"] intercept->depression_1 [label = \"0.91\"] intercept->depression_2 [label = \"0.73\"] intercept->depression_3 [label = \"0.58\"] intercept->depression_4 [label = \"0.45\"] slope->depression_1 [label = \"NA\"] slope->depression_2 [label = \"0.31\"] slope->depression_3 [label = \"0.5\"] slope->depression_4 [label = \"0.58\"] \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script><p>Path Diagram</p>
 </div>
 </div>
 <p>To create an interactive path diagram, you can use the following syntax:</p>
@@ -1158,7 +1158,7 @@ R-Square:
 <div class="cell">
 <details open="" class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb21"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span></span>
 <span>  <span class="va">quadraticGCM_fit</span>,</span>
-<span>  fit.measures <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  fit_measures <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  standardized <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  rsquare <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details><div class="cell-output cell-output-stdout">
@@ -1332,7 +1332,7 @@ R-Square:
 <div class="cell">
 <details open="" class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb23"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/lavaan/man/modificationIndices.html">modificationindices</a></span><span class="op">(</span></span>
 <span>  <span class="va">quadraticGCM_fit</span>,</span>
-<span>  sort. <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span>  sort <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details><div class="cell-output-display">
 <div data-pagedtable="false">
   <script data-pagedtable-source="" type="application/json">
@@ -1351,8 +1351,8 @@ R-Square:
 <span>  stand <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  coef_labels <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details><div class="cell-output-display">
-<div class="grViz html-widget html-fill-item" id="htmlwidget-3c44b19a1236bb04ae7e" style="width:100%;height:464px;"></div>
-<script type="application/json" data-for="htmlwidget-3c44b19a1236bb04ae7e">{"x":{"diagram":"digraph {\n\n\n\n\n  \"1\" [label = \"intercept\", shape = \"oval\", group = \"latent\"] \n  \"2\" [label = \"linear\", shape = \"oval\", group = \"latent\"] \n  \"3\" [label = \"quadratic\", shape = \"oval\", group = \"latent\"] \n  \"4\" [label = \"depression_1\", shape = \"box\", group = \"obs\"] \n  \"5\" [label = \"depression_2\", shape = \"box\", group = \"obs\"] \n  \"6\" [label = \"depression_3\", shape = \"box\", group = \"obs\"] \n  \"7\" [label = \"depression_4\", shape = \"box\", group = \"obs\"] \n  \"8\" [label = \"sexEffectCode\", shape = \"box\", group = \"obs\"] \n  \"9\" [label = \"sleep_personMean\", shape = \"box\", group = \"obs\"] \n  \"10\" [label = \"sexEffectCodeXsleep_personMean\", shape = \"box\", group = \"obs\"] \n  \"11\" [label = \"sleep_personMeanCentered_1\", shape = \"box\", group = \"obs\"] \n  \"12\" [label = \"sexEffectCodeXsleep_personMeanCentered_1\", shape = \"box\", group = \"obs\"] \n  \"13\" [label = \"sleep_personMeanCentered_2\", shape = \"box\", group = \"obs\"] \n  \"14\" [label = \"sexEffectCodeXsleep_personMeanCentered_2\", shape = \"box\", group = \"obs\"] \n  \"15\" [label = \"sleep_personMeanCentered_3\", shape = \"box\", group = \"obs\"] \n  \"16\" [label = \"sexEffectCodeXsleep_personMeanCentered_3\", shape = \"box\", group = \"obs\"] \n  \"17\" [label = \"sleep_personMeanCentered_4\", shape = \"box\", group = \"obs\"] \n  \"18\" [label = \"sexEffectCodeXsleep_personMeanCentered_4\", shape = \"box\", group = \"obs\"] \n\"4\"->\"1\" [dir = \"back\", label = \"0.94\"] \n\"5\"->\"1\" [dir = \"back\", label = \"0.72\"] \n\"6\"->\"1\" [dir = \"back\", label = \"0.57\"] \n\"7\"->\"1\" [dir = \"back\", label = \"0.47\"] \n\"4\"->\"2\" [dir = \"back\", label = \"0\"] \n\"5\"->\"2\" [dir = \"back\", label = \"0.46\"] \n\"6\"->\"2\" [dir = \"back\", label = \"0.73\"] \n\"7\"->\"2\" [dir = \"back\", label = \"0.9\"] \n\"4\"->\"3\" [dir = \"back\", label = \"0\"] \n\"5\"->\"3\" [dir = \"back\", label = \"0.11\"] \n\"6\"->\"3\" [dir = \"back\", label = \"0.36\"] \n\"7\"->\"3\" [dir = \"back\", label = \"0.67\"] \n\"8\"->\"1\" [dir = \"forward\", label = \"-0.33\"] \n\"9\"->\"1\" [dir = \"forward\", label = \"-0.33\"] \n\"10\"->\"1\" [dir = \"forward\", label = \"0.09\"] \n\"8\"->\"2\" [dir = \"forward\", label = \"-1.96\"] \n\"9\"->\"2\" [dir = \"forward\", label = \"-0.15\"] \n\"10\"->\"2\" [dir = \"forward\", label = \"1.65\"] \n\"8\"->\"3\" [dir = \"forward\", label = \"2\"] \n\"9\"->\"3\" [dir = \"forward\", label = \"0.01\"] \n\"10\"->\"3\" [dir = \"forward\", label = \"-1.98\"] \n\"11\"->\"4\" [dir = \"forward\", label = \"-0.18\"] \n\"12\"->\"4\" [dir = \"forward\", label = \"0.03\"] \n\"13\"->\"5\" [dir = \"forward\", label = \"-0.08\"] \n\"14\"->\"5\" [dir = \"forward\", label = \"-0.04\"] \n\"15\"->\"6\" [dir = \"forward\", label = \"-0.05\"] \n\"16\"->\"6\" [dir = \"forward\", label = \"0.02\"] \n\"17\"->\"7\" [dir = \"forward\", label = \"-0.08\"] \n\"18\"->\"7\" [dir = \"forward\", label = \"0.03\"] \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script><p>Path Diagram</p>
+<div class="grViz html-widget html-fill-item" id="htmlwidget-537e46bf3f46c19e4036" style="width:100%;height:464px;"></div>
+<script type="application/json" data-for="htmlwidget-537e46bf3f46c19e4036">{"x":{"diagram":"digraph {\n\n\n\n\n  \"1\" [label = \"intercept\", shape = \"oval\", group = \"latent\"] \n  \"2\" [label = \"linear\", shape = \"oval\", group = \"latent\"] \n  \"3\" [label = \"quadratic\", shape = \"oval\", group = \"latent\"] \n  \"4\" [label = \"depression_1\", shape = \"box\", group = \"obs\"] \n  \"5\" [label = \"depression_2\", shape = \"box\", group = \"obs\"] \n  \"6\" [label = \"depression_3\", shape = \"box\", group = \"obs\"] \n  \"7\" [label = \"depression_4\", shape = \"box\", group = \"obs\"] \n  \"8\" [label = \"sexEffectCode\", shape = \"box\", group = \"obs\"] \n  \"9\" [label = \"sleep_personMean\", shape = \"box\", group = \"obs\"] \n  \"10\" [label = \"sexEffectCodeXsleep_personMean\", shape = \"box\", group = \"obs\"] \n  \"11\" [label = \"sleep_personMeanCentered_1\", shape = \"box\", group = \"obs\"] \n  \"12\" [label = \"sexEffectCodeXsleep_personMeanCentered_1\", shape = \"box\", group = \"obs\"] \n  \"13\" [label = \"sleep_personMeanCentered_2\", shape = \"box\", group = \"obs\"] \n  \"14\" [label = \"sexEffectCodeXsleep_personMeanCentered_2\", shape = \"box\", group = \"obs\"] \n  \"15\" [label = \"sleep_personMeanCentered_3\", shape = \"box\", group = \"obs\"] \n  \"16\" [label = \"sexEffectCodeXsleep_personMeanCentered_3\", shape = \"box\", group = \"obs\"] \n  \"17\" [label = \"sleep_personMeanCentered_4\", shape = \"box\", group = \"obs\"] \n  \"18\" [label = \"sexEffectCodeXsleep_personMeanCentered_4\", shape = \"box\", group = \"obs\"] \n\"4\"->\"1\" [dir = \"back\", label = \"0.94\"] \n\"5\"->\"1\" [dir = \"back\", label = \"0.72\"] \n\"6\"->\"1\" [dir = \"back\", label = \"0.57\"] \n\"7\"->\"1\" [dir = \"back\", label = \"0.47\"] \n\"4\"->\"2\" [dir = \"back\", label = \"0\"] \n\"5\"->\"2\" [dir = \"back\", label = \"0.46\"] \n\"6\"->\"2\" [dir = \"back\", label = \"0.73\"] \n\"7\"->\"2\" [dir = \"back\", label = \"0.9\"] \n\"4\"->\"3\" [dir = \"back\", label = \"0\"] \n\"5\"->\"3\" [dir = \"back\", label = \"0.11\"] \n\"6\"->\"3\" [dir = \"back\", label = \"0.36\"] \n\"7\"->\"3\" [dir = \"back\", label = \"0.67\"] \n\"8\"->\"1\" [dir = \"forward\", label = \"-0.33\"] \n\"9\"->\"1\" [dir = \"forward\", label = \"-0.33\"] \n\"10\"->\"1\" [dir = \"forward\", label = \"0.09\"] \n\"8\"->\"2\" [dir = \"forward\", label = \"-1.96\"] \n\"9\"->\"2\" [dir = \"forward\", label = \"-0.15\"] \n\"10\"->\"2\" [dir = \"forward\", label = \"1.65\"] \n\"8\"->\"3\" [dir = \"forward\", label = \"2\"] \n\"9\"->\"3\" [dir = \"forward\", label = \"0.01\"] \n\"10\"->\"3\" [dir = \"forward\", label = \"-1.98\"] \n\"11\"->\"4\" [dir = \"forward\", label = \"-0.18\"] \n\"12\"->\"4\" [dir = \"forward\", label = \"0.03\"] \n\"13\"->\"5\" [dir = \"forward\", label = \"-0.08\"] \n\"14\"->\"5\" [dir = \"forward\", label = \"-0.04\"] \n\"15\"->\"6\" [dir = \"forward\", label = \"-0.05\"] \n\"16\"->\"6\" [dir = \"forward\", label = \"0.02\"] \n\"17\"->\"7\" [dir = \"forward\", label = \"-0.08\"] \n\"18\"->\"7\" [dir = \"forward\", label = \"0.03\"] \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script><p>Path Diagram</p>
 </div>
 </div>
 <p>To create an interactive path diagram, you can use the following syntax:</p>
@@ -1675,7 +1675,7 @@ R-Square:
 <div class="cell">
 <details open="" class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb34"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span></span>
 <span>  <span class="va">latentBasisGCM_fit</span>,</span>
-<span>  fit.measures <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  fit_measures <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  standardized <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  rsquare <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details><div class="cell-output cell-output-stdout">
@@ -1834,7 +1834,7 @@ R-Square:
 <div class="cell">
 <details open="" class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb36"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/lavaan/man/modificationIndices.html">modificationindices</a></span><span class="op">(</span></span>
 <span>  <span class="va">latentBasisGCM_fit</span>,</span>
-<span>  sort. <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span>  sort <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details><div class="cell-output-display">
 <div data-pagedtable="false">
   <script data-pagedtable-source="" type="application/json">
@@ -1854,8 +1854,8 @@ R-Square:
 <span>  <span class="co">#covs = TRUE,</span></span>
 <span>  stand <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details><div class="cell-output-display">
-<div class="grViz html-widget html-fill-item" id="htmlwidget-020e11542abcdfd3b43c" style="width:100%;height:464px;"></div>
-<script type="application/json" data-for="htmlwidget-020e11542abcdfd3b43c">{"x":{"diagram":" digraph plot { \n graph [ overlap = true, fontsize = 10 ] \n node [ shape = box ] \n node [shape = box] \n sexEffectCode; sleep_personMean; sexEffectCodeXsleep_personMean; sleep_personMeanCentered_1; sexEffectCodeXsleep_personMeanCentered_1; sleep_personMeanCentered_2; sexEffectCodeXsleep_personMeanCentered_2; sleep_personMeanCentered_3; sexEffectCodeXsleep_personMeanCentered_3; sleep_personMeanCentered_4; sexEffectCodeXsleep_personMeanCentered_4; depression_1; depression_2; depression_3; depression_4 \n node [shape = oval] \n intercept; slope \n \n edge [ color = black ] \n sexEffectCode->intercept [label = \"-0.37\"] sleep_personMean->intercept [label = \"-0.31\"] sexEffectCodeXsleep_personMean->intercept [label = \"0.14\"] sexEffectCode->slope [label = \"-1.3\"] sleep_personMean->slope [label = \"-0.16\"] sexEffectCodeXsleep_personMean->slope [label = \"0.92\"] sleep_personMeanCentered_1->depression_1 [label = \"-0.19\"] sexEffectCodeXsleep_personMeanCentered_1->depression_1 [label = \"0.01\"] sleep_personMeanCentered_2->depression_2 [label = \"-0.07\"] sexEffectCodeXsleep_personMeanCentered_2->depression_2 [label = \"-0.04\"] sleep_personMeanCentered_3->depression_3 [label = \"-0.06\"] sexEffectCodeXsleep_personMeanCentered_3->depression_3 [label = \"0.02\"] sleep_personMeanCentered_4->depression_4 [label = \"-0.08\"] sexEffectCodeXsleep_personMeanCentered_4->depression_4 [label = \"0.04\"] intercept->depression_1 [label = \"0.98\"] intercept->depression_2 [label = \"0.72\"] intercept->depression_3 [label = \"0.6\"] intercept->depression_4 [label = \"0.51\"] slope->depression_1 [label = \"NA\"] slope->depression_2 [label = \"0.41\"] slope->depression_3 [label = \"0.6\"] slope->depression_4 [label = \"0.58\"] \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script><p>Path Diagram</p>
+<div class="grViz html-widget html-fill-item" id="htmlwidget-aae31bebbddb7b5d95d1" style="width:100%;height:464px;"></div>
+<script type="application/json" data-for="htmlwidget-aae31bebbddb7b5d95d1">{"x":{"diagram":" digraph plot { \n graph [ overlap = true, fontsize = 10 ] \n node [ shape = box ] \n node [shape = box] \n sexEffectCode; sleep_personMean; sexEffectCodeXsleep_personMean; sleep_personMeanCentered_1; sexEffectCodeXsleep_personMeanCentered_1; sleep_personMeanCentered_2; sexEffectCodeXsleep_personMeanCentered_2; sleep_personMeanCentered_3; sexEffectCodeXsleep_personMeanCentered_3; sleep_personMeanCentered_4; sexEffectCodeXsleep_personMeanCentered_4; depression_1; depression_2; depression_3; depression_4 \n node [shape = oval] \n intercept; slope \n \n edge [ color = black ] \n sexEffectCode->intercept [label = \"-0.37\"] sleep_personMean->intercept [label = \"-0.31\"] sexEffectCodeXsleep_personMean->intercept [label = \"0.14\"] sexEffectCode->slope [label = \"-1.3\"] sleep_personMean->slope [label = \"-0.16\"] sexEffectCodeXsleep_personMean->slope [label = \"0.92\"] sleep_personMeanCentered_1->depression_1 [label = \"-0.19\"] sexEffectCodeXsleep_personMeanCentered_1->depression_1 [label = \"0.01\"] sleep_personMeanCentered_2->depression_2 [label = \"-0.07\"] sexEffectCodeXsleep_personMeanCentered_2->depression_2 [label = \"-0.04\"] sleep_personMeanCentered_3->depression_3 [label = \"-0.06\"] sexEffectCodeXsleep_personMeanCentered_3->depression_3 [label = \"0.02\"] sleep_personMeanCentered_4->depression_4 [label = \"-0.08\"] sexEffectCodeXsleep_personMeanCentered_4->depression_4 [label = \"0.04\"] intercept->depression_1 [label = \"0.98\"] intercept->depression_2 [label = \"0.72\"] intercept->depression_3 [label = \"0.6\"] intercept->depression_4 [label = \"0.51\"] slope->depression_1 [label = \"NA\"] slope->depression_2 [label = \"0.41\"] slope->depression_3 [label = \"0.6\"] slope->depression_4 [label = \"0.58\"] \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script><p>Path Diagram</p>
 </div>
 </div>
 <p>To create an interactive path diagram, you can use the following syntax:</p>
@@ -2326,7 +2326,7 @@ danxiety_4 ~ xi_lag_anxiety_depression_ * ddepression_3 </code></pre>
 <span>    delta_lag_yx <span class="op">=</span> <span class="cn">TRUE</span>, <span class="co"># level of y predicting change of x</span></span>
 <span>    xi_lag_xy <span class="op">=</span> <span class="cn">TRUE</span>,    <span class="co"># change of x predicting change of y</span></span>
 <span>    xi_lag_yx <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,   <span class="co"># change of y predicting change of x</span></span>
-<span>  fixed.x <span class="op">=</span> <span class="cn">FALSE</span> <span class="co"># estimate means, variances, and covariances of the observed variables (to include predictors as part of FIML)</span></span>
+<span>  fixed_x <span class="op">=</span> <span class="cn">FALSE</span> <span class="co"># estimate means, variances, and covariances of the observed variables (to include predictors as part of FIML)</span></span>
 <span>  <span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details><div class="cell-output cell-output-error">
 <pre><code>Error:
@@ -2339,7 +2339,7 @@ danxiety_4 ~ xi_lag_anxiety_depression_ * ddepression_3 </code></pre>
 <div class="cell">
 <details open="" class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb51"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span></span>
 <span>  <span class="va">bivariateLCSM_fit</span>,</span>
-<span>  fit.measures <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  fit_measures <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  standardized <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  rsquare <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details><div class="cell-output cell-output-error">
@@ -2357,7 +2357,7 @@ danxiety_4 ~ xi_lag_anxiety_depression_ * ddepression_3 </code></pre>
 <div class="cell">
 <details open="" class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb55"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/lavaan/man/modificationIndices.html">modificationindices</a></span><span class="op">(</span></span>
 <span>  <span class="va">bivariateLCSM_fit</span>,</span>
-<span>  sort. <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span>  sort <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details><div class="cell-output cell-output-error">
 <pre><code>Error:
 ! object 'bivariateLCSM_fit' not found</code></pre>
@@ -2508,7 +2508,7 @@ danxiety_4 ~ xi_lag_anxiety_depression_ * ddepression_3 </code></pre>
 <span>  missing <span class="op">=</span> <span class="st">"ML"</span>, <span class="co"># FIML</span></span>
 <span>  estimator <span class="op">=</span> <span class="st">"MLR"</span>, <span class="co"># Huber-White robust standard errors (for heteroscedasticity and nonnormally distributed residuals)</span></span>
 <span>  meanstructure <span class="op">=</span> <span class="cn">TRUE</span>, <span class="co"># estimate means/intercepts</span></span>
-<span>  fixed.x <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="co"># estimate means, variances, and covariances of the observed variables (to include predictors as part of FIML)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span>  fixed_x <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="co"># estimate means, variances, and covariances of the observed variables (to include predictors as part of FIML)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 </section><section id="model-summary-4" class="level2" data-number="7.3"><h2 data-number="7.3" class="anchored" data-anchor-id="model-summary-4">
@@ -2516,7 +2516,7 @@ danxiety_4 ~ xi_lag_anxiety_depression_ * ddepression_3 </code></pre>
 <div class="cell">
 <details open="" class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb73"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span></span>
 <span>  <span class="va">clpm_fit</span>,</span>
-<span>  fit.measures <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  fit_measures <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  standardized <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  rsquare <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details><div class="cell-output cell-output-stdout">
@@ -2674,7 +2674,7 @@ R-Square:
 <div class="cell">
 <details open="" class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb75"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/lavaan/man/modificationIndices.html">modificationindices</a></span><span class="op">(</span></span>
 <span>  <span class="va">clpm_fit</span>,</span>
-<span>  sort. <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span>  sort <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details><div class="cell-output-display">
 <div data-pagedtable="false">
   <script data-pagedtable-source="" type="application/json">
@@ -2694,8 +2694,8 @@ R-Square:
 <span>  <span class="co">#covs = TRUE,</span></span>
 <span>  stand <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details><div class="cell-output-display">
-<div class="grViz html-widget html-fill-item" id="htmlwidget-ab961126558e1a9f1e70" style="width:100%;height:464px;"></div>
-<script type="application/json" data-for="htmlwidget-ab961126558e1a9f1e70">{"x":{"diagram":" digraph plot { \n graph [ overlap = true, fontsize = 10 ] \n node [ shape = box ] \n node [shape = box] \n depression_3; depression_2; depression_1; anxiety_3; anxiety_2; anxiety_1; depression_4; anxiety_4 \n node [shape = oval] \n  \n \n edge [ color = black ] \n depression_3->depression_4 [label = \"0.84\"] depression_2->depression_3 [label = \"0.85\"] depression_1->depression_2 [label = \"0.79\"] anxiety_3->anxiety_4 [label = \"0.83\"] anxiety_2->anxiety_3 [label = \"0.86\"] anxiety_1->anxiety_2 [label = \"0.82\"] anxiety_3->depression_4 [label = \"0.15\"] anxiety_2->depression_3 [label = \"0.14\"] anxiety_1->depression_2 [label = \"0.17\"] depression_3->anxiety_4 [label = \"0.11\"] depression_2->anxiety_3 [label = \"0.08\"] depression_1->anxiety_2 [label = \"0.02\"]  \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script><p>Path Diagram</p>
+<div class="grViz html-widget html-fill-item" id="htmlwidget-078f3489f094857c0d7e" style="width:100%;height:464px;"></div>
+<script type="application/json" data-for="htmlwidget-078f3489f094857c0d7e">{"x":{"diagram":" digraph plot { \n graph [ overlap = true, fontsize = 10 ] \n node [ shape = box ] \n node [shape = box] \n depression_3; depression_2; depression_1; anxiety_3; anxiety_2; anxiety_1; depression_4; anxiety_4 \n node [shape = oval] \n  \n \n edge [ color = black ] \n depression_3->depression_4 [label = \"0.84\"] depression_2->depression_3 [label = \"0.85\"] depression_1->depression_2 [label = \"0.79\"] anxiety_3->anxiety_4 [label = \"0.83\"] anxiety_2->anxiety_3 [label = \"0.86\"] anxiety_1->anxiety_2 [label = \"0.82\"] anxiety_3->depression_4 [label = \"0.15\"] anxiety_2->depression_3 [label = \"0.14\"] anxiety_1->depression_2 [label = \"0.17\"] depression_3->anxiety_4 [label = \"0.11\"] depression_2->anxiety_3 [label = \"0.08\"] depression_1->anxiety_2 [label = \"0.02\"]  \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script><p>Path Diagram</p>
 </div>
 </div>
 <p>To create an interactive path diagram, you can use the following syntax:</p>
@@ -2829,7 +2829,7 @@ R-Square:
 <span>  data <span class="op">=</span> <span class="va">mydata_wide</span>,</span>
 <span>  missing <span class="op">=</span> <span class="st">"ML"</span>, <span class="co"># FIML</span></span>
 <span>  estimator <span class="op">=</span> <span class="st">"MLR"</span>, <span class="co"># Huber-White robust standard errors (for heteroscedasticity and nonnormally distributed residuals)</span></span>
-<span>  fixed.x <span class="op">=</span> <span class="cn">FALSE</span>, <span class="co"># estimate means, variances, and covariances of the observed variables (to include predictors as part of FIML)</span></span>
+<span>  fixed_x <span class="op">=</span> <span class="cn">FALSE</span>, <span class="co"># estimate means, variances, and covariances of the observed variables (to include predictors as part of FIML)</span></span>
 <span>  bounds <span class="op">=</span> <span class="st">"standard"</span> <span class="co"># constrains observed variances, latent variances, and factor loadings to be within computed lower and upper bounds</span></span>
 <span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details><div class="cell-output cell-output-stderr">
@@ -2945,7 +2945,7 @@ R-Square:
 <span>  data <span class="op">=</span> <span class="va">mydata_wide</span>,</span>
 <span>  missing <span class="op">=</span> <span class="st">"ML"</span>, <span class="co"># FIML</span></span>
 <span>  estimator <span class="op">=</span> <span class="st">"MLR"</span>, <span class="co"># Huber-White robust standard errors (for heteroscedasticity and nonnormally distributed residuals)</span></span>
-<span>  fixed.x <span class="op">=</span> <span class="cn">FALSE</span>, <span class="co"># estimate means, variances, and covariances of the observed variables (to include predictors as part of FIML)</span></span>
+<span>  fixed_x <span class="op">=</span> <span class="cn">FALSE</span>, <span class="co"># estimate means, variances, and covariances of the observed variables (to include predictors as part of FIML)</span></span>
 <span>  bounds <span class="op">=</span> <span class="st">"standard"</span> <span class="co"># constrains observed variances, latent variances, and factor loadings to be within computed lower and upper bounds</span></span>
 <span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
@@ -2955,7 +2955,7 @@ R-Square:
 <div class="cell">
 <details open="" class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb82"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span></span>
 <span>  <span class="va">riclpm2_fit</span>,</span>
-<span>  fit.measures <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  fit_measures <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  standardized <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  rsquare <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details><div class="cell-output cell-output-stdout">
@@ -3176,7 +3176,7 @@ R-Square:
 <div class="cell">
 <details open="" class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb84"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/lavaan/man/modificationIndices.html">modificationindices</a></span><span class="op">(</span></span>
 <span>  <span class="va">riclpm2_fit</span>,</span>
-<span>  sort. <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span>  sort <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details><div class="cell-output-display">
 <div data-pagedtable="false">
   <script data-pagedtable-source="" type="application/json">
@@ -3194,8 +3194,8 @@ R-Square:
 <span>  <span class="co">#covs = TRUE,</span></span>
 <span>  stand <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details><div class="cell-output-display">
-<div class="grViz html-widget html-fill-item" id="htmlwidget-aa51798bf8fc32f6dea2" style="width:100%;height:464px;"></div>
-<script type="application/json" data-for="htmlwidget-aa51798bf8fc32f6dea2">{"x":{"diagram":" digraph plot { \n graph [ overlap = true, fontsize = 10 ] \n node [ shape = box ] \n node [shape = box] \n depression_1; depression_2; depression_3; depression_4; anxiety_1; anxiety_2; anxiety_3; anxiety_4 \n node [shape = oval] \n depression; anxiety; wdep1; wdep2; wdep3; wdep4; wanx1; wanx2; wanx3; wanx4 \n \n edge [ color = black ] \n wdep3->wdep4 [label = \"0.48\"] wdep2->wdep3 [label = \"-0.42\"] wdep1->wdep2 [label = \"0.24\"] wanx3->wanx4 [label = \"0.85\"] wanx2->wanx3 [label = \"0.65\"] wanx1->wanx2 [label = \"0.53\"] wanx3->wdep4 [label = \"0.39\"] wanx2->wdep3 [label = \"0.34\"] wanx1->wdep2 [label = \"-0.32\"] wdep3->wanx4 [label = \"0.01\"] wdep2->wanx3 [label = \"-0.58\"] wdep1->wanx2 [label = \"-0.46\"] depression->depression_1 [label = \"0.9\"] depression->depression_2 [label = \"1\"] depression->depression_3 [label = \"0.92\"] depression->depression_4 [label = \"0.8\"] anxiety->anxiety_1 [label = \"0.8\"] anxiety->anxiety_2 [label = \"0.66\"] anxiety->anxiety_3 [label = \"0.55\"] anxiety->anxiety_4 [label = \"0.43\"] wdep1->depression_1 [label = \"0.44\"] wdep2->depression_2 [label = \"0.01\"] wdep3->depression_3 [label = \"0.39\"] wdep4->depression_4 [label = \"0.6\"] wanx1->anxiety_1 [label = \"0.6\"] wanx2->anxiety_2 [label = \"0.75\"] wanx3->anxiety_3 [label = \"0.84\"] wanx4->anxiety_4 [label = \"0.9\"] \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div class="grViz html-widget html-fill-item" id="htmlwidget-5b23cf1e929d08e22335" style="width:100%;height:464px;"></div>
+<script type="application/json" data-for="htmlwidget-5b23cf1e929d08e22335">{"x":{"diagram":" digraph plot { \n graph [ overlap = true, fontsize = 10 ] \n node [ shape = box ] \n node [shape = box] \n depression_1; depression_2; depression_3; depression_4; anxiety_1; anxiety_2; anxiety_3; anxiety_4 \n node [shape = oval] \n depression; anxiety; wdep1; wdep2; wdep3; wdep4; wanx1; wanx2; wanx3; wanx4 \n \n edge [ color = black ] \n wdep3->wdep4 [label = \"0.48\"] wdep2->wdep3 [label = \"-0.42\"] wdep1->wdep2 [label = \"0.24\"] wanx3->wanx4 [label = \"0.85\"] wanx2->wanx3 [label = \"0.65\"] wanx1->wanx2 [label = \"0.53\"] wanx3->wdep4 [label = \"0.39\"] wanx2->wdep3 [label = \"0.34\"] wanx1->wdep2 [label = \"-0.32\"] wdep3->wanx4 [label = \"0.01\"] wdep2->wanx3 [label = \"-0.58\"] wdep1->wanx2 [label = \"-0.46\"] depression->depression_1 [label = \"0.9\"] depression->depression_2 [label = \"1\"] depression->depression_3 [label = \"0.92\"] depression->depression_4 [label = \"0.8\"] anxiety->anxiety_1 [label = \"0.8\"] anxiety->anxiety_2 [label = \"0.66\"] anxiety->anxiety_3 [label = \"0.55\"] anxiety->anxiety_4 [label = \"0.43\"] wdep1->depression_1 [label = \"0.44\"] wdep2->depression_2 [label = \"0.01\"] wdep3->depression_3 [label = \"0.39\"] wdep4->depression_4 [label = \"0.6\"] wanx1->anxiety_1 [label = \"0.6\"] wanx2->anxiety_2 [label = \"0.75\"] wanx3->anxiety_3 [label = \"0.84\"] wanx4->anxiety_4 [label = \"0.9\"] \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
 <p>To create an interactive path diagram, you can use the following syntax:</p>
@@ -3233,7 +3233,7 @@ R-Square:
 <div class="cell">
 <details open="" class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb89"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span></span>
 <span>  <span class="va">multilevelSEM_fit</span>,</span>
-<span>  fit.measures <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  fit_measures <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  standardized <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  rsquare <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details><div class="cell-output cell-output-stdout">
@@ -3379,7 +3379,7 @@ R-Square:
 <div class="cell">
 <details open="" class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb91"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/lavaan/man/modificationIndices.html">modificationindices</a></span><span class="op">(</span></span>
 <span>  <span class="va">multilevelSEM_fit</span>,</span>
-<span>  sort. <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span>  sort <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details><div class="cell-output-display">
 <div data-pagedtable="false">
   <script data-pagedtable-source="" type="application/json">
@@ -3397,8 +3397,8 @@ R-Square:
 <span>  <span class="co">#covs = TRUE,</span></span>
 <span>  stand <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details><div class="cell-output-display">
-<div class="grViz html-widget html-fill-item" id="htmlwidget-086e2d4cc135e5209005" style="width:100%;height:464px;"></div>
-<script type="application/json" data-for="htmlwidget-086e2d4cc135e5209005">{"x":{"diagram":" digraph plot { \n graph [ overlap = true, fontsize = 10 ] \n node [ shape = box ] \n node [shape = box] \n sleep_personMeanCentered; anxiety_personMeanCentered; ses_personMeanCentered; sexEffectCodeXsleep_personMeanCentered; sleep_personMean; anxiety_personMean; ses_personMean; sexEffectCode; sexEffectCodeXsleep_personMean; depression \n node [shape = oval] \n  \n \n edge [ color = black ] \n sleep_personMeanCentered->depression [label = \"-0.11\"] anxiety_personMeanCentered->depression [label = \"0.61\"] ses_personMeanCentered->depression [label = \"0.06\"] sexEffectCodeXsleep_personMeanCentered->depression [label = \"0\"] sleep_personMean->depression [label = \"-0.08\"] anxiety_personMean->depression [label = \"0.63\"] ses_personMean->depression [label = \"-0.12\"] sexEffectCode->depression [label = \"-0.55\"] sexEffectCodeXsleep_personMean->depression [label = \"0.41\"]  \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div class="grViz html-widget html-fill-item" id="htmlwidget-8fab9515ca62b4411130" style="width:100%;height:464px;"></div>
+<script type="application/json" data-for="htmlwidget-8fab9515ca62b4411130">{"x":{"diagram":" digraph plot { \n graph [ overlap = true, fontsize = 10 ] \n node [ shape = box ] \n node [shape = box] \n sleep_personMeanCentered; anxiety_personMeanCentered; ses_personMeanCentered; sexEffectCodeXsleep_personMeanCentered; sleep_personMean; anxiety_personMean; ses_personMean; sexEffectCode; sexEffectCodeXsleep_personMean; depression \n node [shape = oval] \n  \n \n edge [ color = black ] \n sleep_personMeanCentered->depression [label = \"-0.11\"] anxiety_personMeanCentered->depression [label = \"0.61\"] ses_personMeanCentered->depression [label = \"0.06\"] sexEffectCodeXsleep_personMeanCentered->depression [label = \"0\"] sleep_personMean->depression [label = \"-0.08\"] anxiety_personMean->depression [label = \"0.63\"] ses_personMean->depression [label = \"-0.12\"] sexEffectCode->depression [label = \"-0.55\"] sexEffectCodeXsleep_personMean->depression [label = \"0.41\"]  \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
 <p>To create an interactive path diagram, you can use the following syntax:</p>
@@ -3553,7 +3553,7 @@ R-Square:
 <span>  missing <span class="op">=</span> <span class="st">"ML"</span>, <span class="co"># FIML</span></span>
 <span>  estimator <span class="op">=</span> <span class="st">"MLR"</span>, <span class="co"># Huber-White robust standard errors (for heteroscedasticity and nonnormally distributed residuals)</span></span>
 <span>  meanstructure <span class="op">=</span> <span class="cn">TRUE</span>, <span class="co"># estimate means/intercepts</span></span>
-<span>  fixed.x <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="co"># estimate means, variances, and covariances of the observed variables (to include predictors as part of FIML)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span>  fixed_x <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="co"># estimate means, variances, and covariances of the observed variables (to include predictors as part of FIML)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 </section><section id="model-summary-7" class="level3" data-number="10.1.3"><h3 data-number="10.1.3" class="anchored" data-anchor-id="model-summary-7">
@@ -3561,7 +3561,7 @@ R-Square:
 <div class="cell">
 <details open="" class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb96"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span></span>
 <span>  <span class="va">configuralInvariance_fit</span>,</span>
-<span>  fit.measures <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  fit_measures <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  standardized <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  rsquare <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details><div class="cell-output cell-output-stdout">
@@ -3845,7 +3845,7 @@ R-Square:
 <div class="cell">
 <details open="" class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb98"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/lavaan/man/modificationIndices.html">modificationindices</a></span><span class="op">(</span></span>
 <span>  <span class="va">configuralInvariance_fit</span>,</span>
-<span>  sort. <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span>  sort <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details><div class="cell-output-display">
 <div data-pagedtable="false">
   <script data-pagedtable-source="" type="application/json">
@@ -3862,8 +3862,8 @@ R-Square:
 <span>  stand <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  coef_labels <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details><div class="cell-output-display">
-<div class="grViz html-widget html-fill-item" id="htmlwidget-0414d69de2361b209fc0" style="width:100%;height:464px;"></div>
-<script type="application/json" data-for="htmlwidget-0414d69de2361b209fc0">{"x":{"diagram":"digraph {\n\n\n\n\n  \"1\" [label = \"jobsat_1\", shape = \"oval\", group = \"latent\"] \n  \"2\" [label = \"jobsat_2\", shape = \"oval\", group = \"latent\"] \n  \"3\" [label = \"jobsat_3\", shape = \"oval\", group = \"latent\"] \n  \"4\" [label = \"ready_1\", shape = \"oval\", group = \"latent\"] \n  \"5\" [label = \"ready_2\", shape = \"oval\", group = \"latent\"] \n  \"6\" [label = \"ready_3\", shape = \"oval\", group = \"latent\"] \n  \"7\" [label = \"commit_1\", shape = \"oval\", group = \"latent\"] \n  \"8\" [label = \"commit_2\", shape = \"oval\", group = \"latent\"] \n  \"9\" [label = \"commit_3\", shape = \"oval\", group = \"latent\"] \n  \"10\" [label = \"JOBSAT11\", shape = \"box\", group = \"obs\"] \n  \"11\" [label = \"JOBSAT12\", shape = \"box\", group = \"obs\"] \n  \"12\" [label = \"JOBSAT13\", shape = \"box\", group = \"obs\"] \n  \"13\" [label = \"JOBSAT21\", shape = \"box\", group = \"obs\"] \n  \"14\" [label = \"JOBSAT22\", shape = \"box\", group = \"obs\"] \n  \"15\" [label = \"JOBSAT23\", shape = \"box\", group = \"obs\"] \n  \"16\" [label = \"JOBSAT31\", shape = \"box\", group = \"obs\"] \n  \"17\" [label = \"JOBSAT32\", shape = \"box\", group = \"obs\"] \n  \"18\" [label = \"JOBSAT33\", shape = \"box\", group = \"obs\"] \n  \"19\" [label = \"READY11\", shape = \"box\", group = \"obs\"] \n  \"20\" [label = \"READY12\", shape = \"box\", group = \"obs\"] \n  \"21\" [label = \"READY13\", shape = \"box\", group = \"obs\"] \n  \"22\" [label = \"READY21\", shape = \"box\", group = \"obs\"] \n  \"23\" [label = \"READY22\", shape = \"box\", group = \"obs\"] \n  \"24\" [label = \"READY23\", shape = \"box\", group = \"obs\"] \n  \"25\" [label = \"READY31\", shape = \"box\", group = \"obs\"] \n  \"26\" [label = \"READY32\", shape = \"box\", group = \"obs\"] \n  \"27\" [label = \"READY33\", shape = \"box\", group = \"obs\"] \n  \"28\" [label = \"COMMIT11\", shape = \"box\", group = \"obs\"] \n  \"29\" [label = \"COMMIT12\", shape = \"box\", group = \"obs\"] \n  \"30\" [label = \"COMMIT13\", shape = \"box\", group = \"obs\"] \n  \"31\" [label = \"COMMIT21\", shape = \"box\", group = \"obs\"] \n  \"32\" [label = \"COMMIT22\", shape = \"box\", group = \"obs\"] \n  \"33\" [label = \"COMMIT23\", shape = \"box\", group = \"obs\"] \n  \"34\" [label = \"COMMIT31\", shape = \"box\", group = \"obs\"] \n  \"35\" [label = \"COMMIT32\", shape = \"box\", group = \"obs\"] \n  \"36\" [label = \"COMMIT33\", shape = \"box\", group = \"obs\"] \n\"10\"->\"1\" [dir = \"back\", label = \"0.82\"] \n\"11\"->\"1\" [dir = \"back\", label = \"0.81\"] \n\"12\"->\"1\" [dir = \"back\", label = \"0.8\"] \n\"13\"->\"2\" [dir = \"back\", label = \"0.8\"] \n\"14\"->\"2\" [dir = \"back\", label = \"0.81\"] \n\"15\"->\"2\" [dir = \"back\", label = \"0.78\"] \n\"16\"->\"3\" [dir = \"back\", label = \"0.78\"] \n\"17\"->\"3\" [dir = \"back\", label = \"0.77\"] \n\"18\"->\"3\" [dir = \"back\", label = \"0.81\"] \n\"19\"->\"4\" [dir = \"back\", label = \"0.78\"] \n\"20\"->\"4\" [dir = \"back\", label = \"0.77\"] \n\"21\"->\"4\" [dir = \"back\", label = \"0.79\"] \n\"22\"->\"5\" [dir = \"back\", label = \"0.8\"] \n\"23\"->\"5\" [dir = \"back\", label = \"0.73\"] \n\"24\"->\"5\" [dir = \"back\", label = \"0.75\"] \n\"25\"->\"6\" [dir = \"back\", label = \"0.76\"] \n\"26\"->\"6\" [dir = \"back\", label = \"0.75\"] \n\"27\"->\"6\" [dir = \"back\", label = \"0.76\"] \n\"28\"->\"7\" [dir = \"back\", label = \"0.75\"] \n\"29\"->\"7\" [dir = \"back\", label = \"0.76\"] \n\"30\"->\"7\" [dir = \"back\", label = \"0.75\"] \n\"31\"->\"8\" [dir = \"back\", label = \"0.77\"] \n\"32\"->\"8\" [dir = \"back\", label = \"0.77\"] \n\"33\"->\"8\" [dir = \"back\", label = \"0.79\"] \n\"34\"->\"9\" [dir = \"back\", label = \"0.75\"] \n\"35\"->\"9\" [dir = \"back\", label = \"0.71\"] \n\"36\"->\"9\" [dir = \"back\", label = \"0.73\"] \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script><p>Path Diagram</p>
+<div class="grViz html-widget html-fill-item" id="htmlwidget-e5267d2695f90032152a" style="width:100%;height:464px;"></div>
+<script type="application/json" data-for="htmlwidget-e5267d2695f90032152a">{"x":{"diagram":"digraph {\n\n\n\n\n  \"1\" [label = \"jobsat_1\", shape = \"oval\", group = \"latent\"] \n  \"2\" [label = \"jobsat_2\", shape = \"oval\", group = \"latent\"] \n  \"3\" [label = \"jobsat_3\", shape = \"oval\", group = \"latent\"] \n  \"4\" [label = \"ready_1\", shape = \"oval\", group = \"latent\"] \n  \"5\" [label = \"ready_2\", shape = \"oval\", group = \"latent\"] \n  \"6\" [label = \"ready_3\", shape = \"oval\", group = \"latent\"] \n  \"7\" [label = \"commit_1\", shape = \"oval\", group = \"latent\"] \n  \"8\" [label = \"commit_2\", shape = \"oval\", group = \"latent\"] \n  \"9\" [label = \"commit_3\", shape = \"oval\", group = \"latent\"] \n  \"10\" [label = \"JOBSAT11\", shape = \"box\", group = \"obs\"] \n  \"11\" [label = \"JOBSAT12\", shape = \"box\", group = \"obs\"] \n  \"12\" [label = \"JOBSAT13\", shape = \"box\", group = \"obs\"] \n  \"13\" [label = \"JOBSAT21\", shape = \"box\", group = \"obs\"] \n  \"14\" [label = \"JOBSAT22\", shape = \"box\", group = \"obs\"] \n  \"15\" [label = \"JOBSAT23\", shape = \"box\", group = \"obs\"] \n  \"16\" [label = \"JOBSAT31\", shape = \"box\", group = \"obs\"] \n  \"17\" [label = \"JOBSAT32\", shape = \"box\", group = \"obs\"] \n  \"18\" [label = \"JOBSAT33\", shape = \"box\", group = \"obs\"] \n  \"19\" [label = \"READY11\", shape = \"box\", group = \"obs\"] \n  \"20\" [label = \"READY12\", shape = \"box\", group = \"obs\"] \n  \"21\" [label = \"READY13\", shape = \"box\", group = \"obs\"] \n  \"22\" [label = \"READY21\", shape = \"box\", group = \"obs\"] \n  \"23\" [label = \"READY22\", shape = \"box\", group = \"obs\"] \n  \"24\" [label = \"READY23\", shape = \"box\", group = \"obs\"] \n  \"25\" [label = \"READY31\", shape = \"box\", group = \"obs\"] \n  \"26\" [label = \"READY32\", shape = \"box\", group = \"obs\"] \n  \"27\" [label = \"READY33\", shape = \"box\", group = \"obs\"] \n  \"28\" [label = \"COMMIT11\", shape = \"box\", group = \"obs\"] \n  \"29\" [label = \"COMMIT12\", shape = \"box\", group = \"obs\"] \n  \"30\" [label = \"COMMIT13\", shape = \"box\", group = \"obs\"] \n  \"31\" [label = \"COMMIT21\", shape = \"box\", group = \"obs\"] \n  \"32\" [label = \"COMMIT22\", shape = \"box\", group = \"obs\"] \n  \"33\" [label = \"COMMIT23\", shape = \"box\", group = \"obs\"] \n  \"34\" [label = \"COMMIT31\", shape = \"box\", group = \"obs\"] \n  \"35\" [label = \"COMMIT32\", shape = \"box\", group = \"obs\"] \n  \"36\" [label = \"COMMIT33\", shape = \"box\", group = \"obs\"] \n\"10\"->\"1\" [dir = \"back\", label = \"0.82\"] \n\"11\"->\"1\" [dir = \"back\", label = \"0.81\"] \n\"12\"->\"1\" [dir = \"back\", label = \"0.8\"] \n\"13\"->\"2\" [dir = \"back\", label = \"0.8\"] \n\"14\"->\"2\" [dir = \"back\", label = \"0.81\"] \n\"15\"->\"2\" [dir = \"back\", label = \"0.78\"] \n\"16\"->\"3\" [dir = \"back\", label = \"0.78\"] \n\"17\"->\"3\" [dir = \"back\", label = \"0.77\"] \n\"18\"->\"3\" [dir = \"back\", label = \"0.81\"] \n\"19\"->\"4\" [dir = \"back\", label = \"0.78\"] \n\"20\"->\"4\" [dir = \"back\", label = \"0.77\"] \n\"21\"->\"4\" [dir = \"back\", label = \"0.79\"] \n\"22\"->\"5\" [dir = \"back\", label = \"0.8\"] \n\"23\"->\"5\" [dir = \"back\", label = \"0.73\"] \n\"24\"->\"5\" [dir = \"back\", label = \"0.75\"] \n\"25\"->\"6\" [dir = \"back\", label = \"0.76\"] \n\"26\"->\"6\" [dir = \"back\", label = \"0.75\"] \n\"27\"->\"6\" [dir = \"back\", label = \"0.76\"] \n\"28\"->\"7\" [dir = \"back\", label = \"0.75\"] \n\"29\"->\"7\" [dir = \"back\", label = \"0.76\"] \n\"30\"->\"7\" [dir = \"back\", label = \"0.75\"] \n\"31\"->\"8\" [dir = \"back\", label = \"0.77\"] \n\"32\"->\"8\" [dir = \"back\", label = \"0.77\"] \n\"33\"->\"8\" [dir = \"back\", label = \"0.79\"] \n\"34\"->\"9\" [dir = \"back\", label = \"0.75\"] \n\"35\"->\"9\" [dir = \"back\", label = \"0.71\"] \n\"36\"->\"9\" [dir = \"back\", label = \"0.73\"] \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script><p>Path Diagram</p>
 </div>
 </div>
 <p>To create an interactive path diagram, you can use the following syntax:</p>
@@ -4042,7 +4042,7 @@ R-Square:
 <span>  missing <span class="op">=</span> <span class="st">"ML"</span>, <span class="co"># FIML</span></span>
 <span>  estimator <span class="op">=</span> <span class="st">"MLR"</span>, <span class="co"># Huber-White robust standard errors (for heteroscedasticity and nonnormally distributed residuals)</span></span>
 <span>  meanstructure <span class="op">=</span> <span class="cn">TRUE</span>, <span class="co"># estimate means/intercepts</span></span>
-<span>  fixed.x <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="co"># estimate means, variances, and covariances of the observed variables (to include predictors as part of FIML)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span>  fixed_x <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="co"># estimate means, variances, and covariances of the observed variables (to include predictors as part of FIML)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 </section><section id="model-summary-8" class="level3" data-number="10.2.3"><h3 data-number="10.2.3" class="anchored" data-anchor-id="model-summary-8">
@@ -4050,7 +4050,7 @@ R-Square:
 <div class="cell">
 <details open="" class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb103"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span></span>
 <span>  <span class="va">configuralInvarianceCorrelatedResiduals_fit</span>,</span>
-<span>  fit.measures <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  fit_measures <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  standardized <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  rsquare <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details><div class="cell-output cell-output-stdout">
@@ -4388,7 +4388,7 @@ R-Square:
 <div class="cell">
 <details open="" class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb105"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/lavaan/man/modificationIndices.html">modificationindices</a></span><span class="op">(</span></span>
 <span>  <span class="va">configuralInvarianceCorrelatedResiduals_fit</span>,</span>
-<span>  sort. <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span>  sort <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details><div class="cell-output-display">
 <div data-pagedtable="false">
   <script data-pagedtable-source="" type="application/json">
@@ -4405,8 +4405,8 @@ R-Square:
 <span>  stand <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  coef_labels <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details><div class="cell-output-display">
-<div class="grViz html-widget html-fill-item" id="htmlwidget-de7dc32db40a18daf7b9" style="width:100%;height:464px;"></div>
-<script type="application/json" data-for="htmlwidget-de7dc32db40a18daf7b9">{"x":{"diagram":"digraph {\n\n\n\n\n  \"1\" [label = \"jobsat_1\", shape = \"oval\", group = \"latent\"] \n  \"2\" [label = \"jobsat_2\", shape = \"oval\", group = \"latent\"] \n  \"3\" [label = \"jobsat_3\", shape = \"oval\", group = \"latent\"] \n  \"4\" [label = \"ready_1\", shape = \"oval\", group = \"latent\"] \n  \"5\" [label = \"ready_2\", shape = \"oval\", group = \"latent\"] \n  \"6\" [label = \"ready_3\", shape = \"oval\", group = \"latent\"] \n  \"7\" [label = \"commit_1\", shape = \"oval\", group = \"latent\"] \n  \"8\" [label = \"commit_2\", shape = \"oval\", group = \"latent\"] \n  \"9\" [label = \"commit_3\", shape = \"oval\", group = \"latent\"] \n  \"10\" [label = \"JOBSAT11\", shape = \"box\", group = \"obs\"] \n  \"11\" [label = \"JOBSAT12\", shape = \"box\", group = \"obs\"] \n  \"12\" [label = \"JOBSAT13\", shape = \"box\", group = \"obs\"] \n  \"13\" [label = \"JOBSAT21\", shape = \"box\", group = \"obs\"] \n  \"14\" [label = \"JOBSAT22\", shape = \"box\", group = \"obs\"] \n  \"15\" [label = \"JOBSAT23\", shape = \"box\", group = \"obs\"] \n  \"16\" [label = \"JOBSAT31\", shape = \"box\", group = \"obs\"] \n  \"17\" [label = \"JOBSAT32\", shape = \"box\", group = \"obs\"] \n  \"18\" [label = \"JOBSAT33\", shape = \"box\", group = \"obs\"] \n  \"19\" [label = \"READY11\", shape = \"box\", group = \"obs\"] \n  \"20\" [label = \"READY12\", shape = \"box\", group = \"obs\"] \n  \"21\" [label = \"READY13\", shape = \"box\", group = \"obs\"] \n  \"22\" [label = \"READY21\", shape = \"box\", group = \"obs\"] \n  \"23\" [label = \"READY22\", shape = \"box\", group = \"obs\"] \n  \"24\" [label = \"READY23\", shape = \"box\", group = \"obs\"] \n  \"25\" [label = \"READY31\", shape = \"box\", group = \"obs\"] \n  \"26\" [label = \"READY32\", shape = \"box\", group = \"obs\"] \n  \"27\" [label = \"READY33\", shape = \"box\", group = \"obs\"] \n  \"28\" [label = \"COMMIT11\", shape = \"box\", group = \"obs\"] \n  \"29\" [label = \"COMMIT12\", shape = \"box\", group = \"obs\"] \n  \"30\" [label = \"COMMIT13\", shape = \"box\", group = \"obs\"] \n  \"31\" [label = \"COMMIT21\", shape = \"box\", group = \"obs\"] \n  \"32\" [label = \"COMMIT22\", shape = \"box\", group = \"obs\"] \n  \"33\" [label = \"COMMIT23\", shape = \"box\", group = \"obs\"] \n  \"34\" [label = \"COMMIT31\", shape = \"box\", group = \"obs\"] \n  \"35\" [label = \"COMMIT32\", shape = \"box\", group = \"obs\"] \n  \"36\" [label = \"COMMIT33\", shape = \"box\", group = \"obs\"] \n\"10\"->\"1\" [dir = \"back\", label = \"0.81\"] \n\"11\"->\"1\" [dir = \"back\", label = \"0.81\"] \n\"12\"->\"1\" [dir = \"back\", label = \"0.81\"] \n\"13\"->\"2\" [dir = \"back\", label = \"0.79\"] \n\"14\"->\"2\" [dir = \"back\", label = \"0.8\"] \n\"15\"->\"2\" [dir = \"back\", label = \"0.79\"] \n\"16\"->\"3\" [dir = \"back\", label = \"0.77\"] \n\"17\"->\"3\" [dir = \"back\", label = \"0.78\"] \n\"18\"->\"3\" [dir = \"back\", label = \"0.81\"] \n\"19\"->\"4\" [dir = \"back\", label = \"0.79\"] \n\"20\"->\"4\" [dir = \"back\", label = \"0.76\"] \n\"21\"->\"4\" [dir = \"back\", label = \"0.79\"] \n\"22\"->\"5\" [dir = \"back\", label = \"0.8\"] \n\"23\"->\"5\" [dir = \"back\", label = \"0.72\"] \n\"24\"->\"5\" [dir = \"back\", label = \"0.76\"] \n\"25\"->\"6\" [dir = \"back\", label = \"0.77\"] \n\"26\"->\"6\" [dir = \"back\", label = \"0.74\"] \n\"27\"->\"6\" [dir = \"back\", label = \"0.76\"] \n\"28\"->\"7\" [dir = \"back\", label = \"0.76\"] \n\"29\"->\"7\" [dir = \"back\", label = \"0.76\"] \n\"30\"->\"7\" [dir = \"back\", label = \"0.74\"] \n\"31\"->\"8\" [dir = \"back\", label = \"0.77\"] \n\"32\"->\"8\" [dir = \"back\", label = \"0.77\"] \n\"33\"->\"8\" [dir = \"back\", label = \"0.78\"] \n\"34\"->\"9\" [dir = \"back\", label = \"0.74\"] \n\"35\"->\"9\" [dir = \"back\", label = \"0.71\"] \n\"36\"->\"9\" [dir = \"back\", label = \"0.73\"] \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script><p>Path Diagram</p>
+<div class="grViz html-widget html-fill-item" id="htmlwidget-76bf44b1988e23b97d51" style="width:100%;height:464px;"></div>
+<script type="application/json" data-for="htmlwidget-76bf44b1988e23b97d51">{"x":{"diagram":"digraph {\n\n\n\n\n  \"1\" [label = \"jobsat_1\", shape = \"oval\", group = \"latent\"] \n  \"2\" [label = \"jobsat_2\", shape = \"oval\", group = \"latent\"] \n  \"3\" [label = \"jobsat_3\", shape = \"oval\", group = \"latent\"] \n  \"4\" [label = \"ready_1\", shape = \"oval\", group = \"latent\"] \n  \"5\" [label = \"ready_2\", shape = \"oval\", group = \"latent\"] \n  \"6\" [label = \"ready_3\", shape = \"oval\", group = \"latent\"] \n  \"7\" [label = \"commit_1\", shape = \"oval\", group = \"latent\"] \n  \"8\" [label = \"commit_2\", shape = \"oval\", group = \"latent\"] \n  \"9\" [label = \"commit_3\", shape = \"oval\", group = \"latent\"] \n  \"10\" [label = \"JOBSAT11\", shape = \"box\", group = \"obs\"] \n  \"11\" [label = \"JOBSAT12\", shape = \"box\", group = \"obs\"] \n  \"12\" [label = \"JOBSAT13\", shape = \"box\", group = \"obs\"] \n  \"13\" [label = \"JOBSAT21\", shape = \"box\", group = \"obs\"] \n  \"14\" [label = \"JOBSAT22\", shape = \"box\", group = \"obs\"] \n  \"15\" [label = \"JOBSAT23\", shape = \"box\", group = \"obs\"] \n  \"16\" [label = \"JOBSAT31\", shape = \"box\", group = \"obs\"] \n  \"17\" [label = \"JOBSAT32\", shape = \"box\", group = \"obs\"] \n  \"18\" [label = \"JOBSAT33\", shape = \"box\", group = \"obs\"] \n  \"19\" [label = \"READY11\", shape = \"box\", group = \"obs\"] \n  \"20\" [label = \"READY12\", shape = \"box\", group = \"obs\"] \n  \"21\" [label = \"READY13\", shape = \"box\", group = \"obs\"] \n  \"22\" [label = \"READY21\", shape = \"box\", group = \"obs\"] \n  \"23\" [label = \"READY22\", shape = \"box\", group = \"obs\"] \n  \"24\" [label = \"READY23\", shape = \"box\", group = \"obs\"] \n  \"25\" [label = \"READY31\", shape = \"box\", group = \"obs\"] \n  \"26\" [label = \"READY32\", shape = \"box\", group = \"obs\"] \n  \"27\" [label = \"READY33\", shape = \"box\", group = \"obs\"] \n  \"28\" [label = \"COMMIT11\", shape = \"box\", group = \"obs\"] \n  \"29\" [label = \"COMMIT12\", shape = \"box\", group = \"obs\"] \n  \"30\" [label = \"COMMIT13\", shape = \"box\", group = \"obs\"] \n  \"31\" [label = \"COMMIT21\", shape = \"box\", group = \"obs\"] \n  \"32\" [label = \"COMMIT22\", shape = \"box\", group = \"obs\"] \n  \"33\" [label = \"COMMIT23\", shape = \"box\", group = \"obs\"] \n  \"34\" [label = \"COMMIT31\", shape = \"box\", group = \"obs\"] \n  \"35\" [label = \"COMMIT32\", shape = \"box\", group = \"obs\"] \n  \"36\" [label = \"COMMIT33\", shape = \"box\", group = \"obs\"] \n\"10\"->\"1\" [dir = \"back\", label = \"0.81\"] \n\"11\"->\"1\" [dir = \"back\", label = \"0.81\"] \n\"12\"->\"1\" [dir = \"back\", label = \"0.81\"] \n\"13\"->\"2\" [dir = \"back\", label = \"0.79\"] \n\"14\"->\"2\" [dir = \"back\", label = \"0.8\"] \n\"15\"->\"2\" [dir = \"back\", label = \"0.79\"] \n\"16\"->\"3\" [dir = \"back\", label = \"0.77\"] \n\"17\"->\"3\" [dir = \"back\", label = \"0.78\"] \n\"18\"->\"3\" [dir = \"back\", label = \"0.81\"] \n\"19\"->\"4\" [dir = \"back\", label = \"0.79\"] \n\"20\"->\"4\" [dir = \"back\", label = \"0.76\"] \n\"21\"->\"4\" [dir = \"back\", label = \"0.79\"] \n\"22\"->\"5\" [dir = \"back\", label = \"0.8\"] \n\"23\"->\"5\" [dir = \"back\", label = \"0.72\"] \n\"24\"->\"5\" [dir = \"back\", label = \"0.76\"] \n\"25\"->\"6\" [dir = \"back\", label = \"0.77\"] \n\"26\"->\"6\" [dir = \"back\", label = \"0.74\"] \n\"27\"->\"6\" [dir = \"back\", label = \"0.76\"] \n\"28\"->\"7\" [dir = \"back\", label = \"0.76\"] \n\"29\"->\"7\" [dir = \"back\", label = \"0.76\"] \n\"30\"->\"7\" [dir = \"back\", label = \"0.74\"] \n\"31\"->\"8\" [dir = \"back\", label = \"0.77\"] \n\"32\"->\"8\" [dir = \"back\", label = \"0.77\"] \n\"33\"->\"8\" [dir = \"back\", label = \"0.78\"] \n\"34\"->\"9\" [dir = \"back\", label = \"0.74\"] \n\"35\"->\"9\" [dir = \"back\", label = \"0.71\"] \n\"36\"->\"9\" [dir = \"back\", label = \"0.73\"] \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script><p>Path Diagram</p>
 </div>
 </div>
 <p>To create an interactive path diagram, you can use the following syntax:</p>
@@ -4601,7 +4601,7 @@ R-Square:
 <span>  missing <span class="op">=</span> <span class="st">"ML"</span>, <span class="co"># FIML</span></span>
 <span>  estimator <span class="op">=</span> <span class="st">"MLR"</span>, <span class="co"># Huber-White robust standard errors (for heteroscedasticity and nonnormally distributed residuals)</span></span>
 <span>  meanstructure <span class="op">=</span> <span class="cn">TRUE</span>, <span class="co"># estimate means/intercepts</span></span>
-<span>  fixed.x <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="co"># estimate means, variances, and covariances of the observed variables (to include predictors as part of FIML)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span>  fixed_x <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="co"># estimate means, variances, and covariances of the observed variables (to include predictors as part of FIML)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 </section><section id="model-summary-9" class="level3" data-number="10.3.3"><h3 data-number="10.3.3" class="anchored" data-anchor-id="model-summary-9">
@@ -4609,7 +4609,7 @@ R-Square:
 <div class="cell">
 <details open="" class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb111"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span></span>
 <span>  <span class="va">metricInvariance_fit</span>,</span>
-<span>  fit.measures <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  fit_measures <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  standardized <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  rsquare <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details><div class="cell-output cell-output-stdout">
@@ -4947,7 +4947,7 @@ R-Square:
 <div class="cell">
 <details open="" class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb113"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/lavaan/man/modificationIndices.html">modificationindices</a></span><span class="op">(</span></span>
 <span>  <span class="va">metricInvariance_fit</span>,</span>
-<span>  sort. <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span>  sort <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details><div class="cell-output-display">
 <div data-pagedtable="false">
   <script data-pagedtable-source="" type="application/json">
@@ -4964,8 +4964,8 @@ R-Square:
 <span>  stand <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  coef_labels <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details><div class="cell-output-display">
-<div class="grViz html-widget html-fill-item" id="htmlwidget-dc3a13d723480a5e3525" style="width:100%;height:464px;"></div>
-<script type="application/json" data-for="htmlwidget-dc3a13d723480a5e3525">{"x":{"diagram":"digraph {\n\n\n\n\n  \"1\" [label = \"jobsat_1\", shape = \"oval\", group = \"latent\"] \n  \"2\" [label = \"jobsat_2\", shape = \"oval\", group = \"latent\"] \n  \"3\" [label = \"jobsat_3\", shape = \"oval\", group = \"latent\"] \n  \"4\" [label = \"ready_1\", shape = \"oval\", group = \"latent\"] \n  \"5\" [label = \"ready_2\", shape = \"oval\", group = \"latent\"] \n  \"6\" [label = \"ready_3\", shape = \"oval\", group = \"latent\"] \n  \"7\" [label = \"commit_1\", shape = \"oval\", group = \"latent\"] \n  \"8\" [label = \"commit_2\", shape = \"oval\", group = \"latent\"] \n  \"9\" [label = \"commit_3\", shape = \"oval\", group = \"latent\"] \n  \"10\" [label = \"JOBSAT11\", shape = \"box\", group = \"obs\"] \n  \"11\" [label = \"JOBSAT12\", shape = \"box\", group = \"obs\"] \n  \"12\" [label = \"JOBSAT13\", shape = \"box\", group = \"obs\"] \n  \"13\" [label = \"JOBSAT21\", shape = \"box\", group = \"obs\"] \n  \"14\" [label = \"JOBSAT22\", shape = \"box\", group = \"obs\"] \n  \"15\" [label = \"JOBSAT23\", shape = \"box\", group = \"obs\"] \n  \"16\" [label = \"JOBSAT31\", shape = \"box\", group = \"obs\"] \n  \"17\" [label = \"JOBSAT32\", shape = \"box\", group = \"obs\"] \n  \"18\" [label = \"JOBSAT33\", shape = \"box\", group = \"obs\"] \n  \"19\" [label = \"READY11\", shape = \"box\", group = \"obs\"] \n  \"20\" [label = \"READY12\", shape = \"box\", group = \"obs\"] \n  \"21\" [label = \"READY13\", shape = \"box\", group = \"obs\"] \n  \"22\" [label = \"READY21\", shape = \"box\", group = \"obs\"] \n  \"23\" [label = \"READY22\", shape = \"box\", group = \"obs\"] \n  \"24\" [label = \"READY23\", shape = \"box\", group = \"obs\"] \n  \"25\" [label = \"READY31\", shape = \"box\", group = \"obs\"] \n  \"26\" [label = \"READY32\", shape = \"box\", group = \"obs\"] \n  \"27\" [label = \"READY33\", shape = \"box\", group = \"obs\"] \n  \"28\" [label = \"COMMIT11\", shape = \"box\", group = \"obs\"] \n  \"29\" [label = \"COMMIT12\", shape = \"box\", group = \"obs\"] \n  \"30\" [label = \"COMMIT13\", shape = \"box\", group = \"obs\"] \n  \"31\" [label = \"COMMIT21\", shape = \"box\", group = \"obs\"] \n  \"32\" [label = \"COMMIT22\", shape = \"box\", group = \"obs\"] \n  \"33\" [label = \"COMMIT23\", shape = \"box\", group = \"obs\"] \n  \"34\" [label = \"COMMIT31\", shape = \"box\", group = \"obs\"] \n  \"35\" [label = \"COMMIT32\", shape = \"box\", group = \"obs\"] \n  \"36\" [label = \"COMMIT33\", shape = \"box\", group = \"obs\"] \n\"10\"->\"1\" [dir = \"back\", label = \"0.81\"] \n\"11\"->\"1\" [dir = \"back\", label = \"0.8\"] \n\"12\"->\"1\" [dir = \"back\", label = \"0.82\"] \n\"13\"->\"2\" [dir = \"back\", label = \"0.78\"] \n\"14\"->\"2\" [dir = \"back\", label = \"0.8\"] \n\"15\"->\"2\" [dir = \"back\", label = \"0.8\"] \n\"16\"->\"3\" [dir = \"back\", label = \"0.78\"] \n\"17\"->\"3\" [dir = \"back\", label = \"0.79\"] \n\"18\"->\"3\" [dir = \"back\", label = \"0.78\"] \n\"19\"->\"4\" [dir = \"back\", label = \"0.8\"] \n\"20\"->\"4\" [dir = \"back\", label = \"0.75\"] \n\"21\"->\"4\" [dir = \"back\", label = \"0.78\"] \n\"22\"->\"5\" [dir = \"back\", label = \"0.78\"] \n\"23\"->\"5\" [dir = \"back\", label = \"0.74\"] \n\"24\"->\"5\" [dir = \"back\", label = \"0.76\"] \n\"25\"->\"6\" [dir = \"back\", label = \"0.77\"] \n\"26\"->\"6\" [dir = \"back\", label = \"0.74\"] \n\"27\"->\"6\" [dir = \"back\", label = \"0.76\"] \n\"28\"->\"7\" [dir = \"back\", label = \"0.75\"] \n\"29\"->\"7\" [dir = \"back\", label = \"0.74\"] \n\"30\"->\"7\" [dir = \"back\", label = \"0.76\"] \n\"31\"->\"8\" [dir = \"back\", label = \"0.78\"] \n\"32\"->\"8\" [dir = \"back\", label = \"0.77\"] \n\"33\"->\"8\" [dir = \"back\", label = \"0.77\"] \n\"34\"->\"9\" [dir = \"back\", label = \"0.74\"] \n\"35\"->\"9\" [dir = \"back\", label = \"0.72\"] \n\"36\"->\"9\" [dir = \"back\", label = \"0.73\"] \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script><p>Path Diagram</p>
+<div class="grViz html-widget html-fill-item" id="htmlwidget-0afbff1e38b5a28ba281" style="width:100%;height:464px;"></div>
+<script type="application/json" data-for="htmlwidget-0afbff1e38b5a28ba281">{"x":{"diagram":"digraph {\n\n\n\n\n  \"1\" [label = \"jobsat_1\", shape = \"oval\", group = \"latent\"] \n  \"2\" [label = \"jobsat_2\", shape = \"oval\", group = \"latent\"] \n  \"3\" [label = \"jobsat_3\", shape = \"oval\", group = \"latent\"] \n  \"4\" [label = \"ready_1\", shape = \"oval\", group = \"latent\"] \n  \"5\" [label = \"ready_2\", shape = \"oval\", group = \"latent\"] \n  \"6\" [label = \"ready_3\", shape = \"oval\", group = \"latent\"] \n  \"7\" [label = \"commit_1\", shape = \"oval\", group = \"latent\"] \n  \"8\" [label = \"commit_2\", shape = \"oval\", group = \"latent\"] \n  \"9\" [label = \"commit_3\", shape = \"oval\", group = \"latent\"] \n  \"10\" [label = \"JOBSAT11\", shape = \"box\", group = \"obs\"] \n  \"11\" [label = \"JOBSAT12\", shape = \"box\", group = \"obs\"] \n  \"12\" [label = \"JOBSAT13\", shape = \"box\", group = \"obs\"] \n  \"13\" [label = \"JOBSAT21\", shape = \"box\", group = \"obs\"] \n  \"14\" [label = \"JOBSAT22\", shape = \"box\", group = \"obs\"] \n  \"15\" [label = \"JOBSAT23\", shape = \"box\", group = \"obs\"] \n  \"16\" [label = \"JOBSAT31\", shape = \"box\", group = \"obs\"] \n  \"17\" [label = \"JOBSAT32\", shape = \"box\", group = \"obs\"] \n  \"18\" [label = \"JOBSAT33\", shape = \"box\", group = \"obs\"] \n  \"19\" [label = \"READY11\", shape = \"box\", group = \"obs\"] \n  \"20\" [label = \"READY12\", shape = \"box\", group = \"obs\"] \n  \"21\" [label = \"READY13\", shape = \"box\", group = \"obs\"] \n  \"22\" [label = \"READY21\", shape = \"box\", group = \"obs\"] \n  \"23\" [label = \"READY22\", shape = \"box\", group = \"obs\"] \n  \"24\" [label = \"READY23\", shape = \"box\", group = \"obs\"] \n  \"25\" [label = \"READY31\", shape = \"box\", group = \"obs\"] \n  \"26\" [label = \"READY32\", shape = \"box\", group = \"obs\"] \n  \"27\" [label = \"READY33\", shape = \"box\", group = \"obs\"] \n  \"28\" [label = \"COMMIT11\", shape = \"box\", group = \"obs\"] \n  \"29\" [label = \"COMMIT12\", shape = \"box\", group = \"obs\"] \n  \"30\" [label = \"COMMIT13\", shape = \"box\", group = \"obs\"] \n  \"31\" [label = \"COMMIT21\", shape = \"box\", group = \"obs\"] \n  \"32\" [label = \"COMMIT22\", shape = \"box\", group = \"obs\"] \n  \"33\" [label = \"COMMIT23\", shape = \"box\", group = \"obs\"] \n  \"34\" [label = \"COMMIT31\", shape = \"box\", group = \"obs\"] \n  \"35\" [label = \"COMMIT32\", shape = \"box\", group = \"obs\"] \n  \"36\" [label = \"COMMIT33\", shape = \"box\", group = \"obs\"] \n\"10\"->\"1\" [dir = \"back\", label = \"0.81\"] \n\"11\"->\"1\" [dir = \"back\", label = \"0.8\"] \n\"12\"->\"1\" [dir = \"back\", label = \"0.82\"] \n\"13\"->\"2\" [dir = \"back\", label = \"0.78\"] \n\"14\"->\"2\" [dir = \"back\", label = \"0.8\"] \n\"15\"->\"2\" [dir = \"back\", label = \"0.8\"] \n\"16\"->\"3\" [dir = \"back\", label = \"0.78\"] \n\"17\"->\"3\" [dir = \"back\", label = \"0.79\"] \n\"18\"->\"3\" [dir = \"back\", label = \"0.78\"] \n\"19\"->\"4\" [dir = \"back\", label = \"0.8\"] \n\"20\"->\"4\" [dir = \"back\", label = \"0.75\"] \n\"21\"->\"4\" [dir = \"back\", label = \"0.78\"] \n\"22\"->\"5\" [dir = \"back\", label = \"0.78\"] \n\"23\"->\"5\" [dir = \"back\", label = \"0.74\"] \n\"24\"->\"5\" [dir = \"back\", label = \"0.76\"] \n\"25\"->\"6\" [dir = \"back\", label = \"0.77\"] \n\"26\"->\"6\" [dir = \"back\", label = \"0.74\"] \n\"27\"->\"6\" [dir = \"back\", label = \"0.76\"] \n\"28\"->\"7\" [dir = \"back\", label = \"0.75\"] \n\"29\"->\"7\" [dir = \"back\", label = \"0.74\"] \n\"30\"->\"7\" [dir = \"back\", label = \"0.76\"] \n\"31\"->\"8\" [dir = \"back\", label = \"0.78\"] \n\"32\"->\"8\" [dir = \"back\", label = \"0.77\"] \n\"33\"->\"8\" [dir = \"back\", label = \"0.77\"] \n\"34\"->\"9\" [dir = \"back\", label = \"0.74\"] \n\"35\"->\"9\" [dir = \"back\", label = \"0.72\"] \n\"36\"->\"9\" [dir = \"back\", label = \"0.73\"] \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script><p>Path Diagram</p>
 </div>
 </div>
 <p>To create an interactive path diagram, you can use the following syntax:</p>
@@ -5156,7 +5156,7 @@ R-Square:
 <span>  missing <span class="op">=</span> <span class="st">"ML"</span>, <span class="co"># FIML</span></span>
 <span>  estimator <span class="op">=</span> <span class="st">"MLR"</span>, <span class="co"># Huber-White robust standard errors (for heteroscedasticity and nonnormally distributed residuals)</span></span>
 <span>  meanstructure <span class="op">=</span> <span class="cn">TRUE</span>, <span class="co"># estimate means/intercepts</span></span>
-<span>  fixed.x <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="co"># estimate means, variances, and covariances of the observed variables (to include predictors as part of FIML)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span>  fixed_x <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="co"># estimate means, variances, and covariances of the observed variables (to include predictors as part of FIML)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 </section><section id="model-summary-10" class="level3" data-number="10.4.3"><h3 data-number="10.4.3" class="anchored" data-anchor-id="model-summary-10">
@@ -5164,7 +5164,7 @@ R-Square:
 <div class="cell">
 <details open="" class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb119"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span></span>
 <span>  <span class="va">scalarInvariance_fit</span>,</span>
-<span>  fit.measures <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  fit_measures <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  standardized <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  rsquare <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details><div class="cell-output cell-output-stdout">
@@ -5502,7 +5502,7 @@ R-Square:
 <div class="cell">
 <details open="" class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb121"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/lavaan/man/modificationIndices.html">modificationindices</a></span><span class="op">(</span></span>
 <span>  <span class="va">scalarInvariance_fit</span>,</span>
-<span>  sort. <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span>  sort <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details><div class="cell-output-display">
 <div data-pagedtable="false">
   <script data-pagedtable-source="" type="application/json">
@@ -5519,8 +5519,8 @@ R-Square:
 <span>  stand <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  coef_labels <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details><div class="cell-output-display">
-<div class="grViz html-widget html-fill-item" id="htmlwidget-6d00e148de83416b2e5d" style="width:100%;height:464px;"></div>
-<script type="application/json" data-for="htmlwidget-6d00e148de83416b2e5d">{"x":{"diagram":"digraph {\n\n\n\n\n  \"1\" [label = \"jobsat_1\", shape = \"oval\", group = \"latent\"] \n  \"2\" [label = \"jobsat_2\", shape = \"oval\", group = \"latent\"] \n  \"3\" [label = \"jobsat_3\", shape = \"oval\", group = \"latent\"] \n  \"4\" [label = \"ready_1\", shape = \"oval\", group = \"latent\"] \n  \"5\" [label = \"ready_2\", shape = \"oval\", group = \"latent\"] \n  \"6\" [label = \"ready_3\", shape = \"oval\", group = \"latent\"] \n  \"7\" [label = \"commit_1\", shape = \"oval\", group = \"latent\"] \n  \"8\" [label = \"commit_2\", shape = \"oval\", group = \"latent\"] \n  \"9\" [label = \"commit_3\", shape = \"oval\", group = \"latent\"] \n  \"10\" [label = \"JOBSAT11\", shape = \"box\", group = \"obs\"] \n  \"11\" [label = \"JOBSAT12\", shape = \"box\", group = \"obs\"] \n  \"12\" [label = \"JOBSAT13\", shape = \"box\", group = \"obs\"] \n  \"13\" [label = \"JOBSAT21\", shape = \"box\", group = \"obs\"] \n  \"14\" [label = \"JOBSAT22\", shape = \"box\", group = \"obs\"] \n  \"15\" [label = \"JOBSAT23\", shape = \"box\", group = \"obs\"] \n  \"16\" [label = \"JOBSAT31\", shape = \"box\", group = \"obs\"] \n  \"17\" [label = \"JOBSAT32\", shape = \"box\", group = \"obs\"] \n  \"18\" [label = \"JOBSAT33\", shape = \"box\", group = \"obs\"] \n  \"19\" [label = \"READY11\", shape = \"box\", group = \"obs\"] \n  \"20\" [label = \"READY12\", shape = \"box\", group = \"obs\"] \n  \"21\" [label = \"READY13\", shape = \"box\", group = \"obs\"] \n  \"22\" [label = \"READY21\", shape = \"box\", group = \"obs\"] \n  \"23\" [label = \"READY22\", shape = \"box\", group = \"obs\"] \n  \"24\" [label = \"READY23\", shape = \"box\", group = \"obs\"] \n  \"25\" [label = \"READY31\", shape = \"box\", group = \"obs\"] \n  \"26\" [label = \"READY32\", shape = \"box\", group = \"obs\"] \n  \"27\" [label = \"READY33\", shape = \"box\", group = \"obs\"] \n  \"28\" [label = \"COMMIT11\", shape = \"box\", group = \"obs\"] \n  \"29\" [label = \"COMMIT12\", shape = \"box\", group = \"obs\"] \n  \"30\" [label = \"COMMIT13\", shape = \"box\", group = \"obs\"] \n  \"31\" [label = \"COMMIT21\", shape = \"box\", group = \"obs\"] \n  \"32\" [label = \"COMMIT22\", shape = \"box\", group = \"obs\"] \n  \"33\" [label = \"COMMIT23\", shape = \"box\", group = \"obs\"] \n  \"34\" [label = \"COMMIT31\", shape = \"box\", group = \"obs\"] \n  \"35\" [label = \"COMMIT32\", shape = \"box\", group = \"obs\"] \n  \"36\" [label = \"COMMIT33\", shape = \"box\", group = \"obs\"] \n\"10\"->\"1\" [dir = \"back\", label = \"0.81\"] \n\"11\"->\"1\" [dir = \"back\", label = \"0.8\"] \n\"12\"->\"1\" [dir = \"back\", label = \"0.82\"] \n\"13\"->\"2\" [dir = \"back\", label = \"0.78\"] \n\"14\"->\"2\" [dir = \"back\", label = \"0.8\"] \n\"15\"->\"2\" [dir = \"back\", label = \"0.8\"] \n\"16\"->\"3\" [dir = \"back\", label = \"0.78\"] \n\"17\"->\"3\" [dir = \"back\", label = \"0.79\"] \n\"18\"->\"3\" [dir = \"back\", label = \"0.78\"] \n\"19\"->\"4\" [dir = \"back\", label = \"0.8\"] \n\"20\"->\"4\" [dir = \"back\", label = \"0.75\"] \n\"21\"->\"4\" [dir = \"back\", label = \"0.78\"] \n\"22\"->\"5\" [dir = \"back\", label = \"0.78\"] \n\"23\"->\"5\" [dir = \"back\", label = \"0.74\"] \n\"24\"->\"5\" [dir = \"back\", label = \"0.76\"] \n\"25\"->\"6\" [dir = \"back\", label = \"0.77\"] \n\"26\"->\"6\" [dir = \"back\", label = \"0.74\"] \n\"27\"->\"6\" [dir = \"back\", label = \"0.76\"] \n\"28\"->\"7\" [dir = \"back\", label = \"0.75\"] \n\"29\"->\"7\" [dir = \"back\", label = \"0.74\"] \n\"30\"->\"7\" [dir = \"back\", label = \"0.76\"] \n\"31\"->\"8\" [dir = \"back\", label = \"0.78\"] \n\"32\"->\"8\" [dir = \"back\", label = \"0.77\"] \n\"33\"->\"8\" [dir = \"back\", label = \"0.77\"] \n\"34\"->\"9\" [dir = \"back\", label = \"0.74\"] \n\"35\"->\"9\" [dir = \"back\", label = \"0.72\"] \n\"36\"->\"9\" [dir = \"back\", label = \"0.73\"] \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script><p>Path Diagram</p>
+<div class="grViz html-widget html-fill-item" id="htmlwidget-281e77bb363c014f22d6" style="width:100%;height:464px;"></div>
+<script type="application/json" data-for="htmlwidget-281e77bb363c014f22d6">{"x":{"diagram":"digraph {\n\n\n\n\n  \"1\" [label = \"jobsat_1\", shape = \"oval\", group = \"latent\"] \n  \"2\" [label = \"jobsat_2\", shape = \"oval\", group = \"latent\"] \n  \"3\" [label = \"jobsat_3\", shape = \"oval\", group = \"latent\"] \n  \"4\" [label = \"ready_1\", shape = \"oval\", group = \"latent\"] \n  \"5\" [label = \"ready_2\", shape = \"oval\", group = \"latent\"] \n  \"6\" [label = \"ready_3\", shape = \"oval\", group = \"latent\"] \n  \"7\" [label = \"commit_1\", shape = \"oval\", group = \"latent\"] \n  \"8\" [label = \"commit_2\", shape = \"oval\", group = \"latent\"] \n  \"9\" [label = \"commit_3\", shape = \"oval\", group = \"latent\"] \n  \"10\" [label = \"JOBSAT11\", shape = \"box\", group = \"obs\"] \n  \"11\" [label = \"JOBSAT12\", shape = \"box\", group = \"obs\"] \n  \"12\" [label = \"JOBSAT13\", shape = \"box\", group = \"obs\"] \n  \"13\" [label = \"JOBSAT21\", shape = \"box\", group = \"obs\"] \n  \"14\" [label = \"JOBSAT22\", shape = \"box\", group = \"obs\"] \n  \"15\" [label = \"JOBSAT23\", shape = \"box\", group = \"obs\"] \n  \"16\" [label = \"JOBSAT31\", shape = \"box\", group = \"obs\"] \n  \"17\" [label = \"JOBSAT32\", shape = \"box\", group = \"obs\"] \n  \"18\" [label = \"JOBSAT33\", shape = \"box\", group = \"obs\"] \n  \"19\" [label = \"READY11\", shape = \"box\", group = \"obs\"] \n  \"20\" [label = \"READY12\", shape = \"box\", group = \"obs\"] \n  \"21\" [label = \"READY13\", shape = \"box\", group = \"obs\"] \n  \"22\" [label = \"READY21\", shape = \"box\", group = \"obs\"] \n  \"23\" [label = \"READY22\", shape = \"box\", group = \"obs\"] \n  \"24\" [label = \"READY23\", shape = \"box\", group = \"obs\"] \n  \"25\" [label = \"READY31\", shape = \"box\", group = \"obs\"] \n  \"26\" [label = \"READY32\", shape = \"box\", group = \"obs\"] \n  \"27\" [label = \"READY33\", shape = \"box\", group = \"obs\"] \n  \"28\" [label = \"COMMIT11\", shape = \"box\", group = \"obs\"] \n  \"29\" [label = \"COMMIT12\", shape = \"box\", group = \"obs\"] \n  \"30\" [label = \"COMMIT13\", shape = \"box\", group = \"obs\"] \n  \"31\" [label = \"COMMIT21\", shape = \"box\", group = \"obs\"] \n  \"32\" [label = \"COMMIT22\", shape = \"box\", group = \"obs\"] \n  \"33\" [label = \"COMMIT23\", shape = \"box\", group = \"obs\"] \n  \"34\" [label = \"COMMIT31\", shape = \"box\", group = \"obs\"] \n  \"35\" [label = \"COMMIT32\", shape = \"box\", group = \"obs\"] \n  \"36\" [label = \"COMMIT33\", shape = \"box\", group = \"obs\"] \n\"10\"->\"1\" [dir = \"back\", label = \"0.81\"] \n\"11\"->\"1\" [dir = \"back\", label = \"0.8\"] \n\"12\"->\"1\" [dir = \"back\", label = \"0.82\"] \n\"13\"->\"2\" [dir = \"back\", label = \"0.78\"] \n\"14\"->\"2\" [dir = \"back\", label = \"0.8\"] \n\"15\"->\"2\" [dir = \"back\", label = \"0.8\"] \n\"16\"->\"3\" [dir = \"back\", label = \"0.78\"] \n\"17\"->\"3\" [dir = \"back\", label = \"0.79\"] \n\"18\"->\"3\" [dir = \"back\", label = \"0.78\"] \n\"19\"->\"4\" [dir = \"back\", label = \"0.8\"] \n\"20\"->\"4\" [dir = \"back\", label = \"0.75\"] \n\"21\"->\"4\" [dir = \"back\", label = \"0.78\"] \n\"22\"->\"5\" [dir = \"back\", label = \"0.78\"] \n\"23\"->\"5\" [dir = \"back\", label = \"0.74\"] \n\"24\"->\"5\" [dir = \"back\", label = \"0.76\"] \n\"25\"->\"6\" [dir = \"back\", label = \"0.77\"] \n\"26\"->\"6\" [dir = \"back\", label = \"0.74\"] \n\"27\"->\"6\" [dir = \"back\", label = \"0.76\"] \n\"28\"->\"7\" [dir = \"back\", label = \"0.75\"] \n\"29\"->\"7\" [dir = \"back\", label = \"0.74\"] \n\"30\"->\"7\" [dir = \"back\", label = \"0.76\"] \n\"31\"->\"8\" [dir = \"back\", label = \"0.78\"] \n\"32\"->\"8\" [dir = \"back\", label = \"0.77\"] \n\"33\"->\"8\" [dir = \"back\", label = \"0.77\"] \n\"34\"->\"9\" [dir = \"back\", label = \"0.74\"] \n\"35\"->\"9\" [dir = \"back\", label = \"0.72\"] \n\"36\"->\"9\" [dir = \"back\", label = \"0.73\"] \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script><p>Path Diagram</p>
 </div>
 </div>
 <p>To create an interactive path diagram, you can use the following syntax:</p>
@@ -5712,7 +5712,7 @@ R-Square:
 <span>  missing <span class="op">=</span> <span class="st">"ML"</span>, <span class="co"># FIML</span></span>
 <span>  estimator <span class="op">=</span> <span class="st">"MLR"</span>, <span class="co"># Huber-White robust standard errors (for heteroscedasticity and nonnormally distributed residuals)</span></span>
 <span>  meanstructure <span class="op">=</span> <span class="cn">TRUE</span>, <span class="co"># estimate means/intercepts</span></span>
-<span>  fixed.x <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="co"># estimate means, variances, and covariances of the observed variables (to include predictors as part of FIML)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span>  fixed_x <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="co"># estimate means, variances, and covariances of the observed variables (to include predictors as part of FIML)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 </section><section id="model-summary-11" class="level3" data-number="10.5.3"><h3 data-number="10.5.3" class="anchored" data-anchor-id="model-summary-11">
@@ -5720,7 +5720,7 @@ R-Square:
 <div class="cell">
 <details open="" class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb127"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span></span>
 <span>  <span class="va">residualInvariance_fit</span>,</span>
-<span>  fit.measures <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  fit_measures <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  standardized <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  rsquare <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details><div class="cell-output cell-output-stdout">
@@ -6058,7 +6058,7 @@ R-Square:
 <div class="cell">
 <details open="" class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb129"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/lavaan/man/modificationIndices.html">modificationindices</a></span><span class="op">(</span></span>
 <span>  <span class="va">residualInvariance_fit</span>,</span>
-<span>  sort. <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span>  sort <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details><div class="cell-output-display">
 <div data-pagedtable="false">
   <script data-pagedtable-source="" type="application/json">
@@ -6075,8 +6075,8 @@ R-Square:
 <span>  stand <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  coef_labels <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details><div class="cell-output-display">
-<div class="grViz html-widget html-fill-item" id="htmlwidget-1135dc946c70f098d0b2" style="width:100%;height:464px;"></div>
-<script type="application/json" data-for="htmlwidget-1135dc946c70f098d0b2">{"x":{"diagram":"digraph {\n\n\n\n\n  \"1\" [label = \"jobsat_1\", shape = \"oval\", group = \"latent\"] \n  \"2\" [label = \"jobsat_2\", shape = \"oval\", group = \"latent\"] \n  \"3\" [label = \"jobsat_3\", shape = \"oval\", group = \"latent\"] \n  \"4\" [label = \"ready_1\", shape = \"oval\", group = \"latent\"] \n  \"5\" [label = \"ready_2\", shape = \"oval\", group = \"latent\"] \n  \"6\" [label = \"ready_3\", shape = \"oval\", group = \"latent\"] \n  \"7\" [label = \"commit_1\", shape = \"oval\", group = \"latent\"] \n  \"8\" [label = \"commit_2\", shape = \"oval\", group = \"latent\"] \n  \"9\" [label = \"commit_3\", shape = \"oval\", group = \"latent\"] \n  \"10\" [label = \"JOBSAT11\", shape = \"box\", group = \"obs\"] \n  \"11\" [label = \"JOBSAT12\", shape = \"box\", group = \"obs\"] \n  \"12\" [label = \"JOBSAT13\", shape = \"box\", group = \"obs\"] \n  \"13\" [label = \"JOBSAT21\", shape = \"box\", group = \"obs\"] \n  \"14\" [label = \"JOBSAT22\", shape = \"box\", group = \"obs\"] \n  \"15\" [label = \"JOBSAT23\", shape = \"box\", group = \"obs\"] \n  \"16\" [label = \"JOBSAT31\", shape = \"box\", group = \"obs\"] \n  \"17\" [label = \"JOBSAT32\", shape = \"box\", group = \"obs\"] \n  \"18\" [label = \"JOBSAT33\", shape = \"box\", group = \"obs\"] \n  \"19\" [label = \"READY11\", shape = \"box\", group = \"obs\"] \n  \"20\" [label = \"READY12\", shape = \"box\", group = \"obs\"] \n  \"21\" [label = \"READY13\", shape = \"box\", group = \"obs\"] \n  \"22\" [label = \"READY21\", shape = \"box\", group = \"obs\"] \n  \"23\" [label = \"READY22\", shape = \"box\", group = \"obs\"] \n  \"24\" [label = \"READY23\", shape = \"box\", group = \"obs\"] \n  \"25\" [label = \"READY31\", shape = \"box\", group = \"obs\"] \n  \"26\" [label = \"READY32\", shape = \"box\", group = \"obs\"] \n  \"27\" [label = \"READY33\", shape = \"box\", group = \"obs\"] \n  \"28\" [label = \"COMMIT11\", shape = \"box\", group = \"obs\"] \n  \"29\" [label = \"COMMIT12\", shape = \"box\", group = \"obs\"] \n  \"30\" [label = \"COMMIT13\", shape = \"box\", group = \"obs\"] \n  \"31\" [label = \"COMMIT21\", shape = \"box\", group = \"obs\"] \n  \"32\" [label = \"COMMIT22\", shape = \"box\", group = \"obs\"] \n  \"33\" [label = \"COMMIT23\", shape = \"box\", group = \"obs\"] \n  \"34\" [label = \"COMMIT31\", shape = \"box\", group = \"obs\"] \n  \"35\" [label = \"COMMIT32\", shape = \"box\", group = \"obs\"] \n  \"36\" [label = \"COMMIT33\", shape = \"box\", group = \"obs\"] \n\"10\"->\"1\" [dir = \"back\", label = \"0.81\"] \n\"11\"->\"1\" [dir = \"back\", label = \"0.82\"] \n\"12\"->\"1\" [dir = \"back\", label = \"0.81\"] \n\"13\"->\"2\" [dir = \"back\", label = \"0.79\"] \n\"14\"->\"2\" [dir = \"back\", label = \"0.81\"] \n\"15\"->\"2\" [dir = \"back\", label = \"0.8\"] \n\"16\"->\"3\" [dir = \"back\", label = \"0.77\"] \n\"17\"->\"3\" [dir = \"back\", label = \"0.78\"] \n\"18\"->\"3\" [dir = \"back\", label = \"0.78\"] \n\"19\"->\"4\" [dir = \"back\", label = \"0.79\"] \n\"20\"->\"4\" [dir = \"back\", label = \"0.75\"] \n\"21\"->\"4\" [dir = \"back\", label = \"0.77\"] \n\"22\"->\"5\" [dir = \"back\", label = \"0.79\"] \n\"23\"->\"5\" [dir = \"back\", label = \"0.74\"] \n\"24\"->\"5\" [dir = \"back\", label = \"0.77\"] \n\"25\"->\"6\" [dir = \"back\", label = \"0.78\"] \n\"26\"->\"6\" [dir = \"back\", label = \"0.73\"] \n\"27\"->\"6\" [dir = \"back\", label = \"0.76\"] \n\"28\"->\"7\" [dir = \"back\", label = \"0.76\"] \n\"29\"->\"7\" [dir = \"back\", label = \"0.74\"] \n\"30\"->\"7\" [dir = \"back\", label = \"0.75\"] \n\"31\"->\"8\" [dir = \"back\", label = \"0.78\"] \n\"32\"->\"8\" [dir = \"back\", label = \"0.77\"] \n\"33\"->\"8\" [dir = \"back\", label = \"0.77\"] \n\"34\"->\"9\" [dir = \"back\", label = \"0.74\"] \n\"35\"->\"9\" [dir = \"back\", label = \"0.72\"] \n\"36\"->\"9\" [dir = \"back\", label = \"0.73\"] \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script><p>Path Diagram</p>
+<div class="grViz html-widget html-fill-item" id="htmlwidget-066a246347439bd2e581" style="width:100%;height:464px;"></div>
+<script type="application/json" data-for="htmlwidget-066a246347439bd2e581">{"x":{"diagram":"digraph {\n\n\n\n\n  \"1\" [label = \"jobsat_1\", shape = \"oval\", group = \"latent\"] \n  \"2\" [label = \"jobsat_2\", shape = \"oval\", group = \"latent\"] \n  \"3\" [label = \"jobsat_3\", shape = \"oval\", group = \"latent\"] \n  \"4\" [label = \"ready_1\", shape = \"oval\", group = \"latent\"] \n  \"5\" [label = \"ready_2\", shape = \"oval\", group = \"latent\"] \n  \"6\" [label = \"ready_3\", shape = \"oval\", group = \"latent\"] \n  \"7\" [label = \"commit_1\", shape = \"oval\", group = \"latent\"] \n  \"8\" [label = \"commit_2\", shape = \"oval\", group = \"latent\"] \n  \"9\" [label = \"commit_3\", shape = \"oval\", group = \"latent\"] \n  \"10\" [label = \"JOBSAT11\", shape = \"box\", group = \"obs\"] \n  \"11\" [label = \"JOBSAT12\", shape = \"box\", group = \"obs\"] \n  \"12\" [label = \"JOBSAT13\", shape = \"box\", group = \"obs\"] \n  \"13\" [label = \"JOBSAT21\", shape = \"box\", group = \"obs\"] \n  \"14\" [label = \"JOBSAT22\", shape = \"box\", group = \"obs\"] \n  \"15\" [label = \"JOBSAT23\", shape = \"box\", group = \"obs\"] \n  \"16\" [label = \"JOBSAT31\", shape = \"box\", group = \"obs\"] \n  \"17\" [label = \"JOBSAT32\", shape = \"box\", group = \"obs\"] \n  \"18\" [label = \"JOBSAT33\", shape = \"box\", group = \"obs\"] \n  \"19\" [label = \"READY11\", shape = \"box\", group = \"obs\"] \n  \"20\" [label = \"READY12\", shape = \"box\", group = \"obs\"] \n  \"21\" [label = \"READY13\", shape = \"box\", group = \"obs\"] \n  \"22\" [label = \"READY21\", shape = \"box\", group = \"obs\"] \n  \"23\" [label = \"READY22\", shape = \"box\", group = \"obs\"] \n  \"24\" [label = \"READY23\", shape = \"box\", group = \"obs\"] \n  \"25\" [label = \"READY31\", shape = \"box\", group = \"obs\"] \n  \"26\" [label = \"READY32\", shape = \"box\", group = \"obs\"] \n  \"27\" [label = \"READY33\", shape = \"box\", group = \"obs\"] \n  \"28\" [label = \"COMMIT11\", shape = \"box\", group = \"obs\"] \n  \"29\" [label = \"COMMIT12\", shape = \"box\", group = \"obs\"] \n  \"30\" [label = \"COMMIT13\", shape = \"box\", group = \"obs\"] \n  \"31\" [label = \"COMMIT21\", shape = \"box\", group = \"obs\"] \n  \"32\" [label = \"COMMIT22\", shape = \"box\", group = \"obs\"] \n  \"33\" [label = \"COMMIT23\", shape = \"box\", group = \"obs\"] \n  \"34\" [label = \"COMMIT31\", shape = \"box\", group = \"obs\"] \n  \"35\" [label = \"COMMIT32\", shape = \"box\", group = \"obs\"] \n  \"36\" [label = \"COMMIT33\", shape = \"box\", group = \"obs\"] \n\"10\"->\"1\" [dir = \"back\", label = \"0.81\"] \n\"11\"->\"1\" [dir = \"back\", label = \"0.82\"] \n\"12\"->\"1\" [dir = \"back\", label = \"0.81\"] \n\"13\"->\"2\" [dir = \"back\", label = \"0.79\"] \n\"14\"->\"2\" [dir = \"back\", label = \"0.81\"] \n\"15\"->\"2\" [dir = \"back\", label = \"0.8\"] \n\"16\"->\"3\" [dir = \"back\", label = \"0.77\"] \n\"17\"->\"3\" [dir = \"back\", label = \"0.78\"] \n\"18\"->\"3\" [dir = \"back\", label = \"0.78\"] \n\"19\"->\"4\" [dir = \"back\", label = \"0.79\"] \n\"20\"->\"4\" [dir = \"back\", label = \"0.75\"] \n\"21\"->\"4\" [dir = \"back\", label = \"0.77\"] \n\"22\"->\"5\" [dir = \"back\", label = \"0.79\"] \n\"23\"->\"5\" [dir = \"back\", label = \"0.74\"] \n\"24\"->\"5\" [dir = \"back\", label = \"0.77\"] \n\"25\"->\"6\" [dir = \"back\", label = \"0.78\"] \n\"26\"->\"6\" [dir = \"back\", label = \"0.73\"] \n\"27\"->\"6\" [dir = \"back\", label = \"0.76\"] \n\"28\"->\"7\" [dir = \"back\", label = \"0.76\"] \n\"29\"->\"7\" [dir = \"back\", label = \"0.74\"] \n\"30\"->\"7\" [dir = \"back\", label = \"0.75\"] \n\"31\"->\"8\" [dir = \"back\", label = \"0.78\"] \n\"32\"->\"8\" [dir = \"back\", label = \"0.77\"] \n\"33\"->\"8\" [dir = \"back\", label = \"0.77\"] \n\"34\"->\"9\" [dir = \"back\", label = \"0.74\"] \n\"35\"->\"9\" [dir = \"back\", label = \"0.72\"] \n\"36\"->\"9\" [dir = \"back\", label = \"0.73\"] \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script><p>Path Diagram</p>
 </div>
 </div>
 <p>To create an interactive path diagram, you can use the following syntax:</p>
@@ -6099,97 +6099,14 @@ R-Square:
 </div>
 </div>
 <details open="" class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb133"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span><span class="op">(</span></span>
-<span>  configural <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/lavaan/man/lavInspect.html">inspect</a></span><span class="op">(</span><span class="va">configuralInvarianceCorrelatedResiduals_fit</span>, <span class="st">"fit.measures"</span><span class="op">)</span>, </span>
-<span>  weak <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/lavaan/man/lavInspect.html">inspect</a></span><span class="op">(</span><span class="va">metricInvariance_fit</span>, <span class="st">"fit.measures"</span><span class="op">)</span>,</span>
-<span>  strong <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/lavaan/man/lavInspect.html">inspect</a></span><span class="op">(</span><span class="va">scalarInvariance_fit</span>, <span class="st">"fit.measures"</span><span class="op">)</span>,</span>
-<span>  strict <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/lavaan/man/lavInspect.html">inspect</a></span><span class="op">(</span><span class="va">residualInvariance_fit</span>, <span class="st">"fit.measures"</span><span class="op">)</span><span class="op">)</span>, <span class="fl">3</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details><div class="cell-output cell-output-stdout">
-<pre><code>                              configural       weak     strong     strict
-npar                             144.000    132.000    120.000    102.000
-fmin                               0.280      0.289      0.298      0.306
-chisq                            277.582    286.159    295.447    303.347
-df                               261.000    273.000    285.000    303.000
-pvalue                             0.230      0.280      0.323      0.484
-chisq.scaled                     281.997    292.814    302.078    310.092
-df.scaled                        261.000    273.000    285.000    303.000
-pvalue.scaled                      0.178      0.196      0.233      0.377
-chisq.scaling.factor               0.984      0.977      0.978      0.978
-baseline.chisq                  6697.063   6697.063   6697.063   6697.063
-baseline.df                      351.000    351.000    351.000    351.000
-baseline.pvalue                    0.000      0.000      0.000      0.000
-baseline.chisq.scaled           6541.933   6541.933   6541.933   6541.933
-baseline.df.scaled               351.000    351.000    351.000    351.000
-baseline.pvalue.scaled             0.000      0.000      0.000      0.000
-baseline.chisq.scaling.factor      1.024      1.024      1.024      1.024
-cfi                                0.997      0.998      0.998      1.000
-tli                                0.996      0.997      0.998      1.000
-cfi.scaled                         0.997      0.997      0.997      0.999
-tli.scaled                         0.995      0.996      0.997      0.999
-cfi.robust                         0.997      0.997      0.997      0.999
-tli.robust                         0.996      0.996      0.997      0.999
-nnfi                               0.996      0.997      0.998      1.000
-rfi                                0.944      0.945      0.946      0.948
-nfi                                0.959      0.957      0.956      0.955
-pnfi                               0.713      0.745      0.776      0.824
-ifi                                0.997      0.998      0.998      1.000
-rni                                0.997      0.998      0.998      1.000
-nnfi.scaled                        0.995      0.996      0.997      0.999
-rfi.scaled                         0.942      0.942      0.943      0.945
-nfi.scaled                         0.957      0.955      0.954      0.953
-pnfi.scaled                        0.712      0.743      0.774      0.822
-ifi.scaled                         0.997      0.997      0.997      0.999
-rni.scaled                         0.997      0.997      0.997      0.999
-nnfi.robust                        0.996      0.996      0.997      0.999
-rni.robust                         0.997      0.997      0.997      0.999
-logl                          -17470.154 -17474.443 -17479.087 -17483.037
-unrestricted.logl             -17331.363 -17331.363 -17331.363 -17331.363
-aic                            35228.308  35212.885  35198.174  35170.074
-bic                            35833.764  35767.887  35702.721  35598.939
-ntotal                           495.000    495.000    495.000    495.000
-bic2                           35376.705  35348.916  35321.838  35275.188
-scaling.factor.h1                  0.998      0.998      0.998      0.998
-scaling.factor.h0                  0.943      0.880      0.803      0.690
-rmsea                              0.011      0.010      0.009      0.002
-rmsea.ci.lower                     0.000      0.000      0.000      0.000
-rmsea.ci.upper                     0.022      0.021      0.020      0.017
-rmsea.ci.level                     0.900      0.900      0.900      0.900
-rmsea.pvalue                       1.000      1.000      1.000      1.000
-rmsea.close.h0                     0.050      0.050      0.050      0.050
-rmsea.notclose.pvalue              0.000      0.000      0.000      0.000
-rmsea.notclose.h0                  0.080      0.080      0.080      0.080
-rmsea.scaled                       0.013      0.012      0.011      0.007
-rmsea.ci.lower.scaled              0.000      0.000      0.000      0.000
-rmsea.ci.upper.scaled              0.023      0.022      0.021      0.019
-rmsea.pvalue.scaled                1.000      1.000      1.000      1.000
-rmsea.notclose.pvalue.scaled       0.000      0.000      0.000      0.000
-rmsea.robust                       0.012      0.012      0.011      0.006
-rmsea.ci.lower.robust              0.000      0.000      0.000      0.000
-rmsea.ci.upper.robust              0.022      0.022      0.021      0.018
-rmsea.pvalue.robust                1.000      1.000      1.000      1.000
-rmsea.notclose.pvalue.robust       0.000      0.000      0.000      0.000
-rmr                                0.031      0.031      0.032      0.032
-rmr_nomean                         0.032      0.032      0.032      0.033
-srmr                               0.023      0.024      0.024      0.025
-srmr_bentler                       0.023      0.024      0.024      0.025
-srmr_bentler_nomean                0.024      0.025      0.025      0.025
-crmr                               0.024      0.024      0.024      0.024
-crmr_nomean                        0.025      0.025      0.025      0.025
-srmr_mplus                         0.023      0.025      0.025      0.026
-srmr_mplus_nomean                  0.024      0.024      0.024      0.025
-gfi                                0.998      0.998      0.998      1.000
-gfi.ci.lower                       0.991      0.991      0.992      0.993
-gfi.ci.upper                       1.000      1.000      1.000      1.000
-gfi.ci.level                       0.900      0.900      0.900      0.900
-gfi.robust                         0.997      0.997      0.998      0.999
-gfi.ci.lower.robust                0.991      0.991      0.991      0.992
-gfi.ci.upper.robust                1.000      1.000      1.000      1.000
-cn_05                            535.412    541.630    546.140    563.310
-cn_01                            566.422    572.322    576.447    593.652
-gfi_lisrel                         0.989      0.988      0.988      0.988
-agfi_lisrel                        0.983      0.983      0.983      0.984
-pgfi                               0.637      0.666      0.695      0.739
-mfi                                0.983      0.987      0.990      1.000
-ecvi                               1.143      1.111      1.082      1.025</code></pre>
+<span>  configural <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/lavaan/man/lavInspect.html">inspect</a></span><span class="op">(</span><span class="va">configuralInvarianceCorrelatedResiduals_fit</span>, <span class="st">"fit_measures"</span><span class="op">)</span>, </span>
+<span>  weak <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/lavaan/man/lavInspect.html">inspect</a></span><span class="op">(</span><span class="va">metricInvariance_fit</span>, <span class="st">"fit_measures"</span><span class="op">)</span>,</span>
+<span>  strong <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/lavaan/man/lavInspect.html">inspect</a></span><span class="op">(</span><span class="va">scalarInvariance_fit</span>, <span class="st">"fit_measures"</span><span class="op">)</span>,</span>
+<span>  strict <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/lavaan/man/lavInspect.html">inspect</a></span><span class="op">(</span><span class="va">residualInvariance_fit</span>, <span class="st">"fit_measures"</span><span class="op">)</span><span class="op">)</span>, <span class="fl">3</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details><div class="cell-output cell-output-error">
+<pre><code>Error:
+! lavaan-&gt;lav_lavaan_lavinspect():  
+   what argument unknown: "fit_measures"</code></pre>
 </div>
 </div>
 
@@ -6808,10 +6725,10 @@ ecvi                               1.143      1.111      1.082      1.025</code>
 <span id="cb135-156"><a href="#cb135-156" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb135-157"><a href="#cb135-157" aria-hidden="true" tabindex="-1"></a><span class="fu">### Fit Model</span></span>
 <span id="cb135-158"><a href="#cb135-158" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb135-159"><a href="#cb135-159" aria-hidden="true" tabindex="-1"></a>Specifying <span class="in">`fixed.x = FALSE`</span> would estimate (i.e., would not consider as fixed) means, variances, and covariances of the observed variables.</span>
+<span id="cb135-159"><a href="#cb135-159" aria-hidden="true" tabindex="-1"></a>Specifying <span class="in">`fixed_x = FALSE`</span> would estimate (i.e., would not consider as fixed) means, variances, and covariances of the observed variables.</span>
 <span id="cb135-160"><a href="#cb135-160" aria-hidden="true" tabindex="-1"></a>Doing so would allow missing information in the predictors to be included as part of full information maximum likelihood (FIML).</span>
 <span id="cb135-161"><a href="#cb135-161" aria-hidden="true" tabindex="-1"></a>However, this gets challenging to use when including both person mean and person-mean-centered variables (due to linear dependencies).</span>
-<span id="cb135-162"><a href="#cb135-162" aria-hidden="true" tabindex="-1"></a>Thus, many of these examples do not specify <span class="in">`fixed.x = FALSE`</span>.</span>
+<span id="cb135-162"><a href="#cb135-162" aria-hidden="true" tabindex="-1"></a>Thus, many of these examples do not specify <span class="in">`fixed_x = FALSE`</span>.</span>
 <span id="cb135-163"><a href="#cb135-163" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb135-166"><a href="#cb135-166" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
 <span id="cb135-167"><a href="#cb135-167" aria-hidden="true" tabindex="-1"></a>linearGCM_fit <span class="ot">&lt;-</span> lavaan<span class="sc">::</span><span class="fu">sem</span>(</span>
@@ -6827,7 +6744,7 @@ ecvi                               1.143      1.111      1.082      1.025</code>
 <span id="cb135-179"><a href="#cb135-179" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
 <span id="cb135-180"><a href="#cb135-180" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(</span>
 <span id="cb135-181"><a href="#cb135-181" aria-hidden="true" tabindex="-1"></a>  linearGCM_fit,</span>
-<span id="cb135-182"><a href="#cb135-182" aria-hidden="true" tabindex="-1"></a>  <span class="at">fit.measures =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb135-182"><a href="#cb135-182" aria-hidden="true" tabindex="-1"></a>  <span class="at">fit_measures =</span> <span class="cn">TRUE</span>,</span>
 <span id="cb135-183"><a href="#cb135-183" aria-hidden="true" tabindex="-1"></a>  <span class="at">standardized =</span> <span class="cn">TRUE</span>,</span>
 <span id="cb135-184"><a href="#cb135-184" aria-hidden="true" tabindex="-1"></a>  <span class="at">rsquare =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb135-185"><a href="#cb135-185" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
@@ -6837,7 +6754,7 @@ ecvi                               1.143      1.111      1.082      1.025</code>
 <span id="cb135-191"><a href="#cb135-191" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
 <span id="cb135-192"><a href="#cb135-192" aria-hidden="true" tabindex="-1"></a><span class="fu">modificationindices</span>(</span>
 <span id="cb135-193"><a href="#cb135-193" aria-hidden="true" tabindex="-1"></a>  linearGCM_fit,</span>
-<span id="cb135-194"><a href="#cb135-194" aria-hidden="true" tabindex="-1"></a>  <span class="at">sort. =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb135-194"><a href="#cb135-194" aria-hidden="true" tabindex="-1"></a>  <span class="at">sort =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb135-195"><a href="#cb135-195" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb135-196"><a href="#cb135-196" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb135-197"><a href="#cb135-197" aria-hidden="true" tabindex="-1"></a><span class="fu">### Plots</span></span>
@@ -7191,7 +7108,7 @@ ecvi                               1.143      1.111      1.082      1.025</code>
 <span id="cb135-565"><a href="#cb135-565" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
 <span id="cb135-566"><a href="#cb135-566" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(</span>
 <span id="cb135-567"><a href="#cb135-567" aria-hidden="true" tabindex="-1"></a>  quadraticGCM_fit,</span>
-<span id="cb135-568"><a href="#cb135-568" aria-hidden="true" tabindex="-1"></a>  <span class="at">fit.measures =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb135-568"><a href="#cb135-568" aria-hidden="true" tabindex="-1"></a>  <span class="at">fit_measures =</span> <span class="cn">TRUE</span>,</span>
 <span id="cb135-569"><a href="#cb135-569" aria-hidden="true" tabindex="-1"></a>  <span class="at">standardized =</span> <span class="cn">TRUE</span>,</span>
 <span id="cb135-570"><a href="#cb135-570" aria-hidden="true" tabindex="-1"></a>  <span class="at">rsquare =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb135-571"><a href="#cb135-571" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
@@ -7201,7 +7118,7 @@ ecvi                               1.143      1.111      1.082      1.025</code>
 <span id="cb135-577"><a href="#cb135-577" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
 <span id="cb135-578"><a href="#cb135-578" aria-hidden="true" tabindex="-1"></a><span class="fu">modificationindices</span>(</span>
 <span id="cb135-579"><a href="#cb135-579" aria-hidden="true" tabindex="-1"></a>  quadraticGCM_fit,</span>
-<span id="cb135-580"><a href="#cb135-580" aria-hidden="true" tabindex="-1"></a>  <span class="at">sort. =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb135-580"><a href="#cb135-580" aria-hidden="true" tabindex="-1"></a>  <span class="at">sort =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb135-581"><a href="#cb135-581" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb135-582"><a href="#cb135-582" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb135-583"><a href="#cb135-583" aria-hidden="true" tabindex="-1"></a><span class="fu">### Plots</span></span>
@@ -7530,7 +7447,7 @@ ecvi                               1.143      1.111      1.082      1.025</code>
 <span id="cb135-928"><a href="#cb135-928" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
 <span id="cb135-929"><a href="#cb135-929" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(</span>
 <span id="cb135-930"><a href="#cb135-930" aria-hidden="true" tabindex="-1"></a>  latentBasisGCM_fit,</span>
-<span id="cb135-931"><a href="#cb135-931" aria-hidden="true" tabindex="-1"></a>  <span class="at">fit.measures =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb135-931"><a href="#cb135-931" aria-hidden="true" tabindex="-1"></a>  <span class="at">fit_measures =</span> <span class="cn">TRUE</span>,</span>
 <span id="cb135-932"><a href="#cb135-932" aria-hidden="true" tabindex="-1"></a>  <span class="at">standardized =</span> <span class="cn">TRUE</span>,</span>
 <span id="cb135-933"><a href="#cb135-933" aria-hidden="true" tabindex="-1"></a>  <span class="at">rsquare =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb135-934"><a href="#cb135-934" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
@@ -7540,7 +7457,7 @@ ecvi                               1.143      1.111      1.082      1.025</code>
 <span id="cb135-940"><a href="#cb135-940" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
 <span id="cb135-941"><a href="#cb135-941" aria-hidden="true" tabindex="-1"></a><span class="fu">modificationindices</span>(</span>
 <span id="cb135-942"><a href="#cb135-942" aria-hidden="true" tabindex="-1"></a>  latentBasisGCM_fit,</span>
-<span id="cb135-943"><a href="#cb135-943" aria-hidden="true" tabindex="-1"></a>  <span class="at">sort. =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb135-943"><a href="#cb135-943" aria-hidden="true" tabindex="-1"></a>  <span class="at">sort =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb135-944"><a href="#cb135-944" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb135-945"><a href="#cb135-945" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb135-946"><a href="#cb135-946" aria-hidden="true" tabindex="-1"></a><span class="fu">### Plots</span></span>
@@ -7849,7 +7766,7 @@ ecvi                               1.143      1.111      1.082      1.025</code>
 <span id="cb135-1269"><a href="#cb135-1269" aria-hidden="true" tabindex="-1"></a>    <span class="at">delta_lag_yx =</span> <span class="cn">TRUE</span>, <span class="co"># level of y predicting change of x</span></span>
 <span id="cb135-1270"><a href="#cb135-1270" aria-hidden="true" tabindex="-1"></a>    <span class="at">xi_lag_xy =</span> <span class="cn">TRUE</span>,    <span class="co"># change of x predicting change of y</span></span>
 <span id="cb135-1271"><a href="#cb135-1271" aria-hidden="true" tabindex="-1"></a>    <span class="at">xi_lag_yx =</span> <span class="cn">TRUE</span>),   <span class="co"># change of y predicting change of x</span></span>
-<span id="cb135-1272"><a href="#cb135-1272" aria-hidden="true" tabindex="-1"></a>  <span class="at">fixed.x =</span> <span class="cn">FALSE</span> <span class="co"># estimate means, variances, and covariances of the observed variables (to include predictors as part of FIML)</span></span>
+<span id="cb135-1272"><a href="#cb135-1272" aria-hidden="true" tabindex="-1"></a>  <span class="at">fixed_x =</span> <span class="cn">FALSE</span> <span class="co"># estimate means, variances, and covariances of the observed variables (to include predictors as part of FIML)</span></span>
 <span id="cb135-1273"><a href="#cb135-1273" aria-hidden="true" tabindex="-1"></a>  )</span>
 <span id="cb135-1274"><a href="#cb135-1274" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb135-1275"><a href="#cb135-1275" aria-hidden="true" tabindex="-1"></a></span>
@@ -7858,7 +7775,7 @@ ecvi                               1.143      1.111      1.082      1.025</code>
 <span id="cb135-1280"><a href="#cb135-1280" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
 <span id="cb135-1281"><a href="#cb135-1281" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(</span>
 <span id="cb135-1282"><a href="#cb135-1282" aria-hidden="true" tabindex="-1"></a>  bivariateLCSM_fit,</span>
-<span id="cb135-1283"><a href="#cb135-1283" aria-hidden="true" tabindex="-1"></a>  <span class="at">fit.measures =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb135-1283"><a href="#cb135-1283" aria-hidden="true" tabindex="-1"></a>  <span class="at">fit_measures =</span> <span class="cn">TRUE</span>,</span>
 <span id="cb135-1284"><a href="#cb135-1284" aria-hidden="true" tabindex="-1"></a>  <span class="at">standardized =</span> <span class="cn">TRUE</span>,</span>
 <span id="cb135-1285"><a href="#cb135-1285" aria-hidden="true" tabindex="-1"></a>  <span class="at">rsquare =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb135-1286"><a href="#cb135-1286" aria-hidden="true" tabindex="-1"></a></span>
@@ -7870,7 +7787,7 @@ ecvi                               1.143      1.111      1.082      1.025</code>
 <span id="cb135-1294"><a href="#cb135-1294" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
 <span id="cb135-1295"><a href="#cb135-1295" aria-hidden="true" tabindex="-1"></a><span class="fu">modificationindices</span>(</span>
 <span id="cb135-1296"><a href="#cb135-1296" aria-hidden="true" tabindex="-1"></a>  bivariateLCSM_fit,</span>
-<span id="cb135-1297"><a href="#cb135-1297" aria-hidden="true" tabindex="-1"></a>  <span class="at">sort. =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb135-1297"><a href="#cb135-1297" aria-hidden="true" tabindex="-1"></a>  <span class="at">sort =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb135-1298"><a href="#cb135-1298" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb135-1299"><a href="#cb135-1299" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb135-1300"><a href="#cb135-1300" aria-hidden="true" tabindex="-1"></a><span class="fu">## Plots</span></span>
@@ -8015,7 +7932,7 @@ ecvi                               1.143      1.111      1.082      1.025</code>
 <span id="cb135-1455"><a href="#cb135-1455" aria-hidden="true" tabindex="-1"></a>  <span class="at">missing =</span> <span class="st">"ML"</span>, <span class="co"># FIML</span></span>
 <span id="cb135-1456"><a href="#cb135-1456" aria-hidden="true" tabindex="-1"></a>  <span class="at">estimator =</span> <span class="st">"MLR"</span>, <span class="co"># Huber-White robust standard errors (for heteroscedasticity and nonnormally distributed residuals)</span></span>
 <span id="cb135-1457"><a href="#cb135-1457" aria-hidden="true" tabindex="-1"></a>  <span class="at">meanstructure =</span> <span class="cn">TRUE</span>, <span class="co"># estimate means/intercepts</span></span>
-<span id="cb135-1458"><a href="#cb135-1458" aria-hidden="true" tabindex="-1"></a>  <span class="at">fixed.x =</span> <span class="cn">FALSE</span>) <span class="co"># estimate means, variances, and covariances of the observed variables (to include predictors as part of FIML)</span></span>
+<span id="cb135-1458"><a href="#cb135-1458" aria-hidden="true" tabindex="-1"></a>  <span class="at">fixed_x =</span> <span class="cn">FALSE</span>) <span class="co"># estimate means, variances, and covariances of the observed variables (to include predictors as part of FIML)</span></span>
 <span id="cb135-1459"><a href="#cb135-1459" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb135-1460"><a href="#cb135-1460" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb135-1461"><a href="#cb135-1461" aria-hidden="true" tabindex="-1"></a><span class="fu">## Model Summary</span></span>
@@ -8023,7 +7940,7 @@ ecvi                               1.143      1.111      1.082      1.025</code>
 <span id="cb135-1465"><a href="#cb135-1465" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
 <span id="cb135-1466"><a href="#cb135-1466" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(</span>
 <span id="cb135-1467"><a href="#cb135-1467" aria-hidden="true" tabindex="-1"></a>  clpm_fit,</span>
-<span id="cb135-1468"><a href="#cb135-1468" aria-hidden="true" tabindex="-1"></a>  <span class="at">fit.measures =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb135-1468"><a href="#cb135-1468" aria-hidden="true" tabindex="-1"></a>  <span class="at">fit_measures =</span> <span class="cn">TRUE</span>,</span>
 <span id="cb135-1469"><a href="#cb135-1469" aria-hidden="true" tabindex="-1"></a>  <span class="at">standardized =</span> <span class="cn">TRUE</span>,</span>
 <span id="cb135-1470"><a href="#cb135-1470" aria-hidden="true" tabindex="-1"></a>  <span class="at">rsquare =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb135-1471"><a href="#cb135-1471" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
@@ -8033,7 +7950,7 @@ ecvi                               1.143      1.111      1.082      1.025</code>
 <span id="cb135-1477"><a href="#cb135-1477" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
 <span id="cb135-1478"><a href="#cb135-1478" aria-hidden="true" tabindex="-1"></a><span class="fu">modificationindices</span>(</span>
 <span id="cb135-1479"><a href="#cb135-1479" aria-hidden="true" tabindex="-1"></a>  clpm_fit,</span>
-<span id="cb135-1480"><a href="#cb135-1480" aria-hidden="true" tabindex="-1"></a>  <span class="at">sort. =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb135-1480"><a href="#cb135-1480" aria-hidden="true" tabindex="-1"></a>  <span class="at">sort =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb135-1481"><a href="#cb135-1481" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb135-1482"><a href="#cb135-1482" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb135-1483"><a href="#cb135-1483" aria-hidden="true" tabindex="-1"></a><span class="fu">## Plots</span></span>
@@ -8183,7 +8100,7 @@ ecvi                               1.143      1.111      1.082      1.025</code>
 <span id="cb135-1635"><a href="#cb135-1635" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> mydata_wide,</span>
 <span id="cb135-1636"><a href="#cb135-1636" aria-hidden="true" tabindex="-1"></a>  <span class="at">missing =</span> <span class="st">"ML"</span>, <span class="co"># FIML</span></span>
 <span id="cb135-1637"><a href="#cb135-1637" aria-hidden="true" tabindex="-1"></a>  <span class="at">estimator =</span> <span class="st">"MLR"</span>, <span class="co"># Huber-White robust standard errors (for heteroscedasticity and nonnormally distributed residuals)</span></span>
-<span id="cb135-1638"><a href="#cb135-1638" aria-hidden="true" tabindex="-1"></a>  <span class="at">fixed.x =</span> <span class="cn">FALSE</span>, <span class="co"># estimate means, variances, and covariances of the observed variables (to include predictors as part of FIML)</span></span>
+<span id="cb135-1638"><a href="#cb135-1638" aria-hidden="true" tabindex="-1"></a>  <span class="at">fixed_x =</span> <span class="cn">FALSE</span>, <span class="co"># estimate means, variances, and covariances of the observed variables (to include predictors as part of FIML)</span></span>
 <span id="cb135-1639"><a href="#cb135-1639" aria-hidden="true" tabindex="-1"></a>  <span class="at">bounds =</span> <span class="st">"standard"</span> <span class="co"># constrains observed variances, latent variances, and factor loadings to be within computed lower and upper bounds</span></span>
 <span id="cb135-1640"><a href="#cb135-1640" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb135-1641"><a href="#cb135-1641" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
@@ -8296,7 +8213,7 @@ ecvi                               1.143      1.111      1.082      1.025</code>
 <span id="cb135-1750"><a href="#cb135-1750" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> mydata_wide,</span>
 <span id="cb135-1751"><a href="#cb135-1751" aria-hidden="true" tabindex="-1"></a>  <span class="at">missing =</span> <span class="st">"ML"</span>, <span class="co"># FIML</span></span>
 <span id="cb135-1752"><a href="#cb135-1752" aria-hidden="true" tabindex="-1"></a>  <span class="at">estimator =</span> <span class="st">"MLR"</span>, <span class="co"># Huber-White robust standard errors (for heteroscedasticity and nonnormally distributed residuals)</span></span>
-<span id="cb135-1753"><a href="#cb135-1753" aria-hidden="true" tabindex="-1"></a>  <span class="at">fixed.x =</span> <span class="cn">FALSE</span>, <span class="co"># estimate means, variances, and covariances of the observed variables (to include predictors as part of FIML)</span></span>
+<span id="cb135-1753"><a href="#cb135-1753" aria-hidden="true" tabindex="-1"></a>  <span class="at">fixed_x =</span> <span class="cn">FALSE</span>, <span class="co"># estimate means, variances, and covariances of the observed variables (to include predictors as part of FIML)</span></span>
 <span id="cb135-1754"><a href="#cb135-1754" aria-hidden="true" tabindex="-1"></a>  <span class="at">bounds =</span> <span class="st">"standard"</span> <span class="co"># constrains observed variances, latent variances, and factor loadings to be within computed lower and upper bounds</span></span>
 <span id="cb135-1755"><a href="#cb135-1755" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb135-1756"><a href="#cb135-1756" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
@@ -8306,7 +8223,7 @@ ecvi                               1.143      1.111      1.082      1.025</code>
 <span id="cb135-1762"><a href="#cb135-1762" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
 <span id="cb135-1763"><a href="#cb135-1763" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(</span>
 <span id="cb135-1764"><a href="#cb135-1764" aria-hidden="true" tabindex="-1"></a>  riclpm2_fit,</span>
-<span id="cb135-1765"><a href="#cb135-1765" aria-hidden="true" tabindex="-1"></a>  <span class="at">fit.measures =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb135-1765"><a href="#cb135-1765" aria-hidden="true" tabindex="-1"></a>  <span class="at">fit_measures =</span> <span class="cn">TRUE</span>,</span>
 <span id="cb135-1766"><a href="#cb135-1766" aria-hidden="true" tabindex="-1"></a>  <span class="at">standardized =</span> <span class="cn">TRUE</span>,</span>
 <span id="cb135-1767"><a href="#cb135-1767" aria-hidden="true" tabindex="-1"></a>  <span class="at">rsquare =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb135-1768"><a href="#cb135-1768" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
@@ -8316,7 +8233,7 @@ ecvi                               1.143      1.111      1.082      1.025</code>
 <span id="cb135-1774"><a href="#cb135-1774" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
 <span id="cb135-1775"><a href="#cb135-1775" aria-hidden="true" tabindex="-1"></a><span class="fu">modificationindices</span>(</span>
 <span id="cb135-1776"><a href="#cb135-1776" aria-hidden="true" tabindex="-1"></a>  riclpm2_fit,</span>
-<span id="cb135-1777"><a href="#cb135-1777" aria-hidden="true" tabindex="-1"></a>  <span class="at">sort. =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb135-1777"><a href="#cb135-1777" aria-hidden="true" tabindex="-1"></a>  <span class="at">sort =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb135-1778"><a href="#cb135-1778" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb135-1779"><a href="#cb135-1779" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb135-1780"><a href="#cb135-1780" aria-hidden="true" tabindex="-1"></a><span class="fu">## Path Diagram</span></span>
@@ -8370,7 +8287,7 @@ ecvi                               1.143      1.111      1.082      1.025</code>
 <span id="cb135-1838"><a href="#cb135-1838" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
 <span id="cb135-1839"><a href="#cb135-1839" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(</span>
 <span id="cb135-1840"><a href="#cb135-1840" aria-hidden="true" tabindex="-1"></a>  multilevelSEM_fit,</span>
-<span id="cb135-1841"><a href="#cb135-1841" aria-hidden="true" tabindex="-1"></a>  <span class="at">fit.measures =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb135-1841"><a href="#cb135-1841" aria-hidden="true" tabindex="-1"></a>  <span class="at">fit_measures =</span> <span class="cn">TRUE</span>,</span>
 <span id="cb135-1842"><a href="#cb135-1842" aria-hidden="true" tabindex="-1"></a>  <span class="at">standardized =</span> <span class="cn">TRUE</span>,</span>
 <span id="cb135-1843"><a href="#cb135-1843" aria-hidden="true" tabindex="-1"></a>  <span class="at">rsquare =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb135-1844"><a href="#cb135-1844" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
@@ -8380,7 +8297,7 @@ ecvi                               1.143      1.111      1.082      1.025</code>
 <span id="cb135-1850"><a href="#cb135-1850" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
 <span id="cb135-1851"><a href="#cb135-1851" aria-hidden="true" tabindex="-1"></a><span class="fu">modificationindices</span>(</span>
 <span id="cb135-1852"><a href="#cb135-1852" aria-hidden="true" tabindex="-1"></a>  multilevelSEM_fit,</span>
-<span id="cb135-1853"><a href="#cb135-1853" aria-hidden="true" tabindex="-1"></a>  <span class="at">sort. =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb135-1853"><a href="#cb135-1853" aria-hidden="true" tabindex="-1"></a>  <span class="at">sort =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb135-1854"><a href="#cb135-1854" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb135-1855"><a href="#cb135-1855" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb135-1856"><a href="#cb135-1856" aria-hidden="true" tabindex="-1"></a><span class="fu">## Path Diagram</span></span>
@@ -8558,7 +8475,7 @@ ecvi                               1.143      1.111      1.082      1.025</code>
 <span id="cb135-2036"><a href="#cb135-2036" aria-hidden="true" tabindex="-1"></a>  <span class="at">missing =</span> <span class="st">"ML"</span>, <span class="co"># FIML</span></span>
 <span id="cb135-2037"><a href="#cb135-2037" aria-hidden="true" tabindex="-1"></a>  <span class="at">estimator =</span> <span class="st">"MLR"</span>, <span class="co"># Huber-White robust standard errors (for heteroscedasticity and nonnormally distributed residuals)</span></span>
 <span id="cb135-2038"><a href="#cb135-2038" aria-hidden="true" tabindex="-1"></a>  <span class="at">meanstructure =</span> <span class="cn">TRUE</span>, <span class="co"># estimate means/intercepts</span></span>
-<span id="cb135-2039"><a href="#cb135-2039" aria-hidden="true" tabindex="-1"></a>  <span class="at">fixed.x =</span> <span class="cn">FALSE</span>) <span class="co"># estimate means, variances, and covariances of the observed variables (to include predictors as part of FIML)</span></span>
+<span id="cb135-2039"><a href="#cb135-2039" aria-hidden="true" tabindex="-1"></a>  <span class="at">fixed_x =</span> <span class="cn">FALSE</span>) <span class="co"># estimate means, variances, and covariances of the observed variables (to include predictors as part of FIML)</span></span>
 <span id="cb135-2040"><a href="#cb135-2040" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb135-2041"><a href="#cb135-2041" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb135-2042"><a href="#cb135-2042" aria-hidden="true" tabindex="-1"></a><span class="fu">### Model Summary</span></span>
@@ -8566,7 +8483,7 @@ ecvi                               1.143      1.111      1.082      1.025</code>
 <span id="cb135-2046"><a href="#cb135-2046" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
 <span id="cb135-2047"><a href="#cb135-2047" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(</span>
 <span id="cb135-2048"><a href="#cb135-2048" aria-hidden="true" tabindex="-1"></a>  configuralInvariance_fit,</span>
-<span id="cb135-2049"><a href="#cb135-2049" aria-hidden="true" tabindex="-1"></a>  <span class="at">fit.measures =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb135-2049"><a href="#cb135-2049" aria-hidden="true" tabindex="-1"></a>  <span class="at">fit_measures =</span> <span class="cn">TRUE</span>,</span>
 <span id="cb135-2050"><a href="#cb135-2050" aria-hidden="true" tabindex="-1"></a>  <span class="at">standardized =</span> <span class="cn">TRUE</span>,</span>
 <span id="cb135-2051"><a href="#cb135-2051" aria-hidden="true" tabindex="-1"></a>  <span class="at">rsquare =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb135-2052"><a href="#cb135-2052" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
@@ -8576,7 +8493,7 @@ ecvi                               1.143      1.111      1.082      1.025</code>
 <span id="cb135-2058"><a href="#cb135-2058" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
 <span id="cb135-2059"><a href="#cb135-2059" aria-hidden="true" tabindex="-1"></a><span class="fu">modificationindices</span>(</span>
 <span id="cb135-2060"><a href="#cb135-2060" aria-hidden="true" tabindex="-1"></a>  configuralInvariance_fit,</span>
-<span id="cb135-2061"><a href="#cb135-2061" aria-hidden="true" tabindex="-1"></a>  <span class="at">sort. =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb135-2061"><a href="#cb135-2061" aria-hidden="true" tabindex="-1"></a>  <span class="at">sort =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb135-2062"><a href="#cb135-2062" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb135-2063"><a href="#cb135-2063" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb135-2064"><a href="#cb135-2064" aria-hidden="true" tabindex="-1"></a><span class="fu">### Path Diagram</span></span>
@@ -8768,7 +8685,7 @@ ecvi                               1.143      1.111      1.082      1.025</code>
 <span id="cb135-2258"><a href="#cb135-2258" aria-hidden="true" tabindex="-1"></a>  <span class="at">missing =</span> <span class="st">"ML"</span>, <span class="co"># FIML</span></span>
 <span id="cb135-2259"><a href="#cb135-2259" aria-hidden="true" tabindex="-1"></a>  <span class="at">estimator =</span> <span class="st">"MLR"</span>, <span class="co"># Huber-White robust standard errors (for heteroscedasticity and nonnormally distributed residuals)</span></span>
 <span id="cb135-2260"><a href="#cb135-2260" aria-hidden="true" tabindex="-1"></a>  <span class="at">meanstructure =</span> <span class="cn">TRUE</span>, <span class="co"># estimate means/intercepts</span></span>
-<span id="cb135-2261"><a href="#cb135-2261" aria-hidden="true" tabindex="-1"></a>  <span class="at">fixed.x =</span> <span class="cn">FALSE</span>) <span class="co"># estimate means, variances, and covariances of the observed variables (to include predictors as part of FIML)</span></span>
+<span id="cb135-2261"><a href="#cb135-2261" aria-hidden="true" tabindex="-1"></a>  <span class="at">fixed_x =</span> <span class="cn">FALSE</span>) <span class="co"># estimate means, variances, and covariances of the observed variables (to include predictors as part of FIML)</span></span>
 <span id="cb135-2262"><a href="#cb135-2262" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb135-2263"><a href="#cb135-2263" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb135-2264"><a href="#cb135-2264" aria-hidden="true" tabindex="-1"></a><span class="fu">### Model Summary</span></span>
@@ -8776,7 +8693,7 @@ ecvi                               1.143      1.111      1.082      1.025</code>
 <span id="cb135-2268"><a href="#cb135-2268" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
 <span id="cb135-2269"><a href="#cb135-2269" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(</span>
 <span id="cb135-2270"><a href="#cb135-2270" aria-hidden="true" tabindex="-1"></a>  configuralInvarianceCorrelatedResiduals_fit,</span>
-<span id="cb135-2271"><a href="#cb135-2271" aria-hidden="true" tabindex="-1"></a>  <span class="at">fit.measures =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb135-2271"><a href="#cb135-2271" aria-hidden="true" tabindex="-1"></a>  <span class="at">fit_measures =</span> <span class="cn">TRUE</span>,</span>
 <span id="cb135-2272"><a href="#cb135-2272" aria-hidden="true" tabindex="-1"></a>  <span class="at">standardized =</span> <span class="cn">TRUE</span>,</span>
 <span id="cb135-2273"><a href="#cb135-2273" aria-hidden="true" tabindex="-1"></a>  <span class="at">rsquare =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb135-2274"><a href="#cb135-2274" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
@@ -8786,7 +8703,7 @@ ecvi                               1.143      1.111      1.082      1.025</code>
 <span id="cb135-2280"><a href="#cb135-2280" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
 <span id="cb135-2281"><a href="#cb135-2281" aria-hidden="true" tabindex="-1"></a><span class="fu">modificationindices</span>(</span>
 <span id="cb135-2282"><a href="#cb135-2282" aria-hidden="true" tabindex="-1"></a>  configuralInvarianceCorrelatedResiduals_fit,</span>
-<span id="cb135-2283"><a href="#cb135-2283" aria-hidden="true" tabindex="-1"></a>  <span class="at">sort. =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb135-2283"><a href="#cb135-2283" aria-hidden="true" tabindex="-1"></a>  <span class="at">sort =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb135-2284"><a href="#cb135-2284" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb135-2285"><a href="#cb135-2285" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb135-2286"><a href="#cb135-2286" aria-hidden="true" tabindex="-1"></a><span class="fu">### Path Diagram</span></span>
@@ -8989,7 +8906,7 @@ ecvi                               1.143      1.111      1.082      1.025</code>
 <span id="cb135-2493"><a href="#cb135-2493" aria-hidden="true" tabindex="-1"></a>  <span class="at">missing =</span> <span class="st">"ML"</span>, <span class="co"># FIML</span></span>
 <span id="cb135-2494"><a href="#cb135-2494" aria-hidden="true" tabindex="-1"></a>  <span class="at">estimator =</span> <span class="st">"MLR"</span>, <span class="co"># Huber-White robust standard errors (for heteroscedasticity and nonnormally distributed residuals)</span></span>
 <span id="cb135-2495"><a href="#cb135-2495" aria-hidden="true" tabindex="-1"></a>  <span class="at">meanstructure =</span> <span class="cn">TRUE</span>, <span class="co"># estimate means/intercepts</span></span>
-<span id="cb135-2496"><a href="#cb135-2496" aria-hidden="true" tabindex="-1"></a>  <span class="at">fixed.x =</span> <span class="cn">FALSE</span>) <span class="co"># estimate means, variances, and covariances of the observed variables (to include predictors as part of FIML)</span></span>
+<span id="cb135-2496"><a href="#cb135-2496" aria-hidden="true" tabindex="-1"></a>  <span class="at">fixed_x =</span> <span class="cn">FALSE</span>) <span class="co"># estimate means, variances, and covariances of the observed variables (to include predictors as part of FIML)</span></span>
 <span id="cb135-2497"><a href="#cb135-2497" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb135-2498"><a href="#cb135-2498" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb135-2499"><a href="#cb135-2499" aria-hidden="true" tabindex="-1"></a><span class="fu">### Model Summary</span></span>
@@ -8997,7 +8914,7 @@ ecvi                               1.143      1.111      1.082      1.025</code>
 <span id="cb135-2503"><a href="#cb135-2503" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
 <span id="cb135-2504"><a href="#cb135-2504" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(</span>
 <span id="cb135-2505"><a href="#cb135-2505" aria-hidden="true" tabindex="-1"></a>  metricInvariance_fit,</span>
-<span id="cb135-2506"><a href="#cb135-2506" aria-hidden="true" tabindex="-1"></a>  <span class="at">fit.measures =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb135-2506"><a href="#cb135-2506" aria-hidden="true" tabindex="-1"></a>  <span class="at">fit_measures =</span> <span class="cn">TRUE</span>,</span>
 <span id="cb135-2507"><a href="#cb135-2507" aria-hidden="true" tabindex="-1"></a>  <span class="at">standardized =</span> <span class="cn">TRUE</span>,</span>
 <span id="cb135-2508"><a href="#cb135-2508" aria-hidden="true" tabindex="-1"></a>  <span class="at">rsquare =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb135-2509"><a href="#cb135-2509" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
@@ -9007,7 +8924,7 @@ ecvi                               1.143      1.111      1.082      1.025</code>
 <span id="cb135-2515"><a href="#cb135-2515" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
 <span id="cb135-2516"><a href="#cb135-2516" aria-hidden="true" tabindex="-1"></a><span class="fu">modificationindices</span>(</span>
 <span id="cb135-2517"><a href="#cb135-2517" aria-hidden="true" tabindex="-1"></a>  metricInvariance_fit,</span>
-<span id="cb135-2518"><a href="#cb135-2518" aria-hidden="true" tabindex="-1"></a>  <span class="at">sort. =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb135-2518"><a href="#cb135-2518" aria-hidden="true" tabindex="-1"></a>  <span class="at">sort =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb135-2519"><a href="#cb135-2519" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb135-2520"><a href="#cb135-2520" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb135-2521"><a href="#cb135-2521" aria-hidden="true" tabindex="-1"></a><span class="fu">### Path Diagram</span></span>
@@ -9206,7 +9123,7 @@ ecvi                               1.143      1.111      1.082      1.025</code>
 <span id="cb135-2724"><a href="#cb135-2724" aria-hidden="true" tabindex="-1"></a>  <span class="at">missing =</span> <span class="st">"ML"</span>, <span class="co"># FIML</span></span>
 <span id="cb135-2725"><a href="#cb135-2725" aria-hidden="true" tabindex="-1"></a>  <span class="at">estimator =</span> <span class="st">"MLR"</span>, <span class="co"># Huber-White robust standard errors (for heteroscedasticity and nonnormally distributed residuals)</span></span>
 <span id="cb135-2726"><a href="#cb135-2726" aria-hidden="true" tabindex="-1"></a>  <span class="at">meanstructure =</span> <span class="cn">TRUE</span>, <span class="co"># estimate means/intercepts</span></span>
-<span id="cb135-2727"><a href="#cb135-2727" aria-hidden="true" tabindex="-1"></a>  <span class="at">fixed.x =</span> <span class="cn">FALSE</span>) <span class="co"># estimate means, variances, and covariances of the observed variables (to include predictors as part of FIML)</span></span>
+<span id="cb135-2727"><a href="#cb135-2727" aria-hidden="true" tabindex="-1"></a>  <span class="at">fixed_x =</span> <span class="cn">FALSE</span>) <span class="co"># estimate means, variances, and covariances of the observed variables (to include predictors as part of FIML)</span></span>
 <span id="cb135-2728"><a href="#cb135-2728" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb135-2729"><a href="#cb135-2729" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb135-2730"><a href="#cb135-2730" aria-hidden="true" tabindex="-1"></a><span class="fu">### Model Summary</span></span>
@@ -9214,7 +9131,7 @@ ecvi                               1.143      1.111      1.082      1.025</code>
 <span id="cb135-2734"><a href="#cb135-2734" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
 <span id="cb135-2735"><a href="#cb135-2735" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(</span>
 <span id="cb135-2736"><a href="#cb135-2736" aria-hidden="true" tabindex="-1"></a>  scalarInvariance_fit,</span>
-<span id="cb135-2737"><a href="#cb135-2737" aria-hidden="true" tabindex="-1"></a>  <span class="at">fit.measures =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb135-2737"><a href="#cb135-2737" aria-hidden="true" tabindex="-1"></a>  <span class="at">fit_measures =</span> <span class="cn">TRUE</span>,</span>
 <span id="cb135-2738"><a href="#cb135-2738" aria-hidden="true" tabindex="-1"></a>  <span class="at">standardized =</span> <span class="cn">TRUE</span>,</span>
 <span id="cb135-2739"><a href="#cb135-2739" aria-hidden="true" tabindex="-1"></a>  <span class="at">rsquare =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb135-2740"><a href="#cb135-2740" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
@@ -9224,7 +9141,7 @@ ecvi                               1.143      1.111      1.082      1.025</code>
 <span id="cb135-2746"><a href="#cb135-2746" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
 <span id="cb135-2747"><a href="#cb135-2747" aria-hidden="true" tabindex="-1"></a><span class="fu">modificationindices</span>(</span>
 <span id="cb135-2748"><a href="#cb135-2748" aria-hidden="true" tabindex="-1"></a>  scalarInvariance_fit,</span>
-<span id="cb135-2749"><a href="#cb135-2749" aria-hidden="true" tabindex="-1"></a>  <span class="at">sort. =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb135-2749"><a href="#cb135-2749" aria-hidden="true" tabindex="-1"></a>  <span class="at">sort =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb135-2750"><a href="#cb135-2750" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb135-2751"><a href="#cb135-2751" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb135-2752"><a href="#cb135-2752" aria-hidden="true" tabindex="-1"></a><span class="fu">### Path Diagram</span></span>
@@ -9424,7 +9341,7 @@ ecvi                               1.143      1.111      1.082      1.025</code>
 <span id="cb135-2956"><a href="#cb135-2956" aria-hidden="true" tabindex="-1"></a>  <span class="at">missing =</span> <span class="st">"ML"</span>, <span class="co"># FIML</span></span>
 <span id="cb135-2957"><a href="#cb135-2957" aria-hidden="true" tabindex="-1"></a>  <span class="at">estimator =</span> <span class="st">"MLR"</span>, <span class="co"># Huber-White robust standard errors (for heteroscedasticity and nonnormally distributed residuals)</span></span>
 <span id="cb135-2958"><a href="#cb135-2958" aria-hidden="true" tabindex="-1"></a>  <span class="at">meanstructure =</span> <span class="cn">TRUE</span>, <span class="co"># estimate means/intercepts</span></span>
-<span id="cb135-2959"><a href="#cb135-2959" aria-hidden="true" tabindex="-1"></a>  <span class="at">fixed.x =</span> <span class="cn">FALSE</span>) <span class="co"># estimate means, variances, and covariances of the observed variables (to include predictors as part of FIML)</span></span>
+<span id="cb135-2959"><a href="#cb135-2959" aria-hidden="true" tabindex="-1"></a>  <span class="at">fixed_x =</span> <span class="cn">FALSE</span>) <span class="co"># estimate means, variances, and covariances of the observed variables (to include predictors as part of FIML)</span></span>
 <span id="cb135-2960"><a href="#cb135-2960" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb135-2961"><a href="#cb135-2961" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb135-2962"><a href="#cb135-2962" aria-hidden="true" tabindex="-1"></a><span class="fu">### Model Summary</span></span>
@@ -9432,7 +9349,7 @@ ecvi                               1.143      1.111      1.082      1.025</code>
 <span id="cb135-2966"><a href="#cb135-2966" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
 <span id="cb135-2967"><a href="#cb135-2967" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(</span>
 <span id="cb135-2968"><a href="#cb135-2968" aria-hidden="true" tabindex="-1"></a>  residualInvariance_fit,</span>
-<span id="cb135-2969"><a href="#cb135-2969" aria-hidden="true" tabindex="-1"></a>  <span class="at">fit.measures =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb135-2969"><a href="#cb135-2969" aria-hidden="true" tabindex="-1"></a>  <span class="at">fit_measures =</span> <span class="cn">TRUE</span>,</span>
 <span id="cb135-2970"><a href="#cb135-2970" aria-hidden="true" tabindex="-1"></a>  <span class="at">standardized =</span> <span class="cn">TRUE</span>,</span>
 <span id="cb135-2971"><a href="#cb135-2971" aria-hidden="true" tabindex="-1"></a>  <span class="at">rsquare =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb135-2972"><a href="#cb135-2972" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
@@ -9442,7 +9359,7 @@ ecvi                               1.143      1.111      1.082      1.025</code>
 <span id="cb135-2978"><a href="#cb135-2978" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
 <span id="cb135-2979"><a href="#cb135-2979" aria-hidden="true" tabindex="-1"></a><span class="fu">modificationindices</span>(</span>
 <span id="cb135-2980"><a href="#cb135-2980" aria-hidden="true" tabindex="-1"></a>  residualInvariance_fit,</span>
-<span id="cb135-2981"><a href="#cb135-2981" aria-hidden="true" tabindex="-1"></a>  <span class="at">sort. =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb135-2981"><a href="#cb135-2981" aria-hidden="true" tabindex="-1"></a>  <span class="at">sort =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb135-2982"><a href="#cb135-2982" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb135-2983"><a href="#cb135-2983" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb135-2984"><a href="#cb135-2984" aria-hidden="true" tabindex="-1"></a><span class="fu">### Path Diagram</span></span>
@@ -9473,10 +9390,10 @@ ecvi                               1.143      1.111      1.082      1.025</code>
 <span id="cb135-3015"><a href="#cb135-3015" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb135-3016"><a href="#cb135-3016" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb135-3017"><a href="#cb135-3017" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">cbind</span>(</span>
-<span id="cb135-3018"><a href="#cb135-3018" aria-hidden="true" tabindex="-1"></a>  <span class="at">configural =</span> <span class="fu">inspect</span>(configuralInvarianceCorrelatedResiduals_fit, <span class="st">"fit.measures"</span>), </span>
-<span id="cb135-3019"><a href="#cb135-3019" aria-hidden="true" tabindex="-1"></a>  <span class="at">weak =</span> <span class="fu">inspect</span>(metricInvariance_fit, <span class="st">"fit.measures"</span>),</span>
-<span id="cb135-3020"><a href="#cb135-3020" aria-hidden="true" tabindex="-1"></a>  <span class="at">strong =</span> <span class="fu">inspect</span>(scalarInvariance_fit, <span class="st">"fit.measures"</span>),</span>
-<span id="cb135-3021"><a href="#cb135-3021" aria-hidden="true" tabindex="-1"></a>  <span class="at">strict =</span> <span class="fu">inspect</span>(residualInvariance_fit, <span class="st">"fit.measures"</span>)), <span class="dv">3</span>)</span>
+<span id="cb135-3018"><a href="#cb135-3018" aria-hidden="true" tabindex="-1"></a>  <span class="at">configural =</span> <span class="fu">inspect</span>(configuralInvarianceCorrelatedResiduals_fit, <span class="st">"fit_measures"</span>), </span>
+<span id="cb135-3019"><a href="#cb135-3019" aria-hidden="true" tabindex="-1"></a>  <span class="at">weak =</span> <span class="fu">inspect</span>(metricInvariance_fit, <span class="st">"fit_measures"</span>),</span>
+<span id="cb135-3020"><a href="#cb135-3020" aria-hidden="true" tabindex="-1"></a>  <span class="at">strong =</span> <span class="fu">inspect</span>(scalarInvariance_fit, <span class="st">"fit_measures"</span>),</span>
+<span id="cb135-3021"><a href="#cb135-3021" aria-hidden="true" tabindex="-1"></a>  <span class="at">strict =</span> <span class="fu">inspect</span>(residualInvariance_fit, <span class="st">"fit_measures"</span>)), <span class="dv">3</span>)</span>
 <span id="cb135-3022"><a href="#cb135-3022" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 </code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
