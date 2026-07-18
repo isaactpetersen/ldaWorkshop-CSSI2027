@@ -1,0 +1,38 @@
+---
+title: "2027 CSSI Workshop on Longitudinal Data Analysis"
+---
+
+# Overview {#sec-overview}
+
+This is the website for the 2027 Center for Social Science Innovation (CSSI) Workshop on Longitudinal Data Analysis led by [Isaac T. Petersen](https://psychology.uiowa.edu/people/isaac-petersen).
+Isaac Petersen is an Associate Professor in the Department of Psychological and Brain Sciences at the University of Iowa.
+
+This workshop provides an applied overview of principles and methods for longitudinal data analysis, with hands-on examples in [`R`](https://cran.r-project.org).
+Topics include types of longitudinal data, data manipulation and visualization, statistical methods for longitudinal analysis (including mixed-effects models and structural equation models), longitudinal measurement invariance, handling missing data, and separating within-person and between-person effects.
+Participants are encouraged to bring a laptop with [`R`](https://cran.r-project.org) and [`RStudio`](https://posit.co/download/rstudio-desktop/) installed for interactive exercises.
+The workshop is intended for participants with experience using [`R`](https://cran.r-project.org) and [`RStudio`](https://posit.co/download/rstudio-desktop/).
+Prior experience with longitudinal data analysis, though helpful, is not required.
+
+# Getting Started {#sec-gettingStarted}
+
+Steps:
+
+1. Install [`R`](https://cran.r-project.org)
+1. Install [`RStudio`](https://posit.co/download/rstudio-desktop/)
+1. Open `RStudio` and run the following code to install the necessary `R` packages:
+
+    ```r
+    install.packages(c(
+      "petersenlab","tidyverse","ggforce","psych","lme4","lmerTest","mgcv","MASS",
+      "easystats","parallelly","MuMIn","lavaan","lavaan.mi","semTools","lcsm",
+      "lavaanPlot","lavaangui","mice","miceadds","micemd","broom.mixed","furrr"))
+    ```
+1. Download the [GitHub repository for the workshop](https://github.com/isaactpetersen/ldaWorkshop-CSSI2027)—either by cloning the repository or by downloading the `.zip` file of the repository.
+    - If you have [GitHub Desktop](https://desktop.github.com/download/), you can clone [the repository](https://github.com/isaactpetersen/ldaWorkshop-CSSI2027) by going to [the repository](https://github.com/isaactpetersen/ldaWorkshop-CSSI2027), clicking the green "Code" button, and then "Open With GitHub Desktop"; then follow the steps in [GitHub Desktop](https://desktop.github.com/download/) to clone the repository.
+    - If you do not have [GitHub Desktop](https://desktop.github.com/download/), you can download the files in the repository by going to [the repository](https://github.com/isaactpetersen/ldaWorkshop-CSSI2027), clicking the green "Code" button, and then "Download ZIP"; once the `.zip` file finishes downloading, unzip the downloaded `.zip` file onto your computer.
+1. Open the following repository files in `RStudio`:
+    - `data-manipulation.qmd`
+    - `data-visualization.qmd`
+    - `mixed-effects-models.qmd`
+    - `structural-equation-models.qmd`
+    - `missing-data.qmd`

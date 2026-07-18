@@ -1,0 +1,248 @@
+---
+title: "Visualization of Longitudinal Data"
+---
+
+# Preamble
+
+## Load Libraries
+
+```{r}
+library("tidyverse")
+library("ggforce")
+```
+
+## Load Data
+
+The data for this example were [simulated](simulate-data.qmd):
+
+```{r}
+mydata_long <- read.csv("./data/mydata_long.csv")
+```
+
+# Pre-Figure Processing
+
+```{r}
+mydata_long$sexFactor <- factor(mydata_long$sex)
+
+mydata_long_summary <- mydata_long |>
+  group_by(age, sexFactor) |>
+  summarise(
+    ses = mean(ses, na.rm = TRUE),
+    sleep = mean(sleep, na.rm = TRUE),
+    depression = mean(depression, na.rm = TRUE),
+    anxiety = mean(anxiety, na.rm = TRUE),
+    .groups = "drop"
+  )
+```
+
+# Plot Observed Growth Curves {#sec-plotObservedGrowthCurves}
+
+## Observed Growth Curves
+
+```{r}
+#| fig-cap: "Observed Growth Curves of Depression Symptoms"
+
+ggplot(
+  data = mydata_long,
+  mapping = aes(
+    x = age,
+    y = depression,
+    group = ID)) +
+  geom_line(
+    alpha = 0.25
+  ) +
+  labs(
+    x = "Age (Years)",
+    y = "Depression Symptoms"
+  ) +
+  theme_classic()
+```
+
+```{r}
+#| fig-cap: "Observed Growth Curves of Anxiety Symptoms"
+
+ggplot(
+  data = mydata_long,
+  mapping = aes(
+    x = age,
+    y = anxiety,
+    group = ID)) +
+  geom_line(
+    alpha = 0.25
+  ) +
+  labs(
+    x = "Age (Years)",
+    y = "Anxiety Symptoms"
+  ) +
+  theme_classic()
+```
+
+## Overlaid with Means by Sex
+
+```{r}
+#| fig-cap: "Observed Growth Curves of Depression Symptoms Overlaid with Means by Sex"
+
+ggplot(
+  data = mydata_long,
+  mapping = aes(
+    x = age,
+    y = depression,
+    group = ID)) +
+  geom_line(
+    alpha = 0.25
+  ) +
+  geom_line(
+    mapping = aes(
+      x = age,
+      y = depression,
+      color = sexFactor,
+      group = sexFactor,
+    ),
+    data = mydata_long_summary,
+    linewidth = 2
+  ) +
+  labs(
+    x = "Age (Years)",
+    y = "Depression Symptoms",
+    color = "Sex"
+  ) +
+  theme_classic()
+```
+
+```{r}
+#| fig-cap: "Observed Growth Curves of Anxiety Symptoms Overlaid with Means by Sex"
+
+ggplot(
+  data = mydata_long,
+  mapping = aes(
+    x = age,
+    y = anxiety,
+    group = ID)) +
+  geom_line(
+    alpha = 0.25
+  ) +
+  geom_line(
+    mapping = aes(
+      x = age,
+      y = anxiety,
+      color = sexFactor,
+      group = sexFactor,
+    ),
+    data = mydata_long_summary,
+    linewidth = 2
+  ) +
+  labs(
+    x = "Age (Years)",
+    y = "Anxiety Symptoms",
+    color = "Sex"
+  ) +
+  theme_classic()
+```
+
+## Faceted Plots
+
+### Random Subsample
+
+```{r}
+#| fig-cap: "Faceted Plot of Observed Growth Curves of Depression Symptoms for a Random Subsample of Individuals"
+
+set.seed(52242) # for reproducibility
+
+random_n <- 12
+
+ids_subset <- sample(
+  x = mydata_long$ID,
+  size = random_n,
+  replace = FALSE
+)
+
+mydata_long |>
+  filter(ID %in% ids_subset) |>
+  ggplot(
+    aes(
+      x = age,
+      y = depression,
+      group = ID
+    )
+  ) +
+  geom_point() +
+  geom_smooth(
+    method = "lm"
+  ) +
+  coord_cartesian(
+    ylim = c(0, max(mydata_long$depression, na.rm = TRUE))) +
+  facet_wrap(
+    ~ ID) +
+  labs(
+    x = "Age (Years)",
+    y = "Depression Symptoms"
+  ) +
+  theme_classic()
+```
+
+```{r}
+#| fig-cap: "Faceted Plot of Observed Growth Curves of Anxiety Symptoms for a Random Subsample of Individuals"
+
+mydata_long |>
+  filter(ID %in% ids_subset) |>
+  ggplot(
+    aes(
+      x = age,
+      y = anxiety,
+      group = ID
+    )
+  ) +
+  geom_point() +
+  geom_smooth(
+    method = "lm"
+  ) +
+  coord_cartesian(
+    ylim = c(0, max(mydata_long$anxiety, na.rm = TRUE))) +
+  facet_wrap(
+    ~ ID
+  ) +
+  labs(
+    x = "Age (Years)",
+    y = "Anxiety Symptoms"
+  ) +
+  theme_classic()
+```
+
+### All Cases
+
+```{r}
+facetedPlots <- mydata_long |>
+  ggplot(
+    aes(
+      x = age,
+      y = anxiety,
+      group = ID
+    )
+  ) +
+  geom_point() +
+  geom_smooth(
+    method = "lm"
+  ) +
+  coord_cartesian(
+    ylim = c(0, max(mydata_long$anxiety, na.rm = TRUE))) +
+  labs(
+    x = "Age (Years)",
+    y = "Anxiety Symptoms"
+  ) +
+  theme_classic() +
+  ggforce::facet_wrap_paginate(
+    ~ ID,
+    ncol = 4,
+    nrow = 3)
+
+num_pages <- ggforce::n_pages(facetedPlots)
+
+for(i in 1:num_pages){
+  print(facetedPlots + 
+    ggforce::facet_wrap_paginate(
+      ~ ID,
+      ncol = 4,
+      nrow = 3,
+      page = i))
+}
+```

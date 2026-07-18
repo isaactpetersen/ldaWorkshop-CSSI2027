@@ -1,0 +1,2814 @@
+---
+title: "Structural Equation Models"
+---
+
+For an overview of structural equation modeling, see my chapter on "[Structural Equation Modeling](https://isaactpetersen.github.io/Principles-Psychological-Assessment/structural-equation-modeling.html)" in the following textbook:
+
+Petersen, I. T. (2025). *Principles of psychological assessment: With applied examples in R*. University of Iowa Libraries. <https://isaactpetersen.github.io/Principles-Psychological-Assessment>. <https://doi.org/10.25820/work.007199>
+
+# Preamble
+
+```{r}
+#| include: false
+
+options(scipen = 999) # suppress scientific notation
+```
+
+## Load Libraries
+
+```{r}
+library("lavaan")
+library("semTools")
+library("lcsm")
+library("lavaanPlot")
+library("lavaangui")
+library("tidyverse")
+```
+
+## Load Data
+
+```{r}
+mydata_long <- read.csv("./data/mydata_long.csv")
+
+longitudinalMI1 <- read.csv("./data/Bliese-Ployhart-2002-indicators-1.csv")
+```
+
+```{r}
+#| eval: false
+
+longitudinalMI2 <- read.csv("./data/Bliese-Ployhart-2002-indicators-2.csv")
+longitudinalMI3 <- read.csv("./data/Bliese-Ployhart-2002-indicators-3.csv")
+longitudinalMI4 <- read.csv("./data/Bliese-Ployhart-2002-indicators-4.csv")
+```
+
+# Research Questions {#sec-researchQuestions}
+
+1. What is the form of adolescents' depressive symptom trajectories across ages 14 to 17?
+1. Do the trajectories differ between boys and girls?
+1. Does how much sleep the adolescent receives predict their depressive symptoms over time?
+1. Does the association between sleep and depressive symptoms differ between boys and girls?
+1. What is the association between sleep and depressive symptoms at the within-individual level versus between-individual level?
+1. Does level of anxiety predict later within-person change in depression (and vice versa)?
+1. Does within-person change in anxiety predict later within-person change in depression (and vice versa)?
+1. Do our measures show measurement invariance across time?
+That is, are our scores able to meaningfully compared on the same metric across time?
+
+# Pre-Model Computation {#sec-premodelComputation}
+
+```{r}
+mydata_long$sexFactor <- factor(mydata_long$sex)
+
+mydata_long <- mydata_long |>
+  group_by(ID) |>
+  mutate(
+    # Compute person mean and mean-centered variables
+    ses_personMean = mean(ses, na.rm = TRUE),
+    ses_personMeanCentered = ses - ses_personMean,
+    sleep_personMean = mean(sleep, na.rm = TRUE),
+    sleep_personMeanCentered = sleep - sleep_personMean,
+    depression_personMean = mean(depression, na.rm = TRUE),
+    depression_personMeanCentered = depression - depression_personMean,
+    anxiety_personMean = mean(anxiety, na.rm = TRUE),
+    anxiety_personMeanCentered = anxiety - anxiety_personMean,
+    
+    # Compute interaction terms
+    sexEffectCodeXses = sexEffectCode * ses,
+    sexEffectCodeXsleep = sexEffectCode * sleep,
+    sexEffectCodeXdepression = sexEffectCode * depression,
+    sexEffectCodeXanxiety = sexEffectCode * anxiety,
+    sexEffectCodeXsleep_personMean = sexEffectCode * sleep_personMean,
+    sexEffectCodeXsleep_personMeanCentered = sexEffectCode * sleep_personMeanCentered
+  ) |>
+  ungroup()
+
+# Convert data from long to wide (widen data by timepoint)
+mydata_wide <- mydata_long |>
+  select(-age) |>
+  tidyr::pivot_wider(
+    names_from  = timepoint, # widen by timepoint
+    values_from = c( # widen time-varying variables
+      ses, ses_personMeanCentered, sleep, sleep_personMeanCentered, depression,
+      depression_personMeanCentered, anxiety, anxiety_personMeanCentered, 
+      sexEffectCodeXses, sexEffectCodeXsleep, sexEffectCodeXdepression, sexEffectCodeXanxiety,
+      sexEffectCodeXsleep_personMeanCentered)
+  )
+```
+
+Variable names for the data in wide form:
+
+```{r}
+names(mydata_wide)
+```
+
+# Latent Growth Curve Model {#sec-latentGCM}
+
+## Linear Growth Curve Model {#sec-linearGCM}
+
+### Model Syntax
+
+In estimating linear latent growth curves of depression symptoms, this model specifies:
+
+1. latent intercept and slope factors
+1. the person's sex (`sexEffectCode`) and the person's average sleep (`sleep_personMean`; and their interaction; `sexEffectCodeXsleep_personMean`) as time-invariant predictors of the latent intercept and slope, and
+1. a person's deviations from their average sleep (`sleep_personMeanCentered`; and in interaction with sex; `sexEffectCodeXsleep_personMeanCentered`) as time-varying covariates predicting concurrent depression symptoms at each wave.
+
+```{r}
+linearGCM_syntax <- '
+  # Intercept and slope
+  intercept =~ 1*depression_1 + 1*depression_2 + 1*depression_3 + 1*depression_4
+  slope =~ 0*depression_1 + 1*depression_2 + 2*depression_3 + 3*depression_4
+
+  # Regression paths
+  intercept ~ sexEffectCode + sleep_personMean + sexEffectCodeXsleep_personMean
+  slope ~ sexEffectCode + sleep_personMean + sexEffectCodeXsleep_personMean
+  
+  # Time-varying covariates
+  depression_1 ~ sleep_personMeanCentered_1 + sexEffectCodeXsleep_personMeanCentered_1
+  depression_2 ~ sleep_personMeanCentered_2 + sexEffectCodeXsleep_personMeanCentered_2
+  depression_3 ~ sleep_personMeanCentered_3 + sexEffectCodeXsleep_personMeanCentered_3
+  depression_4 ~ sleep_personMeanCentered_4 + sexEffectCodeXsleep_personMeanCentered_4
+  
+  # Constrain observed intercepts to zero
+  depression_1 ~ 0*1
+  depression_2 ~ 0*1
+  depression_3 ~ 0*1
+  depression_4 ~ 0*1
+  
+  # Estimate mean of intercept and slope
+  intercept ~ 1
+  slope ~ 1
+'
+```
+
+### Fit Model
+
+Specifying `fixed.x = FALSE` would estimate (i.e., would not consider as fixed) means, variances, and covariances of the observed variables.
+Doing so would allow missing information in the predictors to be included as part of full information maximum likelihood (FIML).
+However, this gets challenging to use when including both person mean and person-mean-centered variables (due to linear dependencies).
+Thus, many of these examples do not specify `fixed.x = FALSE`.
+
+```{r}
+linearGCM_fit <- lavaan::sem(
+  linearGCM_syntax,
+  data = mydata_wide,
+  missing = "ML", # FIML
+  estimator = "MLR", # Huber-White robust standard errors (for heteroscedasticity and nonnormally distributed residuals)
+  meanstructure = TRUE) # estimate means/intercepts
+```
+
+### Model Summary
+
+```{r}
+summary(
+  linearGCM_fit,
+  fit.measures = TRUE,
+  standardized = TRUE,
+  rsquare = TRUE)
+```
+
+### Modification Indices
+
+```{r}
+modificationindices(
+  linearGCM_fit,
+  sort. = TRUE)
+```
+
+### Plots
+
+#### Path Diagram
+
+```{r}
+#| fig-cap: "Path Diagram"
+
+lavaanPlot::lavaanPlot(
+  linearGCM_fit,
+  coefs = TRUE,
+  #covs = TRUE,
+  stand = TRUE)
+```
+
+To create an interactive path diagram, you can use the following syntax:
+
+```{r}
+#| eval: false
+
+lavaangui::plot_lavaan(linearGCM_fit)
+```
+
+#### Model-Implied Trajectories
+
+```{r}
+linearGCM_fs <- as.data.frame(lavaan::lavPredict(linearGCM_fit))
+linearGCM_caseidx <- lavaan::lavInspect(linearGCM_fit, "case.idx")
+linearGCM_fs$ID <- mydata_wide$ID[linearGCM_caseidx]
+
+factorScores_linear <- left_join(
+  mydata_wide,
+  linearGCM_fs,
+  by = "ID")
+
+get_params <- function(fit) {
+  pe <- parameterEstimates(fit)
+  
+  get <- function(lhs, rhs, op = NULL) {
+    if (is.null(op)) {
+      # automatically detect the operator
+      # priority: =~, ~1, ~
+      sub <- pe[pe$lhs == lhs & pe$rhs == rhs, ]
+      if (nrow(sub) == 0) stop(paste("Parameter not found:", lhs, rhs))
+      out <- sub$est[1]
+    } else {
+      sub <- pe[pe$lhs == lhs & pe$rhs == rhs & pe$op == op, ]
+      if (nrow(sub) == 0) stop(paste("Parameter not found:", lhs, op, rhs))
+      out <- sub$est[1]
+    }
+    return(out)
+  }
+  
+  list(pe = pe, get = get)
+}
+
+linearGCM_params <- get_params(linearGCM_fit)
+
+long_linear <- factorScores_linear |>
+  pivot_longer(
+    cols = matches("depression_|sleep_personMeanCentered_"),
+    names_to = c(".value", "time"),
+    names_pattern = "(.*)_(\\d)"
+  ) |>
+  mutate(
+    time = as.numeric(time),
+    time_num = time - 1,
+    age = recode_values(time, 1 ~ 14, 2 ~ 15, 3 ~ 16, 4 ~ 17)
+  )
+
+# Compute individuals' model-implied trajectories
+long_linear <- long_linear |>
+  mutate(
+    beta_sleep = case_when(
+      time_num == 0 ~ linearGCM_params$get("depression_1", "sleep_personMeanCentered_1"),
+      time_num == 1 ~ linearGCM_params$get("depression_2", "sleep_personMeanCentered_2"),
+      time_num == 2 ~ linearGCM_params$get("depression_3", "sleep_personMeanCentered_3"),
+      time_num == 3 ~ linearGCM_params$get("depression_4", "sleep_personMeanCentered_4")
+    ),
+    
+    beta_int = case_when(
+      time_num == 0 ~ linearGCM_params$get("depression_1", "sexEffectCodeXsleep_personMeanCentered_1"),
+      time_num == 1 ~ linearGCM_params$get("depression_2", "sexEffectCodeXsleep_personMeanCentered_2"),
+      time_num == 2 ~ linearGCM_params$get("depression_3", "sexEffectCodeXsleep_personMeanCentered_3"),
+      time_num == 3 ~ linearGCM_params$get("depression_4", "sexEffectCodeXsleep_personMeanCentered_4")
+    ),
+    
+    yhat =
+      intercept +
+      slope * time_num +
+      beta_sleep * sleep_personMeanCentered +
+      beta_int * sexEffectCode * sleep_personMeanCentered
+  )
+
+sleep_stats <- mydata_long |>
+  group_by(sexFactor, age) |>
+  summarize(
+    mean_sleep = mean(sleep, na.rm = TRUE),
+    sd_sleep = sd(sleep, na.rm = TRUE),
+    .groups = "drop"
+  ) %>% 
+  mutate(
+    time = recode_values(age, 14 ~ 1, 15 ~ 2, 16 ~ 3, 17 ~ 4),
+    time_num = time - 1
+  )
+
+newData <- expand.grid(
+  sexFactor = c("female", "male"),
+  time_num = 0:3,
+  sleepFactor = c("low sleep", "average sleep", "high sleep")
+) |>
+  left_join(sleep_stats, by = c("sexFactor", "time_num")) |>
+  mutate(
+    sleep = case_when(
+      sleepFactor == "average sleep" ~ mean_sleep,
+      sleepFactor == "low sleep" ~ mean_sleep - sd_sleep,
+      sleepFactor == "high sleep" ~ mean_sleep + sd_sleep
+    ),
+    sexEffectCode = ifelse(sexFactor == "male", 1, -1)
+  )
+
+# Compute prototypical trajectories
+grand_mean_sleep <- mean(mydata_wide$sleep_personMean, na.rm = TRUE)
+
+newData <- newData |>
+  mutate(
+    sleep_personMeanCentered = sleep - grand_mean_sleep
+  )
+
+newData <- newData |>
+  mutate(
+    intercept_hat =
+    linearGCM_params$get("intercept", "", "~1") +
+    linearGCM_params$get("intercept", "sexEffectCode", "~") * sexEffectCode +
+    linearGCM_params$get("intercept", "sleep_personMean", "~") * sleep +
+    linearGCM_params$get("intercept", "sexEffectCodeXsleep_personMean", "~") * sexEffectCode * sleep,
+    
+  slope_hat =
+    linearGCM_params$get("slope", "", "~1") +
+    linearGCM_params$get("slope", "sexEffectCode", "~") * sexEffectCode +
+    linearGCM_params$get("slope", "sleep_personMean", "~") * sleep +
+    linearGCM_params$get("slope", "sexEffectCodeXsleep_personMean", "~") * sexEffectCode * sleep
+  )
+
+newData <- newData |>
+  mutate(
+    beta_sleep = case_when(
+      time_num == 0 ~ linearGCM_params$get("depression_1", "sleep_personMeanCentered_1"),
+      time_num == 1 ~ linearGCM_params$get("depression_2", "sleep_personMeanCentered_2"),
+      time_num == 2 ~ linearGCM_params$get("depression_3", "sleep_personMeanCentered_3"),
+      time_num == 3 ~ linearGCM_params$get("depression_4", "sleep_personMeanCentered_4")
+    ),
+    
+    beta_int = case_when(
+      time_num == 0 ~ linearGCM_params$get("depression_1", "sexEffectCodeXsleep_personMeanCentered_1"),
+      time_num == 1 ~ linearGCM_params$get("depression_2", "sexEffectCodeXsleep_personMeanCentered_2"),
+      time_num == 2 ~ linearGCM_params$get("depression_3", "sexEffectCodeXsleep_personMeanCentered_3"),
+      time_num == 3 ~ linearGCM_params$get("depression_4", "sexEffectCodeXsleep_personMeanCentered_4")
+    ),
+    
+    yhat =
+      intercept_hat +
+      slope_hat * time_num +
+      beta_sleep * sleep_personMeanCentered +
+      beta_int * sexEffectCode * sleep_personMeanCentered
+  )
+```
+
+##### Prototypical Growth Curve By Sex
+
+```{r}
+#| fig-cap: "Prototypical Model-Implied Growth Curves of Depression Symptoms By Sex"
+
+ggplot(
+  data = newData |> filter(sleepFactor == "average sleep"),
+  mapping = aes(
+    x = age,
+    y = yhat,
+    color = sexFactor)
+) +
+  geom_smooth( # fit a smoothed line to the model-implied points; use geom_line() to fit a non-smooth line
+    method = "lm",
+    se = FALSE
+  ) +
+  labs(
+    x = "Age (years)",
+    y = "Depression Symptoms",
+    color = "Sex"
+  ) +
+  theme_classic()
+```
+
+##### Individuals' Growth Curves
+
+```{r}
+#| fig-cap: "Individuals' Model-Implied Growth Curves of Depression Symptoms"
+
+ggplot(
+  data = long_linear,
+  mapping = aes(
+    x = age,
+    y = yhat,
+    group = ID,
+    color = sexFactor)
+) +
+  geom_smooth( # fit a smoothed line to each participant's points; use geom_line() to fit a non-smooth line
+    method = "lm",
+    se = FALSE,
+    linewidth = 0.5
+  ) +
+  labs(
+    x = "Age (years)",
+    y = "Depression Symptoms",
+    color = "Sex"
+  ) +
+  theme_classic()
+```
+
+##### Individuals' Trajectories Overlaid with Prototypical Trajectory By Sex
+
+```{r}
+#| fig-cap: "Individuals' Model-Implied Growth Curves of Depression Symptoms Overlaid With Prototypical Growth Curves By Sex"
+
+ggplot(
+  data = long_linear,
+  mapping = aes(
+    x = age,
+    y = yhat,
+    group = ID
+  )
+) +
+  geom_smooth( # fit a smoothed line to each participant's points; use geom_line() to fit a non-smooth line
+    method = "lm",
+    se = FALSE,
+    linewidth = 0.5,
+    color = "gray",
+    alpha = 0.30
+  ) +
+  geom_smooth( # fit a smoothed line to the model-implied points; use geom_line() to fit a non-smooth line
+    data = newData |> filter(sleepFactor == "average sleep"),
+    mapping = aes(
+      x = age,
+      y = yhat,
+      group = sexFactor,
+      color = sexFactor
+      ),
+    method = "lm",
+    se = FALSE,
+    linewidth = 2
+  ) +
+  labs(
+    x = "Age (years)",
+    y = "Depression Symptoms",
+    color = "Sex"
+  ) +
+  theme_classic()
+```
+
+##### Prototypical Trajectory By Sex and Sleep
+
+```{r}
+#| fig-cap: "Prototypical Model-Implied Growth Curves of Depression Symptoms By Sex and Sleep"
+
+ggplot(
+  data = newData |> filter(sleepFactor != "average sleep"),
+  mapping = aes(
+    x = age,
+    y = yhat,
+    color = sexFactor,
+    linetype = sleepFactor)
+) +
+  geom_smooth( # fit a smoothed line to the model-implied points; use geom_line() to fit a non-smooth line
+    method = "lm",
+    se = FALSE
+  ) +
+  labs(
+    x = "Age (years)",
+    y = "Depression Symptoms",
+    color = "Sex",
+    linetype = "Sleep"
+  ) +
+  guides(
+    linetype = guide_legend(
+      override.aes = list(color = "black")
+    )
+  ) +
+  theme_classic()
+```
+
+## Quadratic Growth Curve Model {#sec-quadraticGCM}
+
+### Model Syntax
+
+In estimating quadratic latent growth curves of depression symptoms, this model specifies:
+
+1. latent intercept and latent linear and quadratic slope factors
+1. the person's sex (`sexEffectCode`) and the person's average sleep (`sleep_personMean`; and their interaction; `sexEffectCodeXsleep_personMean`) as time-invariant predictors of the latent intercept and slope, and
+1. a person's deviations from their average sleep (`sleep_personMeanCentered`; and in interaction with sex; `sexEffectCodeXsleep_personMeanCentered`) as time-varying covariates predicting concurrent depression symptoms at each wave.
+
+```{r}
+quadraticGCM_syntax <- '
+  # Intercept and slope
+  intercept =~ 1*depression_1 + 1*depression_2 + 1*depression_3 + 1*depression_4
+  linear =~ 0*depression_1 + 1*depression_2 + 2*depression_3 + 3*depression_4
+  quadratic =~ 0*depression_1 + 1*depression_2 + 4*depression_3 + 9*depression_4
+
+  # Regression paths
+  intercept ~ sexEffectCode + sleep_personMean + sexEffectCodeXsleep_personMean
+  linear ~ sexEffectCode + sleep_personMean + sexEffectCodeXsleep_personMean
+  quadratic ~ sexEffectCode + sleep_personMean + sexEffectCodeXsleep_personMean
+  
+  # Time-varying covariates
+  depression_1 ~ sleep_personMeanCentered_1 + sexEffectCodeXsleep_personMeanCentered_1
+  depression_2 ~ sleep_personMeanCentered_2 + sexEffectCodeXsleep_personMeanCentered_2
+  depression_3 ~ sleep_personMeanCentered_3 + sexEffectCodeXsleep_personMeanCentered_3
+  depression_4 ~ sleep_personMeanCentered_4 + sexEffectCodeXsleep_personMeanCentered_4
+  
+  # Constrain observed intercepts to zero
+  depression_1 ~ 0*1
+  depression_2 ~ 0*1
+  depression_3 ~ 0*1
+  depression_4 ~ 0*1
+  
+  # Constrain residual variances to be equal (needed to address negative variance)
+  depression_1 ~~ vardep*depression_1
+  depression_2 ~~ vardep*depression_2
+  depression_3 ~~ vardep*depression_3
+  depression_4 ~~ vardep*depression_4
+  
+  # Estimate mean of intercept and slope
+  intercept ~ 1
+  linear ~ 1
+  quadratic ~ 1
+'
+```
+
+### Fit Model
+
+```{r}
+quadraticGCM_fit <- lavaan::sem(
+  quadraticGCM_syntax,
+  data = mydata_wide,
+  missing = "ML", # FIML
+  estimator = "MLR", # Huber-White robust standard errors (for heteroscedasticity and nonnormally distributed residuals)
+  meanstructure = TRUE) # estimate means/intercepts
+```
+
+### Model Summary
+
+```{r}
+summary(
+  quadraticGCM_fit,
+  fit.measures = TRUE,
+  standardized = TRUE,
+  rsquare = TRUE)
+```
+
+### Modification Indices
+
+```{r}
+modificationindices(
+  quadraticGCM_fit,
+  sort. = TRUE)
+```
+
+### Plots
+
+#### Path Diagram
+
+```{r}
+#| fig-cap: "Path Diagram"
+
+lavaanPlot::lavaanPlot2(
+  quadraticGCM_fit,
+  stand = TRUE,
+  coef_labels = TRUE)
+```
+
+To create an interactive path diagram, you can use the following syntax:
+
+```{r}
+#| eval: false
+
+lavaangui::plot_lavaan(quadraticGCM_fit)
+```
+
+#### Model-Implied Trajectories
+
+```{r}
+# Factor scores (latent growth factors) for each individual
+quadraticGCM_fs <- as.data.frame(lavaan::lavPredict(quadraticGCM_fit))
+quadraticGCM_caseidx <- lavaan::lavInspect(quadraticGCM_fit, "case.idx")
+quadraticGCM_fs$ID <- mydata_wide$ID[quadraticGCM_caseidx]
+
+factorScores_quad <- left_join(
+  mydata_wide,
+  quadraticGCM_fs,
+  by = "ID"
+)
+
+# Function to extract parameter estimates
+quad_params <- get_params(quadraticGCM_fit)
+
+# Compute individuals' model-implied trajectories
+long_quad <- factorScores_quad |>
+  pivot_longer(
+    cols = matches("depression_|sleep_personMeanCentered_"),
+    names_to = c(".value", "time"),
+    names_pattern = "(.*)_(\\d)"
+  ) |>
+  mutate(
+    time = as.numeric(time),
+    time_num = time - 1,
+    age = recode_values(time, 1 ~ 14, 2 ~ 15, 3 ~ 16, 4 ~ 17)
+  ) |>
+  mutate(
+    beta_sleep = case_when(
+      time_num == 0 ~ quad_params$get("depression_1", "sleep_personMeanCentered_1"),
+      time_num == 1 ~ quad_params$get("depression_2", "sleep_personMeanCentered_2"),
+      time_num == 2 ~ quad_params$get("depression_3", "sleep_personMeanCentered_3"),
+      time_num == 3 ~ quad_params$get("depression_4", "sleep_personMeanCentered_4")
+    ),
+    
+    beta_int = case_when(
+      time_num == 0 ~ quad_params$get("depression_1", "sexEffectCodeXsleep_personMeanCentered_1"),
+      time_num == 1 ~ quad_params$get("depression_2", "sexEffectCodeXsleep_personMeanCentered_2"),
+      time_num == 2 ~ quad_params$get("depression_3", "sexEffectCodeXsleep_personMeanCentered_3"),
+      time_num == 3 ~ quad_params$get("depression_4", "sexEffectCodeXsleep_personMeanCentered_4")
+    ),
+    
+    yhat =
+      intercept +
+      linear * time_num +
+      quadratic * time_num^2 +
+      beta_sleep * sleep_personMeanCentered +
+      beta_int * sexEffectCode * sleep_personMeanCentered
+  )
+
+# Compute prototypical trajectories
+grand_mean_sleep <- mean(mydata_wide$sleep_personMean, na.rm = TRUE)
+
+newData_quad <- expand.grid(
+  sexFactor = c("female", "male"),
+  time_num = 0:3,
+  sleepFactor = c("low sleep", "average sleep", "high sleep")
+) |>
+  left_join(sleep_stats, by = c("sexFactor", "time_num")) |>
+  mutate(
+    sleep = case_when(
+      sleepFactor == "average sleep" ~ mean_sleep,
+      sleepFactor == "low sleep" ~ mean_sleep - sd_sleep,
+      sleepFactor == "high sleep" ~ mean_sleep + sd_sleep
+    ),
+    sexEffectCode = ifelse(sexFactor == "male", 1, -1),
+    sleep_personMeanCentered = sleep - grand_mean_sleep
+  ) |>
+  mutate(
+    intercept_hat =
+      quad_params$get("intercept", "", "~1") +
+      quad_params$get("intercept", "sexEffectCode", "~") * sexEffectCode +
+      quad_params$get("intercept", "sleep_personMean", "~") * sleep +
+      quad_params$get("intercept", "sexEffectCodeXsleep_personMean", "~") * sexEffectCode * sleep,
+    
+    linear_hat =
+      quad_params$get("linear", "", "~1") +
+      quad_params$get("linear", "sexEffectCode", "~") * sexEffectCode +
+      quad_params$get("linear", "sleep_personMean", "~") * sleep +
+      quad_params$get("linear", "sexEffectCodeXsleep_personMean", "~") * sexEffectCode * sleep,
+    
+    quadratic_hat =
+      quad_params$get("quadratic", "", "~1") +
+      quad_params$get("quadratic", "sexEffectCode", "~") * sexEffectCode +
+      quad_params$get("quadratic", "sleep_personMean", "~") * sleep +
+      quad_params$get("quadratic", "sexEffectCodeXsleep_personMean", "~") * sexEffectCode * sleep
+  ) |>
+  mutate(
+    beta_sleep = case_when(
+      time_num == 0 ~ quad_params$get("depression_1", "sleep_personMeanCentered_1"),
+      time_num == 1 ~ quad_params$get("depression_2", "sleep_personMeanCentered_2"),
+      time_num == 2 ~ quad_params$get("depression_3", "sleep_personMeanCentered_3"),
+      time_num == 3 ~ quad_params$get("depression_4", "sleep_personMeanCentered_4")
+    ),
+    beta_int = case_when(
+      time_num == 0 ~ quad_params$get("depression_1", "sexEffectCodeXsleep_personMeanCentered_1"),
+      time_num == 1 ~ quad_params$get("depression_2", "sexEffectCodeXsleep_personMeanCentered_2"),
+      time_num == 2 ~ quad_params$get("depression_3", "sexEffectCodeXsleep_personMeanCentered_3"),
+      time_num == 3 ~ quad_params$get("depression_4", "sexEffectCodeXsleep_personMeanCentered_4")
+    ),
+    yhat =
+      intercept_hat +
+      linear_hat * time_num +
+      quadratic_hat * time_num^2 +
+      beta_sleep * sleep_personMeanCentered +
+      beta_int * sexEffectCode * sleep_personMeanCentered,
+    age = time_num + 14
+  )
+```
+
+##### Prototypical Growth Curve By Sex
+
+```{r}
+#| fig-cap: "Prototypical Model-Implied Growth Curves of Depression Symptoms By Sex"
+
+ggplot(
+  data = newData_quad |> filter(sleepFactor == "average sleep"),
+  mapping = aes(
+    x = age,
+    y = yhat,
+    color = sexFactor)
+) +
+  geom_smooth( # fit a smoothed line to the model-implied points; use geom_line() to fit a non-smooth line
+    method = "lm",
+    formula = y ~ x + I(x^2),
+    se = FALSE
+  ) +
+  labs(
+    x = "Age (years)",
+    y = "Depression Symptoms",
+    color = "Sex"
+  ) +
+  theme_classic()
+```
+
+##### Individuals' Growth Curves
+
+```{r}
+#| fig-cap: "Individuals' Model-Implied Growth Curves of Depression Symptoms"
+
+ggplot(
+  data = long_quad,
+  mapping = aes(
+    x = age,
+    y = yhat,
+    group = ID,
+    color = sexFactor)
+) +
+  geom_smooth( # fit a smoothed line to each participant's points; use geom_line() to fit a non-smooth line
+    method = "lm",
+    formula = y ~ x + I(x^2),
+    se = FALSE,
+    linewidth = 0.5
+  ) +
+  labs(
+    x = "Age (years)",
+    y = "Depression Symptoms",
+    color = "Sex"
+  ) +
+  theme_classic()
+```
+
+##### Individuals' Trajectories Overlaid with Prototypical Trajectory By Sex
+
+```{r}
+#| fig-cap: "Individuals' Model-Implied Growth Curves of Depression Symptoms Overlaid With Prototypical Growth Curves By Sex"
+
+ggplot(
+  data = long_quad,
+  mapping = aes(
+    x = age,
+    y = yhat,
+    group = ID
+  )
+) +
+  geom_smooth( # fit a smoothed line to each participant's points; use geom_line() to fit a non-smooth line
+    method = "lm",
+    formula = y ~ x + I(x^2),
+    se = FALSE,
+    linewidth = 0.5,
+    color = "gray",
+    alpha = 0.30
+  ) +
+  geom_smooth( # fit a smoothed line to the model-implied points; use geom_line() to fit a non-smooth line
+    data = newData_quad |> filter(sleepFactor == "average sleep"),
+    mapping = aes(
+      x = age,
+      y = yhat,
+      group = sexFactor,
+      color = sexFactor
+      ),
+    method = "lm",
+    formula = y ~ x + I(x^2),
+    se = FALSE,
+    linewidth = 2
+  ) +
+  labs(
+    x = "Age (years)",
+    y = "Depression Symptoms",
+    color = "Sex"
+  ) +
+  theme_classic()
+```
+
+##### Prototypical Trajectory By Sex and Sleep
+
+```{r}
+#| fig-cap: "Prototypical Model-Implied Growth Curves of Depression Symptoms By Sex and Sleep"
+
+ggplot(
+  data = newData_quad |> filter(sleepFactor != "average sleep"),
+  mapping = aes(
+    x = age,
+    y = yhat,
+    color = sexFactor,
+    linetype = sleepFactor)
+) +
+  geom_smooth( # fit a smoothed line to the model-implied points; use geom_line() to fit a non-smooth line
+    method = "lm",
+    formula = y ~ x + I(x^2),
+    se = FALSE
+  ) +
+  labs(
+    x = "Age (years)",
+    y = "Depression Symptoms",
+    color = "Sex",
+    linetype = "Sleep"
+  ) +
+  guides(
+    linetype = guide_legend(
+      override.aes = list(color = "black")
+    )
+  ) +
+  theme_classic()
+```
+
+## Latent Basis Growth Curve Model {#sec-latentBasisGCM}
+
+### Model Syntax
+
+In estimating latent basis growth curves of depression symptoms, this model specifies:
+
+1. latent intercept and slope factors, with factor loadings for the slope freely estimated at timepoints 2 and 3 to capture nonlinear patterns of change
+1. the person's sex (`sexEffectCode`) and the person's average sleep (`sleep_personMean`; and their interaction; `sexEffectCodeXsleep_personMean`) as time-invariant predictors of the latent intercept and slope, and
+1. a person's deviations from their average sleep (`sleep_personMeanCentered`; and in interaction with sex; `sexEffectCodeXsleep_personMeanCentered`) as time-varying covariates predicting concurrent depression symptoms at each wave.
+
+```{r}
+latentBasisGCM_syntax <- '
+  # Intercept and slope
+  intercept =~ 1*depression_1 + 1*depression_2 + 1*depression_3 + 1*depression_4
+  slope =~ 0*depression_1 + a*depression_2 + b*depression_3 + 1*depression_4 # freely estimate the loadings for t2 and t3
+
+  # Regression paths
+  intercept ~ sexEffectCode + sleep_personMean + sexEffectCodeXsleep_personMean
+  slope ~ sexEffectCode + sleep_personMean + sexEffectCodeXsleep_personMean
+  
+  # Time-varying covariates
+  depression_1 ~ sleep_personMeanCentered_1 + sexEffectCodeXsleep_personMeanCentered_1
+  depression_2 ~ sleep_personMeanCentered_2 + sexEffectCodeXsleep_personMeanCentered_2
+  depression_3 ~ sleep_personMeanCentered_3 + sexEffectCodeXsleep_personMeanCentered_3
+  depression_4 ~ sleep_personMeanCentered_4 + sexEffectCodeXsleep_personMeanCentered_4
+  
+  # Constrain observed intercepts to zero
+  depression_1 ~ 0*1
+  depression_2 ~ 0*1
+  depression_3 ~ 0*1
+  depression_4 ~ 0*1
+  
+  # Estimate mean of intercept and slope
+  intercept ~ 1
+  slope ~ 1
+'
+```
+
+### Fit Model
+
+```{r}
+latentBasisGCM_fit <- lavaan::sem(
+  latentBasisGCM_syntax,
+  data = mydata_wide,
+  missing = "ML", # FIML
+  estimator = "MLR", # Huber-White robust standard errors (for heteroscedasticity and nonnormally distributed residuals)
+  meanstructure = TRUE) # estimate means/intercepts
+```
+
+A model with negative variances is uninterpretable.
+We can constrain the variances to be nonnegative using the `bounds = "pos.var"` argument:
+
+```{r}
+latentBasisGCM_fit <- lavaan::sem(
+  latentBasisGCM_syntax,
+  data = mydata_wide,
+  missing = "ML", # FIML
+  estimator = "MLR", # Huber-White robust standard errors (for heteroscedasticity and nonnormally distributed residuals)
+  meanstructure = TRUE, # estimate means/intercepts
+  bounds = "pos.var") # constrain observed and latent variances to be nonnegative
+```
+
+### Model Summary
+
+```{r}
+summary(
+  latentBasisGCM_fit,
+  fit.measures = TRUE,
+  standardized = TRUE,
+  rsquare = TRUE)
+```
+
+### Modification Indices
+
+```{r}
+modificationindices(
+  latentBasisGCM_fit,
+  sort. = TRUE)
+```
+
+### Plots
+
+#### Path Diagram
+
+```{r}
+#| fig-cap: "Path Diagram"
+
+lavaanPlot::lavaanPlot(
+  latentBasisGCM_fit,
+  coefs = TRUE,
+  #covs = TRUE,
+  stand = TRUE)
+```
+
+To create an interactive path diagram, you can use the following syntax:
+
+```{r}
+#| eval: false
+
+lavaangui::plot_lavaan(latentBasisGCM_fit)
+```
+
+#### Model-Implied Trajectories
+
+```{r}
+# Factor scores for each individual
+latentBasisGCM_fs <- as.data.frame(lavaan::lavPredict(latentBasisGCM_fit))
+latentBasisGCM_caseidx <- lavaan::lavInspect(latentBasisGCM_fit, "case.idx")
+latentBasisGCM_fs$ID <- mydata_wide$ID[latentBasisGCM_caseidx]
+
+factorScores_lb <- left_join(mydata_wide, latentBasisGCM_fs, by = "ID")
+
+# Function to get parameters (reuse your get_params function)
+lb_params <- get_params(latentBasisGCM_fit)
+
+# Get estimated factor loadings
+lambda2 <- lb_params$get("slope", "depression_2", "=~") # estimated loading 'a'
+lambda3 <- lb_params$get("slope", "depression_3", "=~") # estimated loading 'b'
+lambda_vec <- c(0, lambda2, lambda3, 1)
+
+# Compute individuals' model-implied trajectories
+long_lb <- factorScores_lb |>
+  pivot_longer(
+    cols = matches("depression_|sleep_personMeanCentered_"),
+    names_to = c(".value", "time"),
+    names_pattern = "(.*)_(\\d)"
+  ) |>
+  mutate(
+    time = as.numeric(time),
+    time_num = time - 1,
+    age = recode_values(time, 1 ~ 14, 2 ~ 15, 3 ~ 16, 4 ~ 17),
+    lambda = lambda_vec[time] # latent basis loading for each time
+  ) |>
+  mutate(
+    beta_sleep = case_when(
+      time_num == 0 ~ lb_params$get("depression_1", "sleep_personMeanCentered_1"),
+      time_num == 1 ~ lb_params$get("depression_2", "sleep_personMeanCentered_2"),
+      time_num == 2 ~ lb_params$get("depression_3", "sleep_personMeanCentered_3"),
+      time_num == 3 ~ lb_params$get("depression_4", "sleep_personMeanCentered_4")
+    ),
+    beta_int = case_when(
+      time_num == 0 ~ lb_params$get("depression_1", "sexEffectCodeXsleep_personMeanCentered_1"),
+      time_num == 1 ~ lb_params$get("depression_2", "sexEffectCodeXsleep_personMeanCentered_2"),
+      time_num == 2 ~ lb_params$get("depression_3", "sexEffectCodeXsleep_personMeanCentered_3"),
+      time_num == 3 ~ lb_params$get("depression_4", "sexEffectCodeXsleep_personMeanCentered_4")
+    ),
+    yhat =
+      intercept +
+      slope * lambda +
+      beta_sleep * sleep_personMeanCentered +
+      beta_int * sexEffectCode * sleep_personMeanCentered
+  )
+
+# Compute prototypical trajectories
+grand_mean_sleep <- mean(mydata_wide$sleep_personMean, na.rm = TRUE)
+
+newData_lb <- expand.grid(
+  sexFactor = c("female", "male"),
+  time_num = 0:3,
+  sleepFactor = c("low sleep", "average sleep", "high sleep")
+) |>
+  left_join(sleep_stats, by = c("sexFactor", "time_num")) |>
+  mutate(
+    sleep = case_when(
+      sleepFactor == "average sleep" ~ mean_sleep,
+      sleepFactor == "low sleep" ~ mean_sleep - sd_sleep,
+      sleepFactor == "high sleep" ~ mean_sleep + sd_sleep
+    ),
+    sexEffectCode = ifelse(sexFactor == "male", 1, -1),
+    sleep_personMeanCentered = sleep - grand_mean_sleep,
+    lambda = lambda_vec[time_num + 1] # latent basis loading for each time
+  ) |>
+  mutate(
+    intercept_hat =
+      lb_params$get("intercept", "", "~1") +
+      lb_params$get("intercept", "sexEffectCode", "~") * sexEffectCode +
+      lb_params$get("intercept", "sleep_personMean", "~") * sleep +
+      lb_params$get("intercept", "sexEffectCodeXsleep_personMean", "~") * sexEffectCode * sleep,
+    slope_hat =
+      lb_params$get("slope", "", "~1") +
+      lb_params$get("slope", "sexEffectCode", "~") * sexEffectCode +
+      lb_params$get("slope", "sleep_personMean", "~") * sleep +
+      lb_params$get("slope", "sexEffectCodeXsleep_personMean", "~") * sexEffectCode * sleep
+  ) |>
+  mutate(
+    beta_sleep = case_when(
+      time_num == 0 ~ lb_params$get("depression_1", "sleep_personMeanCentered_1"),
+      time_num == 1 ~ lb_params$get("depression_2", "sleep_personMeanCentered_2"),
+      time_num == 2 ~ lb_params$get("depression_3", "sleep_personMeanCentered_3"),
+      time_num == 3 ~ lb_params$get("depression_4", "sleep_personMeanCentered_4")
+    ),
+    beta_int = case_when(
+      time_num == 0 ~ lb_params$get("depression_1", "sexEffectCodeXsleep_personMeanCentered_1"),
+      time_num == 1 ~ lb_params$get("depression_2", "sexEffectCodeXsleep_personMeanCentered_2"),
+      time_num == 2 ~ lb_params$get("depression_3", "sexEffectCodeXsleep_personMeanCentered_3"),
+      time_num == 3 ~ lb_params$get("depression_4", "sexEffectCodeXsleep_personMeanCentered_4")
+    ),
+    yhat =
+      intercept_hat +
+      slope_hat * lambda +
+      beta_sleep * sleep_personMeanCentered +
+      beta_int * sexEffectCode * sleep_personMeanCentered,
+    age = time_num + 14
+  )
+```
+
+##### Prototypical Growth Curve By Sex
+
+```{r}
+#| fig-cap: "Prototypical Model-Implied Growth Curves of Depression Symptoms By Sex"
+
+ggplot(
+  data = newData_lb |> filter(sleepFactor == "average sleep"),
+  mapping = aes(
+    x = age,
+    y = yhat,
+    color = sexFactor)
+) +
+  geom_line() +
+  labs(
+    x = "Age (years)",
+    y = "Depression Symptoms",
+    color = "Sex"
+  ) +
+  theme_classic()
+```
+
+##### Individuals' Growth Curves
+
+```{r}
+#| fig-cap: "Individuals' Model-Implied Growth Curves of Depression Symptoms"
+
+ggplot(
+  data = long_lb,
+  mapping = aes(
+    x = age,
+    y = yhat,
+    group = ID,
+    color = sexFactor)
+) +
+  geom_line(
+    alpha = 0.5
+  ) +
+  labs(
+    x = "Age (years)",
+    y = "Depression Symptoms",
+    color = "Sex"
+  ) +
+  theme_classic()
+```
+
+##### Individuals' Trajectories Overlaid with Prototypical Trajectory By Sex
+
+```{r}
+#| fig-cap: "Individuals' Model-Implied Growth Curves of Depression Symptoms Overlaid With Prototypical Growth Curves By Sex"
+
+ggplot(
+  data = long_lb,
+  mapping = aes(
+    x = age,
+    y = yhat,
+    group = ID
+  )
+) +
+  geom_line( # individuals' trajectories
+    linewidth = 0.5,
+    color = "gray",
+    alpha = 0.30
+  ) +
+  geom_line( # prototypical trajectories
+    data = newData_lb |> filter(sleepFactor == "average sleep"),
+    mapping = aes(
+      x = age,
+      y = yhat,
+      group = sexFactor,
+      color = sexFactor
+      ),
+    linewidth = 2
+  ) +
+  labs(
+    x = "Age (years)",
+    y = "Depression Symptoms",
+    color = "Sex"
+  ) +
+  theme_classic()
+```
+
+##### Prototypical Trajectory By Sex and Sleep
+
+```{r}
+#| fig-cap: "Prototypical Model-Implied Growth Curves of Depression Symptoms By Sex and Sleep"
+
+ggplot(
+  data = newData_lb |> filter(sleepFactor != "average sleep"),
+  mapping = aes(
+    x = age,
+    y = yhat,
+    color = sexFactor,
+    linetype = sleepFactor)
+) +
+  geom_line() +
+  labs(
+    x = "Age (years)",
+    y = "Depression Symptoms",
+    color = "Sex",
+    linetype = "Sleep"
+  ) +
+  guides(
+    linetype = guide_legend(
+      override.aes = list(color = "black")
+    )
+  ) +
+  theme_classic()
+```
+
+# Compare Models {#sec-compareModels}
+
+```{r}
+anova(
+  linearGCM_fit,
+  quadraticGCM_fit
+)
+
+anova(
+  linearGCM_fit,
+  latentBasisGCM_fit
+)
+
+anova(
+  latentBasisGCM_fit,
+  quadraticGCM_fit
+)
+```
+
+# Latent Change Score Model {#sec-lcsm}
+
+## Model Syntax
+
+This model examines reciprocal (i.e., bidirectional), dynamic (i.e., changing) relations between latent change in depression and latent change in anxiety.
+Each construct is modeled with a latent intercept (constant change factor), a proportional change factor (latent true score predicting its own change), and autoregressive effects of prior change scores.
+The cross-domain coupling parameters evaluate whether latent change in depression predicts subsequent latent change in anxiety, and vice versa.
+
+```{r}
+bivariateLCSM_syntax <- lcsm::specify_bi_lcsm(
+  timepoints = 4,
+  var_x = "depression_",
+  model_x = list(
+    alpha_constant = TRUE, # alpha = intercept (constant change factor)
+    beta = TRUE, # beta = proportional change factor (latent true score predicting its change score)
+    phi = TRUE), # phi = autoregression of change scores
+  var_y = "anxiety_",
+  model_y = list(
+    alpha_constant = TRUE, # alpha = intercept (constant change factor)
+    beta = TRUE, # beta = proportional change factor (latent true score predicting its change score)
+    phi = TRUE), # phi = autoregression of change scores
+  coupling = list(
+    delta_lag_xy = TRUE, # level of x predicting change of y
+    delta_lag_yx = TRUE, # level of y predicting change of x
+    xi_lag_xy = TRUE,    # change of x predicting change of y
+    xi_lag_yx = TRUE),   # change of y predicting change of x
+  change_letter_x = "g",
+  change_letter_y = "j")
+
+cat(bivariateLCSM_syntax)
+```
+
+## Fit Model
+
+```{r}
+bivariateLCSM_fit <- lcsm::fit_bi_lcsm(
+  data = mydata_wide,
+  var_x = c("depression_1","depression_2","depression_3","depression_4"),
+  var_y = c("anxiety_1","anxiety_2","anxiety_3","anxiety_4"),
+  model_x = list(
+    alpha_constant = TRUE, # alpha = intercept (constant change factor)
+    beta = TRUE, # beta = proportional change factor (latent true score predicting its change score)
+    phi = TRUE), # phi = autoregression of change scores
+  model_y = list(
+    alpha_constant = TRUE, # alpha = intercept (constant change factor)
+    beta = TRUE, # beta = proportional change factor (latent true score predicting its change score)
+    phi = TRUE), # phi = autoregression of change scores
+  coupling = list(
+    delta_lag_xy = TRUE, # level of x predicting change of y
+    delta_lag_yx = TRUE, # level of y predicting change of x
+    xi_lag_xy = TRUE,    # change of x predicting change of y
+    xi_lag_yx = TRUE),   # change of y predicting change of x
+  fixed.x = FALSE # estimate means, variances, and covariances of the observed variables (to include predictors as part of FIML)
+  )
+```
+
+## Model Summary
+
+```{r}
+summary(
+  bivariateLCSM_fit,
+  fit.measures = TRUE,
+  standardized = TRUE,
+  rsquare = TRUE)
+
+lcsm::extract_param(bivariateLCSM_fit)
+```
+
+## Modification Indices
+
+```{r}
+modificationindices(
+  bivariateLCSM_fit,
+  sort. = TRUE)
+```
+
+## Plots
+
+### Path Diagram
+
+```{r}
+#| fig-cap: "Path Diagram"
+
+lavaanPlot::lavaanPlot2(
+  bivariateLCSM_fit,
+  stand = TRUE,
+  coef_labels = TRUE)
+```
+
+To create an interactive path diagram, you can use the following syntax:
+
+```{r}
+#| eval: false
+
+lavaangui::plot_lavaan(bivariateLCSM_fit)
+```
+
+```{r}
+#| eval: false
+
+lcsm::plot_lcsm(
+  lavaan_object = bivariateLCSM_fit,
+  lcsm = "bivariate",
+  lavaan_syntax = bivariateLCSM_syntax,
+  edge.label.cex = .9,
+  lcsm_colours = TRUE)
+```
+
+### Model-Implied Trajectories
+
+To plot model-implied trajectories, see this resource:
+
+<https://thechangelab.stanford.edu/tutorials/growth-modeling/latent-change-score-modeling-lavaan/> (archived at <https://perma.cc/A2KZ-QPD9>)
+
+```{r}
+modelPredictedValues_wide <- as.data.frame(lavPredict(bivariateLCSM_fit, type = "yhat"))
+
+modelPredictedValues_wide$ID <- mydata_wide$ID
+
+modelPredictedValues_long <- modelPredictedValues_wide |>
+  pivot_longer(
+    cols = -ID,
+    names_to = c("construct", "time"),
+    names_pattern = "([xy])(\\d)",
+    values_to = "score"
+  ) |>
+  mutate(
+    time = as.integer(time),
+    age = recode_values(time, 1 ~ 14, 2 ~ 15, 3 ~ 16, 4 ~ 17),
+    construct = recode_values(construct, "x" ~ "depression", "y" ~ "anxiety")) |>
+  pivot_wider(
+    names_from = construct,
+    values_from = score
+  )
+```
+
+```{r}
+#| fig-cap: "Model-Implied Trajectories of Depression Symptoms"
+
+ggplot(
+  data = modelPredictedValues_long,
+  mapping = aes(
+    x = age,
+    y = depression,
+    group = ID)) +
+  geom_line(
+    alpha = 0.25
+  ) +
+  labs(
+    x = "Age (years)",
+    y = "Depression Symptoms"
+  ) +
+  theme_classic()
+```
+
+```{r}
+#| fig-cap: "Model-Implied Trajectories of Anxiety Symptoms"
+
+ggplot(
+  data = modelPredictedValues_long,
+  mapping = aes(
+    x = time,
+    y = anxiety,
+    group = ID)) +
+  geom_line(
+    alpha = 0.25
+  ) +
+  labs(
+    x = "Age (years)",
+    y = "Anxiety Symptoms"
+  ) +
+  theme_classic()
+```
+
+# Cross-Lagged Panel Model {#sec-clpm}
+
+## Model Syntax
+
+This cross-lagged panel model examines whether anxiety predicts later depression (i.e., cross-lagged paths), controlling for prior levels of depression (i.e., autoregressive effects), and simultaneously examines the reverse association (i.e., depression predicting later anxiety, controlling for prior levels of anxiety).
+Concurrent covariances between depression and anxiety at each timepoint account for shared variance at the same occasion.
+
+```{r}
+clpm_syntax <- '
+  # Autoregressive Paths
+  depression_4 ~ depression_3
+  depression_3 ~ depression_2
+  depression_2 ~ depression_1
+  
+  anxiety_4 ~ anxiety_3
+  anxiety_3 ~ anxiety_2
+  anxiety_2 ~ anxiety_1
+  
+  # Concurrent Covariances
+  depression_1 ~~ anxiety_1
+  depression_2 ~~ anxiety_2
+  depression_3 ~~ anxiety_3
+  depression_4 ~~ anxiety_4
+  
+  # Cross-Lagged Paths
+  depression_4 ~ anxiety_3
+  depression_3 ~ anxiety_2
+  depression_2 ~ anxiety_1
+  
+  anxiety_4 ~ depression_3
+  anxiety_3 ~ depression_2
+  anxiety_2 ~ depression_1
+'
+```
+
+## Fit Model
+
+```{r}
+clpm_fit <- lavaan::sem(
+  clpm_syntax,
+  data = mydata_wide,
+  missing = "ML", # FIML
+  estimator = "MLR", # Huber-White robust standard errors (for heteroscedasticity and nonnormally distributed residuals)
+  meanstructure = TRUE, # estimate means/intercepts
+  fixed.x = FALSE) # estimate means, variances, and covariances of the observed variables (to include predictors as part of FIML)
+```
+
+## Model Summary
+
+```{r}
+summary(
+  clpm_fit,
+  fit.measures = TRUE,
+  standardized = TRUE,
+  rsquare = TRUE)
+```
+
+## Modification Indices
+
+```{r}
+modificationindices(
+  clpm_fit,
+  sort. = TRUE)
+```
+
+## Plots
+
+### Path Diagram
+
+```{r}
+#| fig-cap: "Path Diagram"
+
+lavaanPlot::lavaanPlot(
+  clpm_fit,
+  coefs = TRUE,
+  #covs = TRUE,
+  stand = TRUE)
+```
+
+To create an interactive path diagram, you can use the following syntax:
+
+```{r}
+#| eval: false
+
+lavaangui::plot_lavaan(clpm_fit)
+```
+
+# Random-Intercepts Cross-Lagged Panel Model {#sec-riclpm}
+
+Adapted from:
+
+- Mulder & Hamaker (2021): <https://doi.org/10.1080/10705511.2020.1784738>
+  - <https://jeroendmulder.github.io/RI-CLPM/lavaan.html> (archived at <https://perma.cc/2K6A-WUJQ>)
+- Mund & Nestler (2017): <https://osf.io/a4dhk>
+
+## Model Syntax
+
+This random-intercepts cross-lagged panel model examines whether anxiety predicts later depression (i.e., cross-lagged paths), controlling for prior levels of depression (i.e., autoregressive effects) and controlling for a person's general latent level of depression, and simultaneously and simultaneously examines the reverse association (i.e., depression predicting later anxiety, controlling for prior levels of anxiety and general latent levels of anxiety).
+Concurrent covariances between depression and anxiety at each timepoint account for shared variance at the same occasion.
+
+```{r}
+riclpm_syntax <- '
+  # Random Intercepts
+  depression =~ 1*depression_1 + 1*depression_2 + 1*depression_3 + 1*depression_4
+  anxiety =~ 1*anxiety_1 + 1*anxiety_2 + 1*anxiety_3 + 1*anxiety_4
+  
+  # Create Within-Person Centered Variables
+  wdep1 =~ 1*depression_1
+  wdep2 =~ 1*depression_2
+  wdep3 =~ 1*depression_3
+  wdep4 =~ 1*depression_4
+  
+  wanx1 =~ 1*anxiety_1
+  wanx2 =~ 1*anxiety_2
+  wanx3 =~ 1*anxiety_3
+  wanx4 =~ 1*anxiety_4
+  
+  # Autoregressive Paths
+  wdep4 ~ wdep3
+  wdep3 ~ wdep2
+  wdep2 ~ wdep1
+  
+  wanx4 ~ wanx3
+  wanx3 ~ wanx2
+  wanx2 ~ wanx1
+  
+  # Concurrent Covariances
+  wdep1 ~~ wanx1
+  wdep2 ~~ wanx2
+  wdep3 ~~ wanx3
+  wdep4 ~~ wanx4
+  
+  # Cross-Lagged Paths
+  wdep4 ~ wanx3
+  wdep3 ~ wanx2
+  wdep2 ~ wanx1
+  
+  wanx4 ~ wdep3
+  wanx3 ~ wdep2
+  wanx2 ~ wdep1
+  
+  # Variance and Covariance of Random Intercepts
+  depression ~~ depression
+  anxiety ~~ anxiety
+  depression ~~ anxiety
+  
+  # Variances of Within-Person Centered Variables
+  wdep1 ~~ wdep1
+  wdep2 ~~ wdep2
+  wdep3 ~~ wdep3
+  wdep4 ~~ wdep4
+  
+  wanx1 ~~ wanx1
+  wanx2 ~~ wanx2
+  wanx3 ~~ wanx3
+  wanx4 ~~ wanx4
+  
+  # Fix Error Variances of Observed Variables to Zero
+  depression_1 ~~ 0*depression_1
+  depression_2 ~~ 0*depression_2
+  depression_3 ~~ 0*depression_3
+  depression_4 ~~ 0*depression_4
+  
+  anxiety_1 ~~ 0*anxiety_1
+  anxiety_2 ~~ 0*anxiety_2
+  anxiety_3 ~~ 0*anxiety_3
+  anxiety_4 ~~ 0*anxiety_4
+  
+  # Fix the Covariances Between the Random Intercepts and the Latents at T1 to Zero
+  wdep1 ~~ 0*depression
+  wdep1 ~~ 0*anxiety
+  
+  wanx1 ~~ 0*depression
+  wanx1 ~~ 0*anxiety
+  
+  # Estimate Observed Intercepts
+  depression_1 ~ 1
+  depression_2 ~ 1
+  depression_3 ~ 1
+  depression_4 ~ 1
+  
+  anxiety_1 ~ 1
+  anxiety_2 ~ 1
+  anxiety_3 ~ 1
+  anxiety_4 ~ 1
+  
+  # Fix the Means of the Latents to Zero
+  wdep1 ~ 0*1
+  wdep2 ~ 0*1
+  wdep3 ~ 0*1
+  wdep4 ~ 0*1
+  
+  wanx1 ~ 0*1
+  wanx2 ~ 0*1
+  wanx3 ~ 0*1
+  wanx4 ~ 0*1
+  
+  depression ~ 0*1
+  anxiety ~ 0*1
+'
+```
+
+## Fit Model
+
+```{r}
+#| warning: true
+
+riclpm_fit <- lavaan::sem(
+  riclpm_syntax,
+  data = mydata_wide,
+  missing = "ML", # FIML
+  estimator = "MLR", # Huber-White robust standard errors (for heteroscedasticity and nonnormally distributed residuals)
+  fixed.x = FALSE, # estimate means, variances, and covariances of the observed variables (to include predictors as part of FIML)
+  bounds = "standard" # constrains observed variances, latent variances, and factor loadings to be within computed lower and upper bounds
+)
+```
+
+Modify the syntax to address the model fit errors (don't estimate concurrent covariances):
+
+```{r}
+riclpm2_syntax <- '
+  # Random Intercepts
+  depression =~ 1*depression_1 + 1*depression_2 + 1*depression_3 + 1*depression_4
+  anxiety =~ 1*anxiety_1 + 1*anxiety_2 + 1*anxiety_3 + 1*anxiety_4
+  
+  # Create Within-Person Centered Variables
+  wdep1 =~ 1*depression_1
+  wdep2 =~ 1*depression_2
+  wdep3 =~ 1*depression_3
+  wdep4 =~ 1*depression_4
+  
+  wanx1 =~ 1*anxiety_1
+  wanx2 =~ 1*anxiety_2
+  wanx3 =~ 1*anxiety_3
+  wanx4 =~ 1*anxiety_4
+  
+  # Autoregressive Paths
+  wdep4 ~ wdep3
+  wdep3 ~ wdep2
+  wdep2 ~ wdep1
+  
+  wanx4 ~ wanx3
+  wanx3 ~ wanx2
+  wanx2 ~ wanx1
+  
+  # Concurrent Covariances
+  #wdep1 ~~ wanx1
+  #wdep2 ~~ wanx2
+  #wdep3 ~~ wanx3
+  #wdep4 ~~ wanx4
+  
+  # Cross-Lagged Paths
+  wdep4 ~ wanx3
+  wdep3 ~ wanx2
+  wdep2 ~ wanx1
+  
+  wanx4 ~ wdep3
+  wanx3 ~ wdep2
+  wanx2 ~ wdep1
+  
+  # Variance and Covariance of Random Intercepts
+  depression ~~ depression
+  anxiety ~~ anxiety
+  depression ~~ anxiety
+  
+  # Variances of Within-Person Centered Variables
+  wdep1 ~~ wdep1
+  wdep2 ~~ wdep2
+  wdep3 ~~ wdep3
+  wdep4 ~~ wdep4
+  
+  wanx1 ~~ wanx1
+  wanx2 ~~ wanx2
+  wanx3 ~~ wanx3
+  wanx4 ~~ wanx4
+  
+  # Fix Error Variances of Observed Variables to Zero
+  depression_1 ~~ 0*depression_1
+  depression_2 ~~ 0*depression_2
+  depression_3 ~~ 0*depression_3
+  depression_4 ~~ 0*depression_4
+  
+  anxiety_1 ~~ 0*anxiety_1
+  anxiety_2 ~~ 0*anxiety_2
+  anxiety_3 ~~ 0*anxiety_3
+  anxiety_4 ~~ 0*anxiety_4
+  
+  # Fix the Covariances Between the Random Intercepts and the Latents at T1 to Zero
+  wdep1 ~~ 0*depression
+  wdep1 ~~ 0*anxiety
+  
+  wanx1 ~~ 0*depression
+  wanx1 ~~ 0*anxiety
+  
+  # Estimate Observed Intercepts
+  depression_1 ~ 1
+  depression_2 ~ 1
+  depression_3 ~ 1
+  depression_4 ~ 1
+  
+  anxiety_1 ~ 1
+  anxiety_2 ~ 1
+  anxiety_3 ~ 1
+  anxiety_4 ~ 1
+  
+  # Fix the Means of the Latents to Zero
+  wdep1 ~ 0*1
+  wdep2 ~ 0*1
+  wdep3 ~ 0*1
+  wdep4 ~ 0*1
+  
+  wanx1 ~ 0*1
+  wanx2 ~ 0*1
+  wanx3 ~ 0*1
+  wanx4 ~ 0*1
+  
+  depression ~ 0*1
+  anxiety ~ 0*1
+'
+
+riclpm2_fit <- lavaan::sem(
+  riclpm2_syntax,
+  data = mydata_wide,
+  missing = "ML", # FIML
+  estimator = "MLR", # Huber-White robust standard errors (for heteroscedasticity and nonnormally distributed residuals)
+  fixed.x = FALSE, # estimate means, variances, and covariances of the observed variables (to include predictors as part of FIML)
+  bounds = "standard" # constrains observed variances, latent variances, and factor loadings to be within computed lower and upper bounds
+)
+```
+
+## Model Summary
+
+```{r}
+summary(
+  riclpm2_fit,
+  fit.measures = TRUE,
+  standardized = TRUE,
+  rsquare = TRUE)
+```
+
+## Modification Indices
+
+```{r}
+modificationindices(
+  riclpm2_fit,
+  sort. = TRUE)
+```
+
+## Path Diagram
+
+```{r}
+lavaanPlot::lavaanPlot(
+  riclpm2_fit,
+  coefs = TRUE,
+  #covs = TRUE,
+  stand = TRUE)
+```
+
+To create an interactive path diagram, you can use the following syntax:
+
+```{r}
+#| eval: false
+
+lavaangui::plot_lavaan(riclpm2_fit)
+```
+
+# Multilevel SEM {#sec-multilevelSEM}
+
+## Model Syntax
+
+This multilevel structural equation model disaggregates within- and between-person effects to examine associations with depression.
+At the within-person level, we examine deviations in sleep, anxiety, and SES from a person's usual (average) levels in predicting concurrent deviations in depression, allowing the within-person association between sleep and depression to differ between boys and girls.
+At the between-person level, we examine person-level averages across time of sleep, anxiety, and SES, along with sex, in predicting overall differences in depression across individuals, allowing the between-person association between sleep and depression to differ between boys and girls.
+
+```{r}
+multilevelSEM_syntax <- '
+    level: 1
+        depression ~ sleep_personMeanCentered + anxiety_personMeanCentered + ses_personMeanCentered + sexEffectCodeXsleep_personMeanCentered
+    level: 2
+        depression ~ sleep_personMean + anxiety_personMean + ses_personMean + sexEffectCode + sexEffectCodeXsleep_personMean
+'
+```
+
+## Fit Model
+
+```{r}
+multilevelSEM_fit <- lavaan::sem(
+  multilevelSEM_syntax,
+  data = mydata_long,
+  cluster = "ID",
+  missing = "ML", # FIML
+  estimator = "MLR")
+```
+
+## Model Summary
+
+```{r}
+summary(
+  multilevelSEM_fit,
+  fit.measures = TRUE,
+  standardized = TRUE,
+  rsquare = TRUE)
+```
+
+## Modification Indices
+
+```{r}
+modificationindices(
+  multilevelSEM_fit,
+  sort. = TRUE)
+```
+
+## Path Diagram
+
+```{r}
+lavaanPlot::lavaanPlot(
+  multilevelSEM_fit,
+  coefs = TRUE,
+  #covs = TRUE,
+  stand = TRUE)
+```
+
+To create an interactive path diagram, you can use the following syntax:
+
+```{r}
+#| eval: false
+
+lavaangui::plot_lavaan(multilevelSEM_fit)
+```
+
+# Longitudinal Measurement Invariance {#sec-longitudinalMI}
+
+We will follow the approach suggested by Widaman et al. (2010).
+
+Widaman, K. F., Ferrer, E., & Conger, R. D. (2010). Factorial invariance within longitudinal structural equation models: Measuring the same construct across time. *Child Development Perspectives*, *4*(1), 10–18. <https://doi.org/10.1111/j.1750-8606.2009.00110.x>
+
+For the longitudinal measurement invariance models, we will use simulated data from <https://mycourses.aalto.fi/mod/assign/view.php?id=1203047> (archived at <https://perma.cc/QTL2-ZHX2>).
+These data were simulated and adapted from data from Bliese and Ployhart (2002):
+
+Bliese, P. D., & Ployhart, R. E. (2002). Growth modeling using random coefficient models: Model building, testing, and illustrations. *Organizational Research Methods*, *5*(4), 362–387. <https://doi.org/10.1177/109442802237116>
+
+As noted [here](https://mycourses.aalto.fi/mod/assign/view.php?id=1203047) (archived at <https://perma.cc/QTL2-ZHX2>), "The data are in wide format where the variables are coded as [VARIABLE NAME][time index][indicator index]."
+The data include three indicators for each of three constructs: 1) job satisfaction (`JOBSAT`), 2) organizational commitment (`COMMIT`), and 3) readiness to perform (`READY`).
+
+Questions:
+
+1. Which level of longitudinal measurement invariance holds for the `Bliese-Ployhart-2002-indicators-1.csv` dataset (saved in object `longitudinalMI1`)?
+1. Repeat the tests of longitudinal measurement invariance for the remaining datasets: `Bliese-Ployhart-2000-indicators-2.csv`, `Bliese-Ployhart-2000-indicators-3.csv`, and `Bliese-Ployhart-2000-indicators-4.csv`.
+Which level of longitudinal measurement invariance holds for each dataset?
+
+The answers to these questions are [here](answers.qmd).
+
+## Configural Invariance
+
+A configural invariance model has the same number of latent factors across time, with the indicators loading onto the same latent factor(s) across time.
+Model fit indices can then be examined to evaluate how tenable it is that (a) there are the same number of latent factors across time and that (b) the indicators load onto the same latent factor(s) across time.
+
+1. Standardize the latent factor(s) at T1 (i.e., fix the mean to zero and the variance to one)
+1. For each latent construct, constrain the first indicator's factor loading to be the same across time
+1. For each latent construct, constrain the first indicator's intercept to be the same across time
+
+### Model Syntax
+
+```{r}
+configuralInvariance_syntax <- '
+  # Factor Loadings
+  jobsat_1 =~ NA*loadj1*JOBSAT11 + JOBSAT12 + JOBSAT13
+  jobsat_2 =~ NA*loadj1*JOBSAT21 + JOBSAT22 + JOBSAT23
+  jobsat_3 =~ NA*loadj1*JOBSAT31 + JOBSAT32 + JOBSAT33
+  
+  ready_1 =~ NA*loadr1*READY11 + READY12 + READY13
+  ready_2 =~ NA*loadr1*READY21 + READY22 + READY23
+  ready_3 =~ NA*loadr1*READY31 + READY32 + READY33
+  
+  commit_1 =~ NA*loadc1*COMMIT11 + COMMIT12 + COMMIT13
+  commit_2 =~ NA*loadc1*COMMIT21 + COMMIT22 + COMMIT23
+  commit_3 =~ NA*loadc1*COMMIT31 + COMMIT32 + COMMIT33
+  
+  # Factor Identification: Standardize Factors at T1
+  
+  ## Fix Factor Means at T1 to Zero
+  jobsat_1 ~ 0*1
+  ready_1 ~ 0*1
+  commit_1 ~ 0*1
+  
+  ## Fix Factor Variances at T1 to One
+  jobsat_1 ~~ 1*jobsat_1
+  ready_1 ~~ 1*ready_1
+  commit_1 ~~ 1*commit_1
+  
+  # Freely Estimate Factor Means at T2 and T3 (relative to T1)
+  jobsat_2 ~ 1
+  jobsat_3 ~ 1
+  
+  ready_2 ~ 1
+  ready_3 ~ 1
+  
+  commit_2 ~ 1
+  commit_3 ~ 1
+  
+  # Freely Estimate Factor Variances at T2 and T3 (relative to T1)
+  jobsat_2 ~~ jobsat_2
+  jobsat_3 ~~ jobsat_3
+  
+  ready_2 ~~ ready_2
+  ready_3 ~~ ready_3
+  
+  commit_2 ~~ commit_2
+  commit_3 ~~ commit_3
+  
+  # Fix Intercepts of Indicator 1 Across Time
+  JOBSAT11 ~ intj1*1
+  JOBSAT21 ~ intj1*1
+  JOBSAT31 ~ intj1*1
+  
+  READY11 ~ intr1*1
+  READY21 ~ intr1*1
+  READY31 ~ intr1*1
+  
+  COMMIT11 ~ intc1*1
+  COMMIT21 ~ intc1*1
+  COMMIT31 ~ intc1*1
+  
+  # Free Intercepts of Remaining Manifest Variables
+  JOBSAT12 ~ 1
+  JOBSAT13 ~ 1
+  JOBSAT22 ~ 1
+  JOBSAT23 ~ 1
+  JOBSAT32 ~ 1
+  JOBSAT33 ~ 1
+  
+  READY12 ~ 1
+  READY13 ~ 1
+  READY22 ~ 1
+  READY23 ~ 1
+  READY32 ~ 1
+  READY33 ~ 1
+  
+  COMMIT12 ~ 1
+  COMMIT13 ~ 1
+  COMMIT22 ~ 1
+  COMMIT23 ~ 1
+  COMMIT32 ~ 1
+  COMMIT33 ~ 1
+  
+  # Estimate Residual Variances of Manifest Variables
+  JOBSAT11 ~~ JOBSAT11
+  JOBSAT12 ~~ JOBSAT12
+  JOBSAT13 ~~ JOBSAT13
+  JOBSAT21 ~~ JOBSAT21
+  JOBSAT22 ~~ JOBSAT22
+  JOBSAT23 ~~ JOBSAT23
+  JOBSAT31 ~~ JOBSAT31
+  JOBSAT32 ~~ JOBSAT32
+  JOBSAT33 ~~ JOBSAT33
+  
+  READY11 ~~ READY11
+  READY12 ~~ READY12
+  READY13 ~~ READY13
+  READY21 ~~ READY21
+  READY22 ~~ READY22
+  READY23 ~~ READY23
+  READY31 ~~ READY31
+  READY32 ~~ READY32
+  READY33 ~~ READY33
+  
+  COMMIT11 ~~ COMMIT11
+  COMMIT12 ~~ COMMIT12
+  COMMIT13 ~~ COMMIT13
+  COMMIT21 ~~ COMMIT21
+  COMMIT22 ~~ COMMIT22
+  COMMIT23 ~~ COMMIT23
+  COMMIT31 ~~ COMMIT31
+  COMMIT32 ~~ COMMIT32
+  COMMIT33 ~~ COMMIT33
+'
+```
+
+### Fit Model
+
+```{r}
+configuralInvariance_fit <- cfa(
+  configuralInvariance_syntax,
+  data = longitudinalMI1,
+  missing = "ML", # FIML
+  estimator = "MLR", # Huber-White robust standard errors (for heteroscedasticity and nonnormally distributed residuals)
+  meanstructure = TRUE, # estimate means/intercepts
+  fixed.x = FALSE) # estimate means, variances, and covariances of the observed variables (to include predictors as part of FIML)
+```
+
+### Model Summary
+
+```{r}
+summary(
+  configuralInvariance_fit,
+  fit.measures = TRUE,
+  standardized = TRUE,
+  rsquare = TRUE)
+```
+
+### Modification Indices
+
+```{r}
+modificationindices(
+  configuralInvariance_fit,
+  sort. = TRUE)
+```
+
+### Path Diagram
+
+```{r}
+#| fig-cap: "Path Diagram"
+
+lavaanPlot::lavaanPlot2(
+  configuralInvariance_fit,
+  stand = TRUE,
+  coef_labels = TRUE)
+```
+
+To create an interactive path diagram, you can use the following syntax:
+
+```{r}
+#| eval: false
+
+lavaangui::plot_lavaan(configuralInvariance_fit)
+```
+
+## Configural Invariance With Correlated Residuals Within-Indicator Across Time
+
+1. Standardize the latent factor(s) at T1 (i.e., fix the mean to zero and the variance to one)
+1. For each latent construct, constrain the first indicator's factor loading to be the same across time
+1. For each latent construct, constrain the first indicator's intercept to be the same across time
+1. **Allow within-indicator residuals to covary across time**
+
+### Model Syntax
+
+```{r}
+configuralInvarianceCorrelatedResiduals_syntax <- '
+  # Factor Loadings
+  jobsat_1 =~ NA*loadj1*JOBSAT11 + JOBSAT12 + JOBSAT13
+  jobsat_2 =~ NA*loadj1*JOBSAT21 + JOBSAT22 + JOBSAT23
+  jobsat_3 =~ NA*loadj1*JOBSAT31 + JOBSAT32 + JOBSAT33
+  
+  ready_1 =~ NA*loadr1*READY11 + READY12 + READY13
+  ready_2 =~ NA*loadr1*READY21 + READY22 + READY23
+  ready_3 =~ NA*loadr1*READY31 + READY32 + READY33
+  
+  commit_1 =~ NA*loadc1*COMMIT11 + COMMIT12 + COMMIT13
+  commit_2 =~ NA*loadc1*COMMIT21 + COMMIT22 + COMMIT23
+  commit_3 =~ NA*loadc1*COMMIT31 + COMMIT32 + COMMIT33
+  
+  # Factor Identification: Standardize Factors at T1
+  
+  ## Fix Factor Means at T1 to Zero
+  jobsat_1 ~ 0*1
+  ready_1 ~ 0*1
+  commit_1 ~ 0*1
+  
+  ## Fix Factor Variances at T1 to One
+  jobsat_1 ~~ 1*jobsat_1
+  ready_1 ~~ 1*ready_1
+  commit_1 ~~ 1*commit_1
+  
+  # Freely Estimate Factor Means at T2 and T3 (relative to T1)
+  jobsat_2 ~ 1
+  jobsat_3 ~ 1
+  
+  ready_2 ~ 1
+  ready_3 ~ 1
+  
+  commit_2 ~ 1
+  commit_3 ~ 1
+  
+  # Freely Estimate Factor Variances at T2 and T3 (relative to T1)
+  jobsat_2 ~~ jobsat_2
+  jobsat_3 ~~ jobsat_3
+  
+  ready_2 ~~ ready_2
+  ready_3 ~~ ready_3
+  
+  commit_2 ~~ commit_2
+  commit_3 ~~ commit_3
+  
+  # Fix Intercepts of Indicator 1 Across Time
+  JOBSAT11 ~ intj1*1
+  JOBSAT21 ~ intj1*1
+  JOBSAT31 ~ intj1*1
+  
+  READY11 ~ intr1*1
+  READY21 ~ intr1*1
+  READY31 ~ intr1*1
+  
+  COMMIT11 ~ intc1*1
+  COMMIT21 ~ intc1*1
+  COMMIT31 ~ intc1*1
+  
+  # Free Intercepts of Remaining Manifest Variables
+  JOBSAT12 ~ 1
+  JOBSAT13 ~ 1
+  JOBSAT22 ~ 1
+  JOBSAT23 ~ 1
+  JOBSAT32 ~ 1
+  JOBSAT33 ~ 1
+  
+  READY12 ~ 1
+  READY13 ~ 1
+  READY22 ~ 1
+  READY23 ~ 1
+  READY32 ~ 1
+  READY33 ~ 1
+  
+  COMMIT12 ~ 1
+  COMMIT13 ~ 1
+  COMMIT22 ~ 1
+  COMMIT23 ~ 1
+  COMMIT32 ~ 1
+  COMMIT33 ~ 1
+  
+  # Estimate Residual Variances of Manifest Variables
+  JOBSAT11 ~~ JOBSAT11
+  JOBSAT12 ~~ JOBSAT12
+  JOBSAT13 ~~ JOBSAT13
+  JOBSAT21 ~~ JOBSAT21
+  JOBSAT22 ~~ JOBSAT22
+  JOBSAT23 ~~ JOBSAT23
+  JOBSAT31 ~~ JOBSAT31
+  JOBSAT32 ~~ JOBSAT32
+  JOBSAT33 ~~ JOBSAT33
+  
+  READY11 ~~ READY11
+  READY12 ~~ READY12
+  READY13 ~~ READY13
+  READY21 ~~ READY21
+  READY22 ~~ READY22
+  READY23 ~~ READY23
+  READY31 ~~ READY31
+  READY32 ~~ READY32
+  READY33 ~~ READY33
+  
+  COMMIT11 ~~ COMMIT11
+  COMMIT12 ~~ COMMIT12
+  COMMIT13 ~~ COMMIT13
+  COMMIT21 ~~ COMMIT21
+  COMMIT22 ~~ COMMIT22
+  COMMIT23 ~~ COMMIT23
+  COMMIT31 ~~ COMMIT31
+  COMMIT32 ~~ COMMIT32
+  COMMIT33 ~~ COMMIT33
+  
+  # Residual Covariances Within Indicator Across Time
+  JOBSAT11 ~~ JOBSAT21
+  JOBSAT21 ~~ JOBSAT31
+  JOBSAT11 ~~ JOBSAT31
+  
+  JOBSAT12 ~~ JOBSAT22
+  JOBSAT22 ~~ JOBSAT32
+  JOBSAT12 ~~ JOBSAT32
+  
+  JOBSAT13 ~~ JOBSAT23
+  JOBSAT23 ~~ JOBSAT33
+  JOBSAT13 ~~ JOBSAT33
+  
+  READY11 ~~ READY21
+  READY21 ~~ READY31
+  READY11 ~~ READY31
+  
+  READY12 ~~ READY22
+  READY22 ~~ READY32
+  READY12 ~~ READY32
+  
+  READY13 ~~ READY23
+  READY23 ~~ READY33
+  READY13 ~~ READY33
+  
+  COMMIT11 ~~ COMMIT21
+  COMMIT21 ~~ COMMIT31
+  COMMIT11 ~~ COMMIT31
+  
+  COMMIT12 ~~ COMMIT22
+  COMMIT22 ~~ COMMIT32
+  COMMIT12 ~~ COMMIT32
+  
+  COMMIT13 ~~ COMMIT23
+  COMMIT23 ~~ COMMIT33
+  COMMIT13 ~~ COMMIT33
+'
+```
+
+### Fit Model
+
+```{r}
+configuralInvarianceCorrelatedResiduals_fit <- cfa(
+  configuralInvarianceCorrelatedResiduals_syntax,
+  data = longitudinalMI1,
+  missing = "ML", # FIML
+  estimator = "MLR", # Huber-White robust standard errors (for heteroscedasticity and nonnormally distributed residuals)
+  meanstructure = TRUE, # estimate means/intercepts
+  fixed.x = FALSE) # estimate means, variances, and covariances of the observed variables (to include predictors as part of FIML)
+```
+
+### Model Summary
+
+```{r}
+summary(
+  configuralInvarianceCorrelatedResiduals_fit,
+  fit.measures = TRUE,
+  standardized = TRUE,
+  rsquare = TRUE)
+```
+
+### Modification Indices
+
+```{r}
+modificationindices(
+  configuralInvarianceCorrelatedResiduals_fit,
+  sort. = TRUE)
+```
+
+### Path Diagram
+
+```{r}
+#| fig-cap: "Path Diagram"
+
+lavaanPlot::lavaanPlot2(
+  configuralInvarianceCorrelatedResiduals_fit,
+  stand = TRUE,
+  coef_labels = TRUE)
+```
+
+To create an interactive path diagram, you can use the following syntax:
+
+```{r}
+#| eval: false
+
+lavaangui::plot_lavaan(configuralInvarianceCorrelatedResiduals_fit)
+```
+
+### Compare Models
+
+```{r}
+anova(
+  configuralInvariance_fit,
+  configuralInvarianceCorrelatedResiduals_fit
+)
+```
+
+## Metric ("Weak Factorial") Invariance
+
+A metric invariance model evaluates whether the items' factor loadings are the same across time.
+
+1. Standardize the latent factor(s) at T1 (i.e., fix the mean to zero and the variance to one)
+1. For each latent construct, constrain the first indicator's intercept to be the same across time
+1. Allow within-indicator residuals to covary across time
+1. **For each indicator, constrain its factor loading to be the same across time**
+
+### Model Syntax
+
+```{r}
+metricInvariance_syntax <- '
+  # Factor Loadings
+  jobsat_1 =~ NA*loadj1*JOBSAT11 + loadj2*JOBSAT12 + loadj3*JOBSAT13
+  jobsat_2 =~ NA*loadj1*JOBSAT21 + loadj2*JOBSAT22 + loadj3*JOBSAT23
+  jobsat_3 =~ NA*loadj1*JOBSAT31 + loadj2*JOBSAT32 + loadj3*JOBSAT33
+  
+  ready_1 =~ NA*loadr1*READY11 + loadr2*READY12 + loadr3*READY13
+  ready_2 =~ NA*loadr1*READY21 + loadr2*READY22 + loadr3*READY23
+  ready_3 =~ NA*loadr1*READY31 + loadr2*READY32 + loadr3*READY33
+  
+  commit_1 =~ NA*loadc1*COMMIT11 + loadc2*COMMIT12 + loadc3*COMMIT13
+  commit_2 =~ NA*loadc1*COMMIT21 + loadc2*COMMIT22 + loadc3*COMMIT23
+  commit_3 =~ NA*loadc1*COMMIT31 + loadc2*COMMIT32 + loadc3*COMMIT33
+  
+  # Factor Identification: Standardize Factors at T1
+  
+  ## Fix Factor Means at T1 to Zero
+  jobsat_1 ~ 0*1
+  ready_1 ~ 0*1
+  commit_1 ~ 0*1
+  
+  ## Fix Factor Variances at T1 to One
+  jobsat_1 ~~ 1*jobsat_1
+  ready_1 ~~ 1*ready_1
+  commit_1 ~~ 1*commit_1
+  
+  # Freely Estimate Factor Means at T2 and T3 (relative to T1)
+  jobsat_2 ~ 1
+  jobsat_3 ~ 1
+  
+  ready_2 ~ 1
+  ready_3 ~ 1
+  
+  commit_2 ~ 1
+  commit_3 ~ 1
+  
+  # Freely Estimate Factor Variances at T2 and T3 (relative to T1)
+  jobsat_2 ~~ jobsat_2
+  jobsat_3 ~~ jobsat_3
+  
+  ready_2 ~~ ready_2
+  ready_3 ~~ ready_3
+  
+  commit_2 ~~ commit_2
+  commit_3 ~~ commit_3
+  
+  # Fix Intercepts of Indicator 1 Across Time
+  JOBSAT11 ~ intj1*1
+  JOBSAT21 ~ intj1*1
+  JOBSAT31 ~ intj1*1
+  
+  READY11 ~ intr1*1
+  READY21 ~ intr1*1
+  READY31 ~ intr1*1
+  
+  COMMIT11 ~ intc1*1
+  COMMIT21 ~ intc1*1
+  COMMIT31 ~ intc1*1
+  
+  # Free Intercepts of Remaining Manifest Variables
+  JOBSAT12 ~ 1
+  JOBSAT13 ~ 1
+  JOBSAT22 ~ 1
+  JOBSAT23 ~ 1
+  JOBSAT32 ~ 1
+  JOBSAT33 ~ 1
+  
+  READY12 ~ 1
+  READY13 ~ 1
+  READY22 ~ 1
+  READY23 ~ 1
+  READY32 ~ 1
+  READY33 ~ 1
+  
+  COMMIT12 ~ 1
+  COMMIT13 ~ 1
+  COMMIT22 ~ 1
+  COMMIT23 ~ 1
+  COMMIT32 ~ 1
+  COMMIT33 ~ 1
+  
+  # Estimate Residual Variances of Manifest Variables
+  JOBSAT11 ~~ JOBSAT11
+  JOBSAT12 ~~ JOBSAT12
+  JOBSAT13 ~~ JOBSAT13
+  JOBSAT21 ~~ JOBSAT21
+  JOBSAT22 ~~ JOBSAT22
+  JOBSAT23 ~~ JOBSAT23
+  JOBSAT31 ~~ JOBSAT31
+  JOBSAT32 ~~ JOBSAT32
+  JOBSAT33 ~~ JOBSAT33
+  
+  READY11 ~~ READY11
+  READY12 ~~ READY12
+  READY13 ~~ READY13
+  READY21 ~~ READY21
+  READY22 ~~ READY22
+  READY23 ~~ READY23
+  READY31 ~~ READY31
+  READY32 ~~ READY32
+  READY33 ~~ READY33
+  
+  COMMIT11 ~~ COMMIT11
+  COMMIT12 ~~ COMMIT12
+  COMMIT13 ~~ COMMIT13
+  COMMIT21 ~~ COMMIT21
+  COMMIT22 ~~ COMMIT22
+  COMMIT23 ~~ COMMIT23
+  COMMIT31 ~~ COMMIT31
+  COMMIT32 ~~ COMMIT32
+  COMMIT33 ~~ COMMIT33
+  
+  # Residual Covariances Within Indicator Across Time
+  JOBSAT11 ~~ JOBSAT21
+  JOBSAT21 ~~ JOBSAT31
+  JOBSAT11 ~~ JOBSAT31
+  
+  JOBSAT12 ~~ JOBSAT22
+  JOBSAT22 ~~ JOBSAT32
+  JOBSAT12 ~~ JOBSAT32
+  
+  JOBSAT13 ~~ JOBSAT23
+  JOBSAT23 ~~ JOBSAT33
+  JOBSAT13 ~~ JOBSAT33
+  
+  READY11 ~~ READY21
+  READY21 ~~ READY31
+  READY11 ~~ READY31
+  
+  READY12 ~~ READY22
+  READY22 ~~ READY32
+  READY12 ~~ READY32
+  
+  READY13 ~~ READY23
+  READY23 ~~ READY33
+  READY13 ~~ READY33
+  
+  COMMIT11 ~~ COMMIT21
+  COMMIT21 ~~ COMMIT31
+  COMMIT11 ~~ COMMIT31
+  
+  COMMIT12 ~~ COMMIT22
+  COMMIT22 ~~ COMMIT32
+  COMMIT12 ~~ COMMIT32
+  
+  COMMIT13 ~~ COMMIT23
+  COMMIT23 ~~ COMMIT33
+  COMMIT13 ~~ COMMIT33
+'
+```
+
+### Fit Model
+
+```{r}
+metricInvariance_fit <- cfa(
+  metricInvariance_syntax,
+  data = longitudinalMI1,
+  missing = "ML", # FIML
+  estimator = "MLR", # Huber-White robust standard errors (for heteroscedasticity and nonnormally distributed residuals)
+  meanstructure = TRUE, # estimate means/intercepts
+  fixed.x = FALSE) # estimate means, variances, and covariances of the observed variables (to include predictors as part of FIML)
+```
+
+### Model Summary
+
+```{r}
+summary(
+  metricInvariance_fit,
+  fit.measures = TRUE,
+  standardized = TRUE,
+  rsquare = TRUE)
+```
+
+### Modification Indices
+
+```{r}
+modificationindices(
+  metricInvariance_fit,
+  sort. = TRUE)
+```
+
+### Path Diagram
+
+```{r}
+#| fig-cap: "Path Diagram"
+
+lavaanPlot::lavaanPlot2(
+  metricInvariance_fit,
+  stand = TRUE,
+  coef_labels = TRUE)
+```
+
+To create an interactive path diagram, you can use the following syntax:
+
+```{r}
+#| eval: false
+
+lavaangui::plot_lavaan(metricInvariance_fit)
+```
+
+### Compare Models
+
+```{r}
+anova(
+  configuralInvarianceCorrelatedResiduals_fit,
+  metricInvariance_fit
+)
+```
+
+## Scalar ("Strong Factorial") Invariance
+
+A scalar invariance model evaluates whether the items' intercepts are the same across time.
+
+1. Standardize the latent factor(s) at T1 (i.e., fix the mean to zero and the variance to one)
+1. Allow within-indicator residuals to covary across time
+1. For each indicator, constrain its factor loading to be the same across time
+1. **For each indicator, constrain its intercept to be the same across time**
+
+### Model Syntax
+
+```{r}
+scalarInvariance_syntax <- '
+  # Factor Loadings
+  jobsat_1 =~ NA*loadj1*JOBSAT11 + loadj2*JOBSAT12 + loadj3*JOBSAT13
+  jobsat_2 =~ NA*loadj1*JOBSAT21 + loadj2*JOBSAT22 + loadj3*JOBSAT23
+  jobsat_3 =~ NA*loadj1*JOBSAT31 + loadj2*JOBSAT32 + loadj3*JOBSAT33
+  
+  ready_1 =~ NA*loadr1*READY11 + loadr2*READY12 + loadr3*READY13
+  ready_2 =~ NA*loadr1*READY21 + loadr2*READY22 + loadr3*READY23
+  ready_3 =~ NA*loadr1*READY31 + loadr2*READY32 + loadr3*READY33
+  
+  commit_1 =~ NA*loadc1*COMMIT11 + loadc2*COMMIT12 + loadc3*COMMIT13
+  commit_2 =~ NA*loadc1*COMMIT21 + loadc2*COMMIT22 + loadc3*COMMIT23
+  commit_3 =~ NA*loadc1*COMMIT31 + loadc2*COMMIT32 + loadc3*COMMIT33
+  
+  # Factor Identification: Standardize Factors at T1
+  
+  ## Fix Factor Means at T1 to Zero
+  jobsat_1 ~ 0*1
+  ready_1 ~ 0*1
+  commit_1 ~ 0*1
+  
+  ## Fix Factor Variances at T1 to One
+  jobsat_1 ~~ 1*jobsat_1
+  ready_1 ~~ 1*ready_1
+  commit_1 ~~ 1*commit_1
+  
+  # Freely Estimate Factor Means at T2 and T3 (relative to T1)
+  jobsat_2 ~ 1
+  jobsat_3 ~ 1
+  
+  ready_2 ~ 1
+  ready_3 ~ 1
+  
+  commit_2 ~ 1
+  commit_3 ~ 1
+  
+  # Freely Estimate Factor Variances at T2 and T3 (relative to T1)
+  jobsat_2 ~~ jobsat_2
+  jobsat_3 ~~ jobsat_3
+  
+  ready_2 ~~ ready_2
+  ready_3 ~~ ready_3
+  
+  commit_2 ~~ commit_2
+  commit_3 ~~ commit_3
+  
+  # Fix Intercepts of Indicators Across Time
+  JOBSAT11 ~ intj1*1
+  JOBSAT21 ~ intj1*1
+  JOBSAT31 ~ intj1*1
+  JOBSAT12 ~ intj2*1
+  JOBSAT22 ~ intj2*1
+  JOBSAT32 ~ intj2*1
+  JOBSAT13 ~ intj3*1
+  JOBSAT23 ~ intj3*1
+  JOBSAT33 ~ intj3*1
+  
+  READY11 ~ intr1*1
+  READY21 ~ intr1*1
+  READY31 ~ intr1*1
+  READY12 ~ intr2*1
+  READY22 ~ intr2*1
+  READY32 ~ intr2*1
+  READY13 ~ intr3*1
+  READY23 ~ intr3*1
+  READY33 ~ intr3*1
+  
+  COMMIT11 ~ intc1*1
+  COMMIT21 ~ intc1*1
+  COMMIT31 ~ intc1*1
+  COMMIT12 ~ intc2*1
+  COMMIT22 ~ intc2*1
+  COMMIT32 ~ intc2*1
+  COMMIT13 ~ intc3*1
+  COMMIT23 ~ intc3*1
+  COMMIT33 ~ intc3*1
+  
+  # Estimate Residual Variances of Manifest Variables
+  JOBSAT11 ~~ JOBSAT11
+  JOBSAT12 ~~ JOBSAT12
+  JOBSAT13 ~~ JOBSAT13
+  JOBSAT21 ~~ JOBSAT21
+  JOBSAT22 ~~ JOBSAT22
+  JOBSAT23 ~~ JOBSAT23
+  JOBSAT31 ~~ JOBSAT31
+  JOBSAT32 ~~ JOBSAT32
+  JOBSAT33 ~~ JOBSAT33
+  
+  READY11 ~~ READY11
+  READY12 ~~ READY12
+  READY13 ~~ READY13
+  READY21 ~~ READY21
+  READY22 ~~ READY22
+  READY23 ~~ READY23
+  READY31 ~~ READY31
+  READY32 ~~ READY32
+  READY33 ~~ READY33
+  
+  COMMIT11 ~~ COMMIT11
+  COMMIT12 ~~ COMMIT12
+  COMMIT13 ~~ COMMIT13
+  COMMIT21 ~~ COMMIT21
+  COMMIT22 ~~ COMMIT22
+  COMMIT23 ~~ COMMIT23
+  COMMIT31 ~~ COMMIT31
+  COMMIT32 ~~ COMMIT32
+  COMMIT33 ~~ COMMIT33
+  
+  # Residual Covariances Within Indicator Across Time
+  JOBSAT11 ~~ JOBSAT21
+  JOBSAT21 ~~ JOBSAT31
+  JOBSAT11 ~~ JOBSAT31
+  
+  JOBSAT12 ~~ JOBSAT22
+  JOBSAT22 ~~ JOBSAT32
+  JOBSAT12 ~~ JOBSAT32
+  
+  JOBSAT13 ~~ JOBSAT23
+  JOBSAT23 ~~ JOBSAT33
+  JOBSAT13 ~~ JOBSAT33
+  
+  READY11 ~~ READY21
+  READY21 ~~ READY31
+  READY11 ~~ READY31
+  
+  READY12 ~~ READY22
+  READY22 ~~ READY32
+  READY12 ~~ READY32
+  
+  READY13 ~~ READY23
+  READY23 ~~ READY33
+  READY13 ~~ READY33
+  
+  COMMIT11 ~~ COMMIT21
+  COMMIT21 ~~ COMMIT31
+  COMMIT11 ~~ COMMIT31
+  
+  COMMIT12 ~~ COMMIT22
+  COMMIT22 ~~ COMMIT32
+  COMMIT12 ~~ COMMIT32
+  
+  COMMIT13 ~~ COMMIT23
+  COMMIT23 ~~ COMMIT33
+  COMMIT13 ~~ COMMIT33
+'
+```
+
+### Fit Model
+
+```{r}
+scalarInvariance_fit <- cfa(
+  scalarInvariance_syntax,
+  data = longitudinalMI1,
+  missing = "ML", # FIML
+  estimator = "MLR", # Huber-White robust standard errors (for heteroscedasticity and nonnormally distributed residuals)
+  meanstructure = TRUE, # estimate means/intercepts
+  fixed.x = FALSE) # estimate means, variances, and covariances of the observed variables (to include predictors as part of FIML)
+```
+
+### Model Summary
+
+```{r}
+summary(
+  scalarInvariance_fit,
+  fit.measures = TRUE,
+  standardized = TRUE,
+  rsquare = TRUE)
+```
+
+### Modification Indices
+
+```{r}
+modificationindices(
+  scalarInvariance_fit,
+  sort. = TRUE)
+```
+
+### Path Diagram
+
+```{r}
+#| fig-cap: "Path Diagram"
+
+lavaanPlot::lavaanPlot2(
+  scalarInvariance_fit,
+  stand = TRUE,
+  coef_labels = TRUE)
+```
+
+To create an interactive path diagram, you can use the following syntax:
+
+```{r}
+#| eval: false
+
+lavaangui::plot_lavaan(scalarInvariance_fit)
+```
+
+### Compare Models
+
+```{r}
+anova(
+  metricInvariance_fit,
+  scalarInvariance_fit
+)
+```
+
+## Residual ("Strict Factorial") Invariance
+
+A residual invariance model evaluates whether the items' residual variances are the same across time.
+
+1. Standardize the latent factor(s) at T1 (i.e., fix the mean to zero and the variance to one)
+1. Allow within-indicator residuals to covary across time
+1. For each indicator, constrain its factor loading to be the same across time
+1. For each indicator, constrain its intercept to be the same across time
+1. **For each indicator, constrain its residual variance to be the same across time**
+
+### Model Syntax
+
+```{r}
+residualInvariance_syntax <- '
+  # Factor Loadings
+  jobsat_1 =~ NA*loadj1*JOBSAT11 + loadj2*JOBSAT12 + loadj3*JOBSAT13
+  jobsat_2 =~ NA*loadj1*JOBSAT21 + loadj2*JOBSAT22 + loadj3*JOBSAT23
+  jobsat_3 =~ NA*loadj1*JOBSAT31 + loadj2*JOBSAT32 + loadj3*JOBSAT33
+  
+  ready_1 =~ NA*loadr1*READY11 + loadr2*READY12 + loadr3*READY13
+  ready_2 =~ NA*loadr1*READY21 + loadr2*READY22 + loadr3*READY23
+  ready_3 =~ NA*loadr1*READY31 + loadr2*READY32 + loadr3*READY33
+  
+  commit_1 =~ NA*loadc1*COMMIT11 + loadc2*COMMIT12 + loadc3*COMMIT13
+  commit_2 =~ NA*loadc1*COMMIT21 + loadc2*COMMIT22 + loadc3*COMMIT23
+  commit_3 =~ NA*loadc1*COMMIT31 + loadc2*COMMIT32 + loadc3*COMMIT33
+  
+  # Factor Identification: Standardize Factors at T1
+  
+  ## Fix Factor Means at T1 to Zero
+  jobsat_1 ~ 0*1
+  ready_1 ~ 0*1
+  commit_1 ~ 0*1
+  
+  ## Fix Factor Variances at T1 to One
+  jobsat_1 ~~ 1*jobsat_1
+  ready_1 ~~ 1*ready_1
+  commit_1 ~~ 1*commit_1
+  
+  # Freely Estimate Factor Means at T2 and T3 (relative to T1)
+  jobsat_2 ~ 1
+  jobsat_3 ~ 1
+  
+  ready_2 ~ 1
+  ready_3 ~ 1
+  
+  commit_2 ~ 1
+  commit_3 ~ 1
+  
+  # Freely Estimate Factor Variances at T2 and T3 (relative to T1)
+  jobsat_2 ~~ jobsat_2
+  jobsat_3 ~~ jobsat_3
+  
+  ready_2 ~~ ready_2
+  ready_3 ~~ ready_3
+  
+  commit_2 ~~ commit_2
+  commit_3 ~~ commit_3
+  
+  # Constrain Intercepts of Indicators Across Time
+  JOBSAT11 ~ intj1*1
+  JOBSAT21 ~ intj1*1
+  JOBSAT31 ~ intj1*1
+  JOBSAT12 ~ intj2*1
+  JOBSAT22 ~ intj2*1
+  JOBSAT32 ~ intj2*1
+  JOBSAT13 ~ intj3*1
+  JOBSAT23 ~ intj3*1
+  JOBSAT33 ~ intj3*1
+  
+  READY11 ~ intr1*1
+  READY21 ~ intr1*1
+  READY31 ~ intr1*1
+  READY12 ~ intr2*1
+  READY22 ~ intr2*1
+  READY32 ~ intr2*1
+  READY13 ~ intr3*1
+  READY23 ~ intr3*1
+  READY33 ~ intr3*1
+  
+  COMMIT11 ~ intc1*1
+  COMMIT21 ~ intc1*1
+  COMMIT31 ~ intc1*1
+  COMMIT12 ~ intc2*1
+  COMMIT22 ~ intc2*1
+  COMMIT32 ~ intc2*1
+  COMMIT13 ~ intc3*1
+  COMMIT23 ~ intc3*1
+  COMMIT33 ~ intc3*1
+  
+  # Constrain Residual Variances of Indicators Across Time
+  JOBSAT11 ~~ resj1*JOBSAT11
+  JOBSAT21 ~~ resj1*JOBSAT21
+  JOBSAT31 ~~ resj1*JOBSAT31
+  JOBSAT12 ~~ resj2*JOBSAT12
+  JOBSAT22 ~~ resj2*JOBSAT22
+  JOBSAT32 ~~ resj2*JOBSAT32
+  JOBSAT13 ~~ resj3*JOBSAT13
+  JOBSAT23 ~~ resj3*JOBSAT23
+  JOBSAT33 ~~ resj3*JOBSAT33
+  
+  READY11 ~~ resr1*READY11
+  READY21 ~~ resr1*READY21
+  READY31 ~~ resr1*READY31
+  READY12 ~~ resr2*READY12
+  READY22 ~~ resr2*READY22
+  READY32 ~~ resr2*READY32
+  READY13 ~~ resr3*READY13
+  READY23 ~~ resr3*READY23
+  READY33 ~~ resr3*READY33
+  
+  COMMIT11 ~~ resc1*COMMIT11
+  COMMIT21 ~~ resc1*COMMIT21
+  COMMIT31 ~~ resc1*COMMIT31
+  COMMIT12 ~~ resc2*COMMIT12
+  COMMIT22 ~~ resc2*COMMIT22
+  COMMIT32 ~~ resc2*COMMIT32
+  COMMIT13 ~~ resc3*COMMIT13
+  COMMIT23 ~~ resc3*COMMIT23
+  COMMIT33 ~~ resc3*COMMIT33
+  
+  # Residual Covariances Within Indicator Across Time
+  JOBSAT11 ~~ JOBSAT21
+  JOBSAT21 ~~ JOBSAT31
+  JOBSAT11 ~~ JOBSAT31
+  
+  JOBSAT12 ~~ JOBSAT22
+  JOBSAT22 ~~ JOBSAT32
+  JOBSAT12 ~~ JOBSAT32
+  
+  JOBSAT13 ~~ JOBSAT23
+  JOBSAT23 ~~ JOBSAT33
+  JOBSAT13 ~~ JOBSAT33
+  
+  READY11 ~~ READY21
+  READY21 ~~ READY31
+  READY11 ~~ READY31
+  
+  READY12 ~~ READY22
+  READY22 ~~ READY32
+  READY12 ~~ READY32
+  
+  READY13 ~~ READY23
+  READY23 ~~ READY33
+  READY13 ~~ READY33
+  
+  COMMIT11 ~~ COMMIT21
+  COMMIT21 ~~ COMMIT31
+  COMMIT11 ~~ COMMIT31
+  
+  COMMIT12 ~~ COMMIT22
+  COMMIT22 ~~ COMMIT32
+  COMMIT12 ~~ COMMIT32
+  
+  COMMIT13 ~~ COMMIT23
+  COMMIT23 ~~ COMMIT33
+  COMMIT13 ~~ COMMIT33
+'
+```
+
+### Fit Model
+
+```{r}
+residualInvariance_fit <- cfa(
+  residualInvariance_syntax,
+  data = longitudinalMI1,
+  missing = "ML", # FIML
+  estimator = "MLR", # Huber-White robust standard errors (for heteroscedasticity and nonnormally distributed residuals)
+  meanstructure = TRUE, # estimate means/intercepts
+  fixed.x = FALSE) # estimate means, variances, and covariances of the observed variables (to include predictors as part of FIML)
+```
+
+### Model Summary
+
+```{r}
+summary(
+  residualInvariance_fit,
+  fit.measures = TRUE,
+  standardized = TRUE,
+  rsquare = TRUE)
+```
+
+### Modification Indices
+
+```{r}
+modificationindices(
+  residualInvariance_fit,
+  sort. = TRUE)
+```
+
+### Path Diagram
+
+```{r}
+#| fig-cap: "Path Diagram"
+
+lavaanPlot::lavaanPlot2(
+  residualInvariance_fit,
+  stand = TRUE,
+  coef_labels = TRUE)
+```
+
+To create an interactive path diagram, you can use the following syntax:
+
+```{r}
+#| eval: false
+
+lavaangui::plot_lavaan(residualInvariance_fit)
+```
+
+### Compare Models
+
+```{r}
+anova(
+  scalarInvariance_fit,
+  residualInvariance_fit
+)
+
+round(cbind(
+  configural = inspect(configuralInvarianceCorrelatedResiduals_fit, "fit.measures"), 
+  weak = inspect(metricInvariance_fit, "fit.measures"),
+  strong = inspect(scalarInvariance_fit, "fit.measures"),
+  strict = inspect(residualInvariance_fit, "fit.measures")), 3)
+```

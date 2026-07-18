@@ -1,0 +1,16 @@
+---
+title: "Answers"
+---
+
+1. Which level of longitudinal measurement invariance holds for the `Bliese-Ployhard-2000-indicators-1.csv` dataset (saved in object `longitudinalMI1`)?
+
+Answer: residual (strict factorial) invariance
+
+2. Repeat the tests of longitudinal measurement invariance for the remaining datasets: `Bliese-Ployhard-2000-indicators-2.csv`, `Bliese-Ployhard-2000-indicators-3.csv`, and `Bliese-Ployhard-2000-indicators-4.csv`.
+Which level of longitudinal measurement invariance holds for each dataset?
+
+Answer:
+
+- `Bliese-Ployhard-2000-indicators-2.csv`: scalar (strong factorial) invariance
+- `Bliese-Ployhard-2000-indicators-3.csv`: configural invariance
+- `Bliese-Ployhard-2000-indicators-4.csv`: metric (weak factorial) invariance
