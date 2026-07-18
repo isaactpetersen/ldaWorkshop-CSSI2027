@@ -142,10 +142,10 @@ linearGCM_syntax <- '
 
 ### Fit Model
 
-Specifying `fixed.x = FALSE` would estimate (i.e., would not consider as fixed) means, variances, and covariances of the observed variables.
+Specifying `fixed_x = FALSE` would estimate (i.e., would not consider as fixed) means, variances, and covariances of the observed variables.
 Doing so would allow missing information in the predictors to be included as part of full information maximum likelihood (FIML).
 However, this gets challenging to use when including both person mean and person-mean-centered variables (due to linear dependencies).
-Thus, many of these examples do not specify `fixed.x = FALSE`.
+Thus, many of these examples do not specify `fixed_x = FALSE`.
 
 ```{r}
 linearGCM_fit <- lavaan::sem(
@@ -161,7 +161,7 @@ linearGCM_fit <- lavaan::sem(
 ```{r}
 summary(
   linearGCM_fit,
-  fit.measures = TRUE,
+  fit_measures = TRUE,
   standardized = TRUE,
   rsquare = TRUE)
 ```
@@ -171,7 +171,7 @@ summary(
 ```{r}
 modificationindices(
   linearGCM_fit,
-  sort. = TRUE)
+  sort = TRUE)
 ```
 
 ### Plots
@@ -525,7 +525,7 @@ quadraticGCM_fit <- lavaan::sem(
 ```{r}
 summary(
   quadraticGCM_fit,
-  fit.measures = TRUE,
+  fit_measures = TRUE,
   standardized = TRUE,
   rsquare = TRUE)
 ```
@@ -535,7 +535,7 @@ summary(
 ```{r}
 modificationindices(
   quadraticGCM_fit,
-  sort. = TRUE)
+  sort = TRUE)
 ```
 
 ### Plots
@@ -864,7 +864,7 @@ latentBasisGCM_fit <- lavaan::sem(
 ```{r}
 summary(
   latentBasisGCM_fit,
-  fit.measures = TRUE,
+  fit_measures = TRUE,
   standardized = TRUE,
   rsquare = TRUE)
 ```
@@ -874,7 +874,7 @@ summary(
 ```{r}
 modificationindices(
   latentBasisGCM_fit,
-  sort. = TRUE)
+  sort = TRUE)
 ```
 
 ### Plots
@@ -1183,7 +1183,7 @@ bivariateLCSM_fit <- lcsm::fit_bi_lcsm(
     delta_lag_yx = TRUE, # level of y predicting change of x
     xi_lag_xy = TRUE,    # change of x predicting change of y
     xi_lag_yx = TRUE),   # change of y predicting change of x
-  fixed.x = FALSE # estimate means, variances, and covariances of the observed variables (to include predictors as part of FIML)
+  fixed_x = FALSE # estimate means, variances, and covariances of the observed variables (to include predictors as part of FIML)
   )
 ```
 
@@ -1192,7 +1192,7 @@ bivariateLCSM_fit <- lcsm::fit_bi_lcsm(
 ```{r}
 summary(
   bivariateLCSM_fit,
-  fit.measures = TRUE,
+  fit_measures = TRUE,
   standardized = TRUE,
   rsquare = TRUE)
 
@@ -1204,7 +1204,7 @@ lcsm::extract_param(bivariateLCSM_fit)
 ```{r}
 modificationindices(
   bivariateLCSM_fit,
-  sort. = TRUE)
+  sort = TRUE)
 ```
 
 ## Plots
@@ -1349,7 +1349,7 @@ clpm_fit <- lavaan::sem(
   missing = "ML", # FIML
   estimator = "MLR", # Huber-White robust standard errors (for heteroscedasticity and nonnormally distributed residuals)
   meanstructure = TRUE, # estimate means/intercepts
-  fixed.x = FALSE) # estimate means, variances, and covariances of the observed variables (to include predictors as part of FIML)
+  fixed_x = FALSE) # estimate means, variances, and covariances of the observed variables (to include predictors as part of FIML)
 ```
 
 ## Model Summary
@@ -1357,7 +1357,7 @@ clpm_fit <- lavaan::sem(
 ```{r}
 summary(
   clpm_fit,
-  fit.measures = TRUE,
+  fit_measures = TRUE,
   standardized = TRUE,
   rsquare = TRUE)
 ```
@@ -1367,7 +1367,7 @@ summary(
 ```{r}
 modificationindices(
   clpm_fit,
-  sort. = TRUE)
+  sort = TRUE)
 ```
 
 ## Plots
@@ -1517,7 +1517,7 @@ riclpm_fit <- lavaan::sem(
   data = mydata_wide,
   missing = "ML", # FIML
   estimator = "MLR", # Huber-White robust standard errors (for heteroscedasticity and nonnormally distributed residuals)
-  fixed.x = FALSE, # estimate means, variances, and covariances of the observed variables (to include predictors as part of FIML)
+  fixed_x = FALSE, # estimate means, variances, and covariances of the observed variables (to include predictors as part of FIML)
   bounds = "standard" # constrains observed variances, latent variances, and factor loadings to be within computed lower and upper bounds
 )
 ```
@@ -1630,7 +1630,7 @@ riclpm2_fit <- lavaan::sem(
   data = mydata_wide,
   missing = "ML", # FIML
   estimator = "MLR", # Huber-White robust standard errors (for heteroscedasticity and nonnormally distributed residuals)
-  fixed.x = FALSE, # estimate means, variances, and covariances of the observed variables (to include predictors as part of FIML)
+  fixed_x = FALSE, # estimate means, variances, and covariances of the observed variables (to include predictors as part of FIML)
   bounds = "standard" # constrains observed variances, latent variances, and factor loadings to be within computed lower and upper bounds
 )
 ```
@@ -1640,7 +1640,7 @@ riclpm2_fit <- lavaan::sem(
 ```{r}
 summary(
   riclpm2_fit,
-  fit.measures = TRUE,
+  fit_measures = TRUE,
   standardized = TRUE,
   rsquare = TRUE)
 ```
@@ -1650,7 +1650,7 @@ summary(
 ```{r}
 modificationindices(
   riclpm2_fit,
-  sort. = TRUE)
+  sort = TRUE)
 ```
 
 ## Path Diagram
@@ -1704,7 +1704,7 @@ multilevelSEM_fit <- lavaan::sem(
 ```{r}
 summary(
   multilevelSEM_fit,
-  fit.measures = TRUE,
+  fit_measures = TRUE,
   standardized = TRUE,
   rsquare = TRUE)
 ```
@@ -1714,7 +1714,7 @@ summary(
 ```{r}
 modificationindices(
   multilevelSEM_fit,
-  sort. = TRUE)
+  sort = TRUE)
 ```
 
 ## Path Diagram
@@ -1892,7 +1892,7 @@ configuralInvariance_fit <- cfa(
   missing = "ML", # FIML
   estimator = "MLR", # Huber-White robust standard errors (for heteroscedasticity and nonnormally distributed residuals)
   meanstructure = TRUE, # estimate means/intercepts
-  fixed.x = FALSE) # estimate means, variances, and covariances of the observed variables (to include predictors as part of FIML)
+  fixed_x = FALSE) # estimate means, variances, and covariances of the observed variables (to include predictors as part of FIML)
 ```
 
 ### Model Summary
@@ -1900,7 +1900,7 @@ configuralInvariance_fit <- cfa(
 ```{r}
 summary(
   configuralInvariance_fit,
-  fit.measures = TRUE,
+  fit_measures = TRUE,
   standardized = TRUE,
   rsquare = TRUE)
 ```
@@ -1910,7 +1910,7 @@ summary(
 ```{r}
 modificationindices(
   configuralInvariance_fit,
-  sort. = TRUE)
+  sort = TRUE)
 ```
 
 ### Path Diagram
@@ -2102,7 +2102,7 @@ configuralInvarianceCorrelatedResiduals_fit <- cfa(
   missing = "ML", # FIML
   estimator = "MLR", # Huber-White robust standard errors (for heteroscedasticity and nonnormally distributed residuals)
   meanstructure = TRUE, # estimate means/intercepts
-  fixed.x = FALSE) # estimate means, variances, and covariances of the observed variables (to include predictors as part of FIML)
+  fixed_x = FALSE) # estimate means, variances, and covariances of the observed variables (to include predictors as part of FIML)
 ```
 
 ### Model Summary
@@ -2110,7 +2110,7 @@ configuralInvarianceCorrelatedResiduals_fit <- cfa(
 ```{r}
 summary(
   configuralInvarianceCorrelatedResiduals_fit,
-  fit.measures = TRUE,
+  fit_measures = TRUE,
   standardized = TRUE,
   rsquare = TRUE)
 ```
@@ -2120,7 +2120,7 @@ summary(
 ```{r}
 modificationindices(
   configuralInvarianceCorrelatedResiduals_fit,
-  sort. = TRUE)
+  sort = TRUE)
 ```
 
 ### Path Diagram
@@ -2323,7 +2323,7 @@ metricInvariance_fit <- cfa(
   missing = "ML", # FIML
   estimator = "MLR", # Huber-White robust standard errors (for heteroscedasticity and nonnormally distributed residuals)
   meanstructure = TRUE, # estimate means/intercepts
-  fixed.x = FALSE) # estimate means, variances, and covariances of the observed variables (to include predictors as part of FIML)
+  fixed_x = FALSE) # estimate means, variances, and covariances of the observed variables (to include predictors as part of FIML)
 ```
 
 ### Model Summary
@@ -2331,7 +2331,7 @@ metricInvariance_fit <- cfa(
 ```{r}
 summary(
   metricInvariance_fit,
-  fit.measures = TRUE,
+  fit_measures = TRUE,
   standardized = TRUE,
   rsquare = TRUE)
 ```
@@ -2341,7 +2341,7 @@ summary(
 ```{r}
 modificationindices(
   metricInvariance_fit,
-  sort. = TRUE)
+  sort = TRUE)
 ```
 
 ### Path Diagram
@@ -2540,7 +2540,7 @@ scalarInvariance_fit <- cfa(
   missing = "ML", # FIML
   estimator = "MLR", # Huber-White robust standard errors (for heteroscedasticity and nonnormally distributed residuals)
   meanstructure = TRUE, # estimate means/intercepts
-  fixed.x = FALSE) # estimate means, variances, and covariances of the observed variables (to include predictors as part of FIML)
+  fixed_x = FALSE) # estimate means, variances, and covariances of the observed variables (to include predictors as part of FIML)
 ```
 
 ### Model Summary
@@ -2548,7 +2548,7 @@ scalarInvariance_fit <- cfa(
 ```{r}
 summary(
   scalarInvariance_fit,
-  fit.measures = TRUE,
+  fit_measures = TRUE,
   standardized = TRUE,
   rsquare = TRUE)
 ```
@@ -2558,7 +2558,7 @@ summary(
 ```{r}
 modificationindices(
   scalarInvariance_fit,
-  sort. = TRUE)
+  sort = TRUE)
 ```
 
 ### Path Diagram
@@ -2758,7 +2758,7 @@ residualInvariance_fit <- cfa(
   missing = "ML", # FIML
   estimator = "MLR", # Huber-White robust standard errors (for heteroscedasticity and nonnormally distributed residuals)
   meanstructure = TRUE, # estimate means/intercepts
-  fixed.x = FALSE) # estimate means, variances, and covariances of the observed variables (to include predictors as part of FIML)
+  fixed_x = FALSE) # estimate means, variances, and covariances of the observed variables (to include predictors as part of FIML)
 ```
 
 ### Model Summary
@@ -2766,7 +2766,7 @@ residualInvariance_fit <- cfa(
 ```{r}
 summary(
   residualInvariance_fit,
-  fit.measures = TRUE,
+  fit_measures = TRUE,
   standardized = TRUE,
   rsquare = TRUE)
 ```
@@ -2776,7 +2776,7 @@ summary(
 ```{r}
 modificationindices(
   residualInvariance_fit,
-  sort. = TRUE)
+  sort = TRUE)
 ```
 
 ### Path Diagram
@@ -2807,8 +2807,8 @@ anova(
 )
 
 round(cbind(
-  configural = inspect(configuralInvarianceCorrelatedResiduals_fit, "fit.measures"), 
-  weak = inspect(metricInvariance_fit, "fit.measures"),
-  strong = inspect(scalarInvariance_fit, "fit.measures"),
-  strict = inspect(residualInvariance_fit, "fit.measures")), 3)
+  configural = inspect(configuralInvarianceCorrelatedResiduals_fit, "fit_measures"), 
+  weak = inspect(metricInvariance_fit, "fit_measures"),
+  strong = inspect(scalarInvariance_fit, "fit_measures"),
+  strict = inspect(residualInvariance_fit, "fit_measures")), 3)
 ```

@@ -40,7 +40,7 @@ mydata_long <- read.csv("./data/mydata_long.csv")
 # Full Information Maximum Likelihood {#sec-fiml}
 
 For examples using full information maximum likelihood (FIML), see examples of structural equation models [here](structural-equation-models.qmd).
-You can include cases with missingness on predictors by specifying `fixed.x = FALSE`.
+You can include cases with missingness on predictors by specifying `fixed_x = FALSE`.
 
 # Multiple Imputation {#sec-multipleImputation}
 
@@ -342,7 +342,7 @@ linearGCM_fit_mice <- lavaan.mi::sem.mi(
 ```{r}
 summary(
   linearGCM_fit_mice,
-  fit.measures = TRUE,
+  fit_measures = TRUE,
   standardized = TRUE,
   rsquare = TRUE)
 ```
