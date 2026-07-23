@@ -273,7 +273,7 @@ sleep_stats <- mydata_long |>
     mean_sleep = mean(sleep, na.rm = TRUE),
     sd_sleep = sd(sleep, na.rm = TRUE),
     .groups = "drop"
-  ) %>% 
+  ) |> 
   mutate(
     time = recode_values(age, 14 ~ 1, 15 ~ 2, 16 ~ 3, 17 ~ 4),
     time_num = time - 1
