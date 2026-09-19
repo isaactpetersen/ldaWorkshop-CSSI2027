@@ -494,8 +494,12 @@ gamGCM_standardized <- mgcv::gamm(
 
 ```{r}
 gamGCM
+summary(gamGCM$lme)
+summary(gamGCM$gam)
 
 gamGCM_standardized
+summary(gamGCM_standardized$lme)
+summary(gamGCM_standardized$gam)
 
 performance::r2(gamGCM)
 ```
