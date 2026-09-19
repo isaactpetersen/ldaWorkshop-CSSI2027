@@ -543,12 +543,10 @@ newData$sleep[which(newData$sexFactor == "male" & newData$age >= 16 & newData$ag
 newData$sleep[which(newData$sexFactor == "female" & newData$age >= 17 & newData$sleepFactor == "high sleep")] <- mean(mydata_long$sleep[which(mydata_long$sexFactor == "female" & mydata_long$age == 17)], na.rm = TRUE) + sd(mydata_long$sleep[which(mydata_long$sexFactor == "female" & mydata_long$age == 17)], na.rm = TRUE)
 newData$sleep[which(newData$sexFactor == "male" & newData$age >= 17 & newData$sleepFactor == "high sleep")] <- mean(mydata_long$sleep[which(mydata_long$sexFactor == "male" & mydata_long$age == 17)], na.rm = TRUE) + sd(mydata_long$sleep[which(mydata_long$sexFactor == "male" & mydata_long$age == 17)], na.rm = TRUE)
 
-# add a dummy id
-newData$ID <- mydata_long$ID[1]
-
 newData$modelImpliedDepression <- predict( # predict.gam
   gamGCM,
-  newdata = newData
+  newdata = newData,
+  newdata.guaranteed = TRUE # to indicate that ID is not in the newdata object
 )
 ```
 
