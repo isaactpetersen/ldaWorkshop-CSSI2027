@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<meta charset="utf-8">
-<meta name="generator" content="quarto-1.10.19">
+<meta charset="UTF-8">
+<meta name="generator" content="quarto-1.11.9">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <meta name="author" content="Isaac T. Petersen">
 <meta name="dcterms.date" content="today">
@@ -71,14 +70,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <meta name="quarto:offset" content="./">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/scrollable-regions/scrollable-regions.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-e21500bb30e7ce080c64316834ee3be8.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-7b1528b1cba7e9f63f59baa7408a6f56.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-7e332052b267abddad7613605182c7d6.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-3e874bf94cd87f2917f91a2f3f3b98e6.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script src="site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
 <link href="site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
 <link href="site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet"><script id="quarto-search-options" type="application/json">{
@@ -118,10 +118,10 @@ gtag('config', 'G-EG2ZSZZ7EP', { 'anonymize_ip': true});
 <link rel="stylesheet" href="includes/custom.css">
 <link rel="stylesheet" href="font/css/roboto.css">
 </head>
-<body class="nav-fixed quarto-light">
+<body class="nav-fixed quarto-light"><a id="quarto-skip-link" class="visually-hidden-focusable" href="#quarto-document-content">Skip to main content</a>
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top"><nav class="navbar navbar-expand-lg " data-bs-theme="dark"><div class="navbar-container container-fluid">
+  <header id="quarto-header" class="headroom fixed-top"><nav class="navbar navbar-expand-lg " data-bs-theme="dark" aria-label="Site"><div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
     <a href="./index.html" class="navbar-brand navbar-brand-logo">
     <img src="./images/labLogo.png" alt="" class="navbar-logo light-content"><img src="./images/labLogo.png" alt="" class="navbar-logo dark-content"></a>
@@ -129,8 +129,7 @@ gtag('config', 'G-EG2ZSZZ7EP', { 'anonymize_ip': true});
     <span class="navbar-title">2027 CSSI Workshop on Longitudinal Data Analysis</span>
     </a>
   </div>
-            <div id="quarto-search" class="" title="Search"></div>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
@@ -202,12 +201,13 @@ gtag('config', 'G-EG2ZSZZ7EP', { 'anonymize_ip': true});
     <a href="https://www.facebook.com/DevPsyLab" title="" class="quarto-navigation-tool px-1" aria-label=""><i class="bi bi-facebook"></i></a>
     <a href="https://www.instagram.com/devpsylab" title="" class="quarto-navigation-tool px-1" aria-label=""><i class="bi bi-instagram"></i></a>
 </div>
+            <div id="quarto-search" class="" title="Search"></div>
       </div> <!-- /container-fluid -->
     </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">Contents</h2>
+        <nav id="TOC" role="doc-toc" aria-labelledby="toc-title" class="toc-active"><h2 id="toc-title">Contents</h2>
    
   <ul>
 <li>
@@ -226,7 +226,7 @@ gtag('config', 'G-EG2ZSZZ7EP', { 'anonymize_ip': true});
   </ul><div class="toc-actions"><ul><li><a href="https://github.com/isaactpetersen/ldaWorkshop-CSSI2027/edit/main/simulate-data.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/isaactpetersen/ldaWorkshop-CSSI2027/blob/main/simulate-data.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li><li><a href="https://github.com/isaactpetersen/ldaWorkshop-CSSI2027/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
+<main class="content" id="quarto-document-content" tabindex="-1"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
 <div class="quarto-title-block"><div><h1 class="title">Simulate Data</h1><button type="button" class="btn code-tools-button dropdown-toggle" id="quarto-code-tools-menu" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi"></i> Code</button><ul class="dropdown-menu dropdown-menu-end" aria-labelelledby="quarto-code-tools-menu"><li><a id="quarto-show-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Show All Code</a></li><li><a id="quarto-hide-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Hide All Code</a></li><li><hr class="dropdown-divider"></li><li><a id="quarto-view-source" class="dropdown-item" href="javascript:void(0)" role="button">View Source</a></li></ul></div></div>
 </div>
 
@@ -470,7 +470,7 @@ gtag('config', 'G-EG2ZSZZ7EP', { 'anonymize_ip': true});
 </details><div class="cell-output-display">
 <div data-pagedtable="false">
   <script data-pagedtable-source="" type="application/json">
-{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["vars"],"name":[1],"type":["int"],"align":["right"]},{"label":["n"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["mean"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["sd"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["median"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["trimmed"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["mad"],"name":[7],"type":["dbl"],"align":["right"]},{"label":["min"],"name":[8],"type":["dbl"],"align":["right"]},{"label":["max"],"name":[9],"type":["dbl"],"align":["right"]},{"label":["range"],"name":[10],"type":["dbl"],"align":["right"]},{"label":["skew"],"name":[11],"type":["dbl"],"align":["right"]},{"label":["kurtosis"],"name":[12],"type":["dbl"],"align":["right"]},{"label":["se"],"name":[13],"type":["dbl"],"align":["right"]}],"data":[{"1":"1","2":"1000","3":"125.500000000","4":"72.2043175","5":"125.500000000","6":"125.500000000","7":"92.6625000","8":"1.000000","9":"250.000000","10":"249.000000","11":"0.0000000","12":"-1.2036365","13":"2.28330100","_rn_":"ID"},{"1":"2","2":"1000","3":"2.500000000","4":"1.1185934","5":"2.500000000","6":"2.500000000","7":"1.4826000","8":"1.000000","9":"4.000000","10":"3.000000","11":"0.0000000","12":"-1.3632784","13":"0.03537303","_rn_":"timepoint"},{"1":"3","2":"1000","3":"15.500000000","4":"1.1185934","5":"15.500000000","6":"15.500000000","7":"1.4826000","8":"14.000000","9":"17.000000","10":"3.000000","11":"0.0000000","12":"-1.3632784","13":"0.03537303","_rn_":"age"},{"1":"4","2":"1000","3":"1.440000000","4":"0.4966353","5":"1.000000000","6":"1.425000000","7":"0.0000000","8":"1.000000","9":"2.000000","10":"1.000000","11":"0.2413844","12":"-1.9436743","13":"0.01570499","_rn_":"sex*"},{"1":"5","2":"1000","3":"0.440000000","4":"0.4966353","5":"0.000000000","6":"0.425000000","7":"0.0000000","8":"0.000000","9":"1.000000","10":"1.000000","11":"0.2413844","12":"-1.9436743","13":"0.01570499","_rn_":"sexMale"},{"1":"6","2":"1000","3":"-0.120000000","4":"0.9932707","5":"-1.000000000","6":"-0.150000000","7":"0.0000000","8":"-1.000000","9":"1.000000","10":"2.000000","11":"0.2413844","12":"-1.9436743","13":"0.03140998","_rn_":"sexEffectCode"},{"1":"7","2":"931","3":"-0.003903526","4":"1.0081658","5":"-0.004143989","6":"-0.004130524","7":"0.9459139","8":"-3.324139","9":"4.677685","10":"8.001823","11":"0.0594660","12":"0.7411332","13":"0.03304130","_rn_":"ses"},{"1":"8","2":"931","3":"8.075352902","4":"1.1127775","5":"8.089046278","6":"8.092597972","7":"1.1539042","8":"5.000000","9":"10.000000","10":"5.000000","11":"-0.1943376","12":"-0.4378542","13":"0.03646981","_rn_":"sleep"},{"1":"9","2":"931","3":"9.951664876","4":"6.6154613","5":"8.000000000","6":"9.181208054","7":"5.9304000","8":"0.000000","9":"30.000000","10":"30.000000","11":"1.0219952","12":"0.6996849","13":"0.21681299","_rn_":"depression"},{"1":"10","2":"931","3":"9.922663802","4":"6.5558340","5":"9.000000000","6":"9.163758389","7":"5.9304000","8":"0.000000","9":"30.000000","10":"30.000000","11":"1.0204811","12":"0.7276117","13":"0.21485878","_rn_":"anxiety"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["vars"],"name":[1],"type":["int"],"align":["right"]},{"label":["n"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["mean"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["sd"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["median"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["trimmed"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["mad"],"name":[7],"type":["dbl"],"align":["right"]},{"label":["min"],"name":[8],"type":["dbl"],"align":["right"]},{"label":["max"],"name":[9],"type":["dbl"],"align":["right"]},{"label":["range"],"name":[10],"type":["dbl"],"align":["right"]},{"label":["skew"],"name":[11],"type":["dbl"],"align":["right"]},{"label":["kurtosis"],"name":[12],"type":["dbl"],"align":["right"]},{"label":["se"],"name":[13],"type":["dbl"],"align":["right"]}],"data":[{"1":"1","2":"1000","3":"125.50000000","4":"72.2043175","5":"125.50000000","6":"1.255000e+02","7":"92.662500","8":"1.000000","9":"250.000000","10":"249.00000","11":"0.0000000","12":"-1.20363652","13":"2.28330100","_rn_":"ID"},{"1":"2","2":"1000","3":"2.50000000","4":"1.1185934","5":"2.50000000","6":"2.500000e+00","7":"1.482600","8":"1.000000","9":"4.000000","10":"3.00000","11":"0.0000000","12":"-1.36327836","13":"0.03537303","_rn_":"timepoint"},{"1":"3","2":"1000","3":"15.50000000","4":"1.1185934","5":"15.50000000","6":"1.550000e+01","7":"1.482600","8":"14.000000","9":"17.000000","10":"3.00000","11":"0.0000000","12":"-1.36327836","13":"0.03537303","_rn_":"age"},{"1":"4","2":"1000","3":"1.44000000","4":"0.4966353","5":"1.00000000","6":"1.425000e+00","7":"0.000000","8":"1.000000","9":"2.000000","10":"1.00000","11":"0.2413844","12":"-1.94367427","13":"0.01570499","_rn_":"sex*"},{"1":"5","2":"1000","3":"0.44000000","4":"0.4966353","5":"0.00000000","6":"4.250000e-01","7":"0.000000","8":"0.000000","9":"1.000000","10":"1.00000","11":"0.2413844","12":"-1.94367427","13":"0.01570499","_rn_":"sexMale"},{"1":"6","2":"1000","3":"-0.12000000","4":"0.9932707","5":"-1.00000000","6":"-1.500000e-01","7":"0.000000","8":"-1.000000","9":"1.000000","10":"2.00000","11":"0.2413844","12":"-1.94367427","13":"0.03140998","_rn_":"sexEffectCode"},{"1":"7","2":"931","3":"0.00364141","4":"1.0053017","5":"-0.02256062","6":"1.026472e-04","7":"1.011459","8":"-3.290917","9":"3.084573","10":"6.37549","11":"0.0225670","12":"-0.02537155","13":"0.03294743","_rn_":"ses"},{"1":"8","2":"931","3":"8.04086398","4":"1.1346318","5":"8.04129620","6":"8.075919e+00","7":"1.171733","8":"5.000000","9":"10.000000","10":"5.00000","11":"-0.2513578","12":"-0.45538727","13":"0.03718605","_rn_":"sleep"},{"1":"9","2":"931","3":"9.95166488","4":"6.6086311","5":"8.00000000","6":"9.187919e+00","7":"5.930400","8":"0.000000","9":"30.000000","10":"30.00000","11":"1.0179767","12":"0.68600006","13":"0.21658914","_rn_":"depression"},{"1":"10","2":"931","3":"9.91299678","4":"6.5403588","5":"9.00000000","6":"9.162416e+00","7":"5.930400","8":"0.000000","9":"30.000000","10":"30.00000","11":"1.0075290","12":"0.68013799","13":"0.21435160","_rn_":"anxiety"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
 </div>
@@ -479,16 +479,16 @@ gtag('config', 'G-EG2ZSZZ7EP', { 'anonymize_ip': true});
 <span>  use <span class="op">=</span> <span class="st">"pairwise.complete.obs"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details><div class="cell-output cell-output-stdout">
 <pre><code>           depression    anxiety      sleep        ses
-depression  1.0000000  0.7971076 -0.3937106 -0.3360859
-anxiety     0.7971076  1.0000000 -0.3294949 -0.2713153
-sleep      -0.3937106 -0.3294949  1.0000000  0.4987447
-ses        -0.3360859 -0.2713153  0.4987447  1.0000000</code></pre>
+depression  1.0000000  0.7902557 -0.3337265 -0.2927077
+anxiety     0.7902557  1.0000000 -0.2827866 -0.2320977
+sleep      -0.3337265 -0.2827866  1.0000000  0.5237375
+ses        -0.2927077 -0.2320977  0.5237375  1.0000000</code></pre>
 </div>
 <details open="" class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details><div class="cell-output-display">
 <div data-pagedtable="false">
   <script data-pagedtable-source="" type="application/json">
-{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["ID"],"name":[1],"type":["int"],"align":["right"]},{"label":["timepoint"],"name":[2],"type":["int"],"align":["right"]},{"label":["age"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["sex"],"name":[4],"type":["chr"],"align":["left"]},{"label":["sexMale"],"name":[5],"type":["int"],"align":["right"]},{"label":["sexEffectCode"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["ses"],"name":[7],"type":["dbl"],"align":["right"]},{"label":["sleep"],"name":[8],"type":["dbl"],"align":["right"]},{"label":["depression"],"name":[9],"type":["dbl"],"align":["right"]},{"label":["anxiety"],"name":[10],"type":["dbl"],"align":["right"]}],"data":[{"1":"1","2":"1","3":"14","4":"male","5":"1","6":"1","7":"1.4918080","8":"8.808881","9":"10","10":"5","_rn_":"1"},{"1":"1","2":"2","3":"15","4":"male","5":"1","6":"1","7":"0.4933722","8":"7.526908","9":"8","10":"4","_rn_":"2"},{"1":"1","2":"3","3":"16","4":"male","5":"1","6":"1","7":"0.9198545","8":"8.662823","9":"5","10":"2","_rn_":"3"},{"1":"1","2":"4","3":"17","4":"male","5":"1","6":"1","7":"-0.1993990","8":"7.748215","9":"4","10":"3","_rn_":"4"},{"1":"2","2":"1","3":"14","4":"male","5":"1","6":"1","7":"-0.3537554","8":"6.593601","9":"13","10":"5","_rn_":"5"},{"1":"2","2":"2","3":"15","4":"male","5":"1","6":"1","7":"0.4051036","8":"7.210944","9":"9","10":"3","_rn_":"6"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["ID"],"name":[1],"type":["int"],"align":["right"]},{"label":["timepoint"],"name":[2],"type":["int"],"align":["right"]},{"label":["age"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["sex"],"name":[4],"type":["chr"],"align":["left"]},{"label":["sexMale"],"name":[5],"type":["int"],"align":["right"]},{"label":["sexEffectCode"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["ses"],"name":[7],"type":["dbl"],"align":["right"]},{"label":["sleep"],"name":[8],"type":["dbl"],"align":["right"]},{"label":["depression"],"name":[9],"type":["dbl"],"align":["right"]},{"label":["anxiety"],"name":[10],"type":["dbl"],"align":["right"]}],"data":[{"1":"1","2":"1","3":"14","4":"male","5":"1","6":"1","7":"-0.3293635","8":"6.624533","9":"11","10":"6","_rn_":"1"},{"1":"1","2":"2","3":"15","4":"male","5":"1","6":"1","7":"0.4301783","8":"7.411496","9":"9","10":"4","_rn_":"2"},{"1":"1","2":"3","3":"16","4":"male","5":"1","6":"1","7":"0.1742834","8":"7.744554","9":"6","10":"3","_rn_":"3"},{"1":"1","2":"4","3":"17","4":"male","5":"1","6":"1","7":"0.7266020","8":"8.796222","9":"5","10":"3","_rn_":"4"},{"1":"2","2":"1","3":"14","4":"male","5":"1","6":"1","7":"0.7515544","8":"7.852333","9":"13","10":"5","_rn_":"5"},{"1":"2","2":"2","3":"15","4":"male","5":"1","6":"1","7":"0.4712654","8":"7.247684","9":"8","10":"3","_rn_":"6"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
 </div>
@@ -502,34 +502,34 @@ Formula: depression ~ lag(anxiety) + lag(depression) + age + sex + (1 |
     ID)
    Data: df
 
-REML criterion at convergence: 4610
+REML criterion at convergence: 4598.1
 
 Scaled residuals: 
     Min      1Q  Median      3Q     Max 
--3.4669 -0.5481 -0.1033  0.4028  3.2498 
+-3.4789 -0.5480 -0.1212  0.4228  3.2359 
 
 Random effects:
  Groups   Name        Variance Std.Dev.
- ID       (Intercept) 20.263   4.501   
- Residual              5.668   2.381   
+ ID       (Intercept) 20.18    4.492   
+ Residual              5.57    2.360   
 Number of obs: 866, groups:  ID, 250
 
 Fixed effects:
                  Estimate Std. Error        df t value Pr(&gt;|t|)    
-(Intercept)       8.56919    1.30640 729.98136   6.559 1.02e-10 ***
-lag(anxiety)      0.22313    0.02979 700.45838   7.490 2.07e-13 ***
-lag(depression)   0.06848    0.02882 693.76941   2.376   0.0178 *  
-age               0.03963    0.07766 606.74321   0.510   0.6100    
-sexmale          -5.02272    0.60319 234.48759  -8.327 6.93e-15 ***
+(Intercept)       8.59746    1.29567 731.59687   6.636 6.29e-11 ***
+lag(anxiety)      0.22417    0.02884 696.55413   7.774 2.75e-14 ***
+lag(depression)   0.07383    0.02802 689.28087   2.635  0.00861 ** 
+age               0.02959    0.07702 607.41922   0.384  0.70096    
+sexmale          -4.90052    0.60111 234.35384  -8.152 2.15e-14 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
 Correlation of Fixed Effects:
             (Intr) lg(nx) lg(dp) age   
-lag(anxity) -0.080                     
-lag(dprssn) -0.101 -0.797              
-age         -0.938  0.023  0.056       
-sexmale     -0.236  0.036  0.045  0.016</code></pre>
+lag(anxity) -0.063                     
+lag(dprssn) -0.120 -0.788              
+age         -0.938  0.007  0.074       
+sexmale     -0.235  0.024  0.053  0.016</code></pre>
 </div>
 <details open="" class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/lme4/man/lmer.html">lmer</a></span><span class="op">(</span></span>
 <span>  <span class="va">anxiety</span> <span class="op">~</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/lead-lag.html">lag</a></span><span class="op">(</span><span class="va">depression</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/lead-lag.html">lag</a></span><span class="op">(</span><span class="va">anxiety</span><span class="op">)</span> <span class="op">+</span> <span class="va">age</span> <span class="op">+</span> <span class="va">sex</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span><span class="op">|</span><span class="va">ID</span><span class="op">)</span>,</span>
@@ -540,34 +540,34 @@ lmerModLmerTest]
 Formula: anxiety ~ lag(depression) + lag(anxiety) + age + sex + (1 | ID)
    Data: df
 
-REML criterion at convergence: 4607.2
+REML criterion at convergence: 4609.8
 
 Scaled residuals: 
     Min      1Q  Median      3Q     Max 
--2.6751 -0.5435 -0.1248  0.5123  3.0140 
+-3.3277 -0.5918 -0.1035  0.4778  3.0872 
 
 Random effects:
  Groups   Name        Variance Std.Dev.
- ID       (Intercept) 20.7     4.549   
- Residual              5.6     2.366   
+ ID       (Intercept) 21.03    4.586   
+ Residual              5.59    2.364   
 Number of obs: 866, groups:  ID, 250
 
 Fixed effects:
                  Estimate Std. Error        df t value Pr(&gt;|t|)    
-(Intercept)       4.30800    1.30070 729.76858   3.312 0.000972 ***
-lag(depression)  -0.02366    0.02868 687.44006  -0.825 0.409774    
-lag(anxiety)      0.24659    0.02965 694.07022   8.318 4.74e-16 ***
-age               0.36476    0.07720 601.73768   4.725 2.87e-06 ***
-sexmale          -5.10795    0.60868 229.99467  -8.392 4.89e-15 ***
+(Intercept)       3.97960    1.30048 731.21591   3.060  0.00229 ** 
+lag(depression)  -0.02170    0.02811 681.89325  -0.772  0.44047    
+lag(anxiety)      0.25065    0.02893 689.10460   8.664  &lt; 2e-16 ***
+age               0.37180    0.07717 601.40622   4.818 1.84e-06 ***
+sexmale          -4.80726    0.61261 228.96794  -7.847 1.62e-13 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
 Correlation of Fixed Effects:
             (Intr) lg(dp) lg(nx) age   
-lag(dprssn) -0.101                     
-lag(anxity) -0.080 -0.797              
-age         -0.937  0.056  0.023       
-sexmale     -0.238  0.045  0.035  0.016</code></pre>
+lag(dprssn) -0.120                     
+lag(anxity) -0.063 -0.788              
+age         -0.936  0.074  0.008       
+sexmale     -0.238  0.052  0.024  0.015</code></pre>
 </div>
 </div>
 <div class="cell">
@@ -792,11 +792,30 @@ sexmale     -0.238  0.045  0.035  0.016</code></pre>
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
       var mailtoRegex = new RegExp(/^mailto:/);
         var filterRegex = new RegExp("https:\/\/isaactpetersen\.github\.io\/ldaWorkshop-CSSI2027\/");
+      const newWindowLabel = "(opens in a new tab)";
+      const newWindowNoteId = "quarto-ext-newwindow-label";
+      // Links reference one hidden label through aria-describedby, so the
+      // announcement never changes their accessible name.
+      var describeNewWindow = (link) => {
+        if (!window.document.getElementById(newWindowNoteId)) {
+          var newWindowNote = window.document.createElement("span");
+          newWindowNote.id = newWindowNoteId;
+          newWindowNote.hidden = true;
+          newWindowNote.textContent = newWindowLabel;
+          window.document.body.appendChild(newWindowNote);
+        }
+        var describedBy = (link.getAttribute("aria-describedby") || "").split(/\s+/).filter(Boolean);
+        if (!describedBy.includes(newWindowNoteId)) {
+          describedBy.push(newWindowNoteId);
+          link.setAttribute("aria-describedby", describedBy.join(" "));
+        }
+      }
       var isInternal = (href) => {
           return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
       }
       // Inspect non-navigation links and adorn them if external
-     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      window.quartoDecorateExternalLinks = function (root) {
+     var links = (root || window.document).querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
       for (var i=0; i<links.length; i++) {
         const link = links[i];
         if (!isInternal(link.href)) {
@@ -810,8 +829,70 @@ sexmale     -0.238  0.045  0.035  0.016</code></pre>
             if (link.getAttribute("rel") === null) {
               link.setAttribute("rel", "noopener");
             }
+            describeNewWindow(link);
+          if (!link.classList.contains('no-external-icon')) {
+          }
         }
       }
+      };
+      window.quartoDecorateExternalLinks(window.document);
+    // Esc closes the popup (WCAG 1.4.13) and focus leaving both trigger and
+    // popup closes it (WCAG 2.4.11); tippy handles neither for interactive popups.
+    const hideOnEscAndFocusOut = {
+      name: 'hideOnEscAndFocusOut',
+      defaultValue: true,
+      fn(instance) {
+        const dismiss = () => {
+          // A show scheduled by the trigger delay would otherwise reopen it
+          instance.clearDelayTimeouts();
+          instance.hide();
+        };
+        const onKeyDown = (event) => {
+          if (event.key !== 'Escape') {
+            return;
+          }
+          // Keep Esc from also reaching page handlers (e.g. reveal.js overview),
+          // except an open reveal.js slide menu, which Esc should close too.
+          // The menu handles keys only when its keyboard option is on.
+          const menuHandlesEsc = window.Reveal?.getPlugin?.('menu')?.isOpen() &&
+            window.Reveal.getConfig().menu?.keyboard !== false;
+          if (!menuHandlesEsc) {
+            event.stopPropagation();
+          }
+          if (instance.popper.contains(window.document.activeElement)) {
+            // Disabled while refocusing so the focus trigger does not reopen it
+            instance.disable();
+            instance.reference.focus();
+            instance.enable();
+          }
+          dismiss();
+        };
+        const onFocusOut = (event) => {
+          const target = event.relatedTarget;
+          if (target && !instance.reference.contains(target) &&
+              !instance.popper.contains(target)) {
+            dismiss();
+          }
+        };
+        // On the trigger too: a click trigger (code-annotations: select) has no
+        // blur handling. Attached for the instance's lifetime so leaving the
+        // trigger also cancels a show still pending on the trigger delay.
+        instance.reference.addEventListener('focusout', onFocusOut);
+        return {
+          onShow() {
+            window.document.addEventListener('keydown', onKeyDown, true);
+            instance.popper.addEventListener('focusout', onFocusOut);
+          },
+          onHide() {
+            window.document.removeEventListener('keydown', onKeyDown, true);
+            instance.popper.removeEventListener('focusout', onFocusOut);
+          },
+          onDestroy() {
+            instance.reference.removeEventListener('focusout', onFocusOut);
+          },
+        };
+      },
+    };
     function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
       const config = {
         allowHTML: true,
@@ -825,6 +906,7 @@ sexmale     -0.238  0.045  0.035  0.016</code></pre>
         interactiveBorder: 10,
         theme: 'quarto',
         placement: 'bottom-start',
+        plugins: [hideOnEscAndFocusOut],
       };
       if (contentFn) {
         config.content = contentFn;
@@ -987,44 +1069,54 @@ sexmale     -0.238  0.045  0.035  0.016</code></pre>
           const lineIds = lines.map((line) => {
             return targetCell + "-" + line;
           })
-          let top = null;
-          let height = null;
-          let parent = null;
+          // Each band is positioned against its own containing block, which is
+          // not the offsetParent of the lines, so place it from client rects.
+          const placeBand = (band, firstEl, lastEl, codeBlock) => {
+            const container = band.offsetParent;
+            if (container === null) {
+              return;
+            }
+            const containerRect = container.getBoundingClientRect();
+            // Reveal.js scales slides with a transform, so convert client
+            // pixels back to the CSS pixels of the container.
+            const scale = containerRect.height / container.offsetHeight || 1;
+            const firstRect = firstEl.getBoundingClientRect();
+            const lastRect = lastEl.getBoundingClientRect();
+            const top = (firstRect.top - containerRect.top) / scale - container.clientTop + container.scrollTop;
+            const height = (lastRect.bottom - firstRect.top) / scale;
+            band.style.top = top - 2 + "px";
+            band.style.height = height + 4 + "px";
+            if (codeBlock) {
+              // Without the copy button wrapper, the containing block is wider
+              // than the code block, so span the code block explicitly.
+              const blockRect = codeBlock.getBoundingClientRect();
+              band.style.left = (blockRect.left - containerRect.left) / scale - container.clientLeft + container.scrollLeft + "px";
+              band.style.width = blockRect.width / scale + "px";
+            }
+          };
           if (lineIds.length > 0) {
-              //compute the position of the single el (top and bottom and make a div)
-              const el = window.document.getElementById(lineIds[0]);
-              top = el.offsetTop;
-              height = el.offsetHeight;
-              parent = el.parentElement.parentElement;
-            if (lineIds.length > 1) {
-              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
-              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
-              height = bottom - top;
+            const el = window.document.getElementById(lineIds[0]);
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const parent = el.parentElement.parentElement;
+            // cook up a div (if necessary) and position it
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
             }
-            if (top !== null && height !== null && parent !== null) {
-              // cook up a div (if necessary) and position it 
-              let div = window.document.getElementById("code-annotation-line-highlight");
-              if (div === null) {
-                div = window.document.createElement("div");
-                div.setAttribute("id", "code-annotation-line-highlight");
-                div.style.position = 'absolute';
-                parent.appendChild(div);
-              }
-              div.style.top = top - 2 + "px";
-              div.style.height = height + 4 + "px";
-              div.style.left = 0;
-              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
-              if (gutterDiv === null) {
-                gutterDiv = window.document.createElement("div");
-                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
-                gutterDiv.style.position = 'absolute';
-                const codeCell = window.document.getElementById(targetCell);
-                const gutter = codeCell.querySelector('.code-annotation-gutter');
-                gutter.appendChild(gutterDiv);
-              }
-              gutterDiv.style.top = top - 2 + "px";
-              gutterDiv.style.height = height + 4 + "px";
+            placeBand(div, el, lastEl, parent.closest("div.sourceCode") || parent);
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
             }
+            placeBand(gutterDiv, el, lastEl);
             selectedAnnoteEl = annoteEl;
           }
         };
@@ -1122,6 +1214,8 @@ sexmale     -0.238  0.045  0.035  0.016</code></pre>
       }
     }
   });
+  </script><script type="application/javascript">
+  window.quartoScrollableRegionsLabels = {"code":"Scrollable code","output":"Scrollable output"};
   </script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "Simulate Data"</span></span>
